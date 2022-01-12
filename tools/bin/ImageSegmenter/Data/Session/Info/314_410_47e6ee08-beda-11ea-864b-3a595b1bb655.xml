@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<annotation>
+  <file>
+    <original_image_filename>314_410_47e6ee08-beda-11ea-864b-3a595b1bb655</original_image_filename>
+    <processed_image_filename>314_410_47e6ee08-beda-11ea-864b-3a595b1bb655</processed_image_filename>
+  </file>
+  <size>
+    <width>896</width>
+    <height>896</height>
+    <depth>3</depth>
+  </size>
+  <steering_angle>
+    <item>
+      <name>left</name>
+      <angle>0.000000</angle>
+      <draw_color>FF008000</draw_color>
+    </item>
+    <item>
+      <name>straight</name>
+      <angle>0.000000</angle>
+      <draw_color>FF8B0000</draw_color>
+    </item>
+    <item>
+      <name>right</name>
+      <angle>0.000000</angle>
+      <draw_color>FF00008B</draw_color>
+    </item>
+  </steering_angle>
+  <object />
+</annotation>

@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<annotation>
+  <file>
+    <original_image_filename>375_492_7bef58fe-bedd-11ea-a490-3a595b1bb655</original_image_filename>
+    <processed_image_filename>375_492_7bef58fe-bedd-11ea-a490-3a595b1bb655</processed_image_filename>
+  </file>
+  <size>
+    <width>896</width>
+    <height>896</height>
+    <depth>3</depth>
+  </size>
+  <steering_angle>
+    <item>
+      <name>left</name>
+      <angle>0.000000</angle>
+      <draw_color>FF008000</draw_color>
+    </item>
+    <item>
+      <name>straight</name>
+      <angle>0.000000</angle>
+      <draw_color>FF8B0000</draw_color>
+    </item>
+    <item>
+      <name>right</name>
+      <angle>0.000000</angle>
+      <draw_color>FF00008B</draw_color>
+    </item>
+  </steering_angle>
+  <object>
+    <item>
+      <id>3</id>
+      <name>yellow_solid_line</name>
+      <draw_order>8</draw_order>
+      <draw_color>FFBE1EFB</draw_color>
+      <polygon>
+        <point idx="0" x="0.3508041" y="0.8707564" />
+        <point idx="1" x="0.3866775" y="0.8822096" />
+        <point idx="2" x="0.4357542" y="0.6145251" />
+        <point idx="3" x="0.4625698" y="0.4860335" />
+        <point idx="4" x="0.4748603" y="0.4245810" />
+        <point idx="5" x="0.4715084" y="0.3910615" />
+        <point idx="6" x="0.4446927" y="0.3296089" />
+        <point idx="7" x="0.4245810" y="0.2949721" />
+        <point idx="8" x="0.4288449" y="0.2814295" />
+        <point idx="9" x="0.4125066" y="0.2832370" />
+        <point idx="10" x="0.4111732" y="0.3072626" />
+        <point idx="11" x="0.4346369" y="0.3486033" />
+        <point idx="12" x="0.4513966" y="0.3854749" />
+        <point idx="13" x="0.4511806" y="0.4224633" />
+        <point idx="14" x="0.4424581" y="0.4715084" />
+        <point idx="15" x="0.4211870" y="0.5469049" />
+        <point idx="16" x="0.4044693" y="0.6234637" />
+      </polygon>
+    </item>
+    <item>
+      <id>1</id>
+      <name>white_solid_line</name>
+      <draw_order>9</draw_order>
+      <draw_color>FFE70E13</draw_color>
+      <polygon>
+        <point idx="0" x="0.3854749" y="0.8815643" />
+        <point idx="1" x="0.3273743" y="0.8603352" />
+        <point idx="2" x="0.2748603" y="0.8279330" />
+        <point idx="3" x="0.2290503" y="0.8100559" />
+        <point idx="4" x="0.1697439" y="0.7718880" />
+        <point idx="5" x="0.1497207" y="0.7553073" />
+        <point idx="6" x="0.1072067" y="0.7212626" />
+        <point idx="7" x="0.0875521" y="0.7033949" />
+        <point idx="8" x="0.0748603" y="0.6882682" />
+        <point idx="9" x="0.0643240" y="0.6783800" />
+        <point idx="10" x="0.0434783" y="0.6557475" />
+        <point idx="11" x="0.0297796" y="0.6337106" />
+        <point idx="12" x="0.0643240" y="0.5699821" />
+        <point idx="13" x="0.1083799" y="0.5050279" />
+        <point idx="14" x="0.1477070" y="0.4514592" />
+        <point idx="15" x="0.1733174" y="0.4192972" />
+        <point idx="16" x="0.2113994" y="0.3798384" />
+        <point idx="17" x="0.2369205" y="0.3598469" />
+        <point idx="18" x="0.3011484" y="0.3253934" />
+        <point idx="19" x="0.3649511" y="0.2824330" />
+        <point idx="20" x="0.3390047" y="0.2926414" />
+        <point idx="21" x="0.2977456" y="0.3194385" />
+        <point idx="22" x="0.2284134" y="0.3543173" />
+        <point idx="23" x="0.1888268" y="0.3921788" />
+        <point idx="24" x="0.1471114" y="0.4371650" />
+        <point idx="25" x="0.1030375" y="0.4955330" />
+        <point idx="26" x="0.0589637" y="0.5568791" />
+        <point idx="27" x="0.0327576" y="0.6104825" />
+        <point idx="28" x="0.0212291" y="0.6245810" />
+        <point idx="29" x="0.0000000" y="0.5955307" />
+        <point idx="30" x="0.0000000" y="0.6312849" />
+        <point idx="31" x="0.0335196" y="0.6770950" />
+        <point idx="32" x="0.0949721" y="0.7486033" />
+        <point idx="33" x="0.1631285" y="0.8111732" />
+        <point idx="34" x="0.2412150" y="0.8630137" />
+        <point idx="35" x="0.3150838" y="0.8972067" />
+        <point idx="36" x="0.3798883" y="0.9195531" />
+      </polygon>
+    </item>
+    <item>
+      <id>1</id>
+      <name>white_solid_line</name>
+      <draw_order>9</draw_order>
+      <draw_color>FFE70E13</draw_color>
+      <polygon>
+        <point idx="0" x="0.6860335" y="1.0011170" />
+        <point idx="1" x="0.6804469" y="0.8491620" />
+        <point idx="2" x="0.6670391" y="0.7407821" />
+        <point idx="3" x="0.6413408" y="0.6011173" />
+        <point idx="4" x="0.6279330" y="0.5016760" />
+        <point idx="5" x="0.6134079" y="0.4189944" />
+        <point idx="6" x="0.5988827" y="0.3832402" />
+        <point idx="7" x="0.5642458" y="0.3441341" />
+        <point idx="8" x="0.5206704" y="0.3083799" />
+        <point idx="9" x="0.4949721" y="0.2849162" />
+        <point idx="10" x="0.5083799" y="0.2849162" />
+        <point idx="11" x="0.5407821" y="0.3072626" />
+        <point idx="12" x="0.5709497" y="0.3363129" />
+        <point idx="13" x="0.6044693" y="0.3642458" />
+        <point idx="14" x="0.6256983" y="0.4000000" />
+        <point idx="15" x="0.6491620" y="0.4804469" />
+        <point idx="16" x="0.6726257" y="0.5843576" />
+        <point idx="17" x="0.6949720" y="0.7363129" />
+        <point idx="18" x="0.7050279" y="0.8067039" />
+        <point idx="19" x="0.7273743" y="0.8446928" />
+        <point idx="20" x="0.7441341" y="0.8625698" />
+        <point idx="21" x="0.7743016" y="0.8692737" />
+        <point idx="22" x="0.8413408" y="0.8424581" />
+        <point idx="23" x="0.9039106" y="0.8044693" />
+        <point idx="24" x="0.9709497" y="0.7586592" />
+        <point idx="25" x="1.0011170" y="0.7340782" />
+        <point idx="26" x="1.0011170" y="0.7720670" />
+        <point idx="27" x="0.9385475" y="0.8212290" />
+        <point idx="28" x="0.8860335" y="0.8592179" />
+        <point idx="29" x="0.8223464" y="0.8905028" />
+        <point idx="30" x="0.7921788" y="0.9083799" />
+        <point idx="31" x="0.7575419" y="0.9072626" />
+        <point idx="32" x="0.7273743" y="0.9016760" />
+        <point idx="33" x="0.7106145" y="0.8916201" />
+        <point idx="34" x="0.7150838" y="1.0011170" />
+      </polygon>
+    </item>
+    <item>
+      <id>6</id>
+      <name>lane_wrong_dir</name>
+      <draw_order>0</draw_order>
+      <draw_color>FF8A0000</draw_color>
+      <polygon>
+        <point idx="0" x="0.3608938" y="0.8927374" />
+        <point idx="1" x="0.4067039" y="0.6625698" />
+        <point idx="2" x="0.4558659" y="0.4491620" />
+        <point idx="3" x="0.4648045" y="0.3977654" />
+        <point idx="4" x="0.4154877" y="0.2859270" />
+        <point idx="5" x="0.3521966" y="0.2881608" />
+        <point idx="6" x="0.2871508" y="0.3307263" />
+        <point idx="7" x="0.2357542" y="0.3541899" />
+        <point idx="8" x="0.1966480" y="0.3854749" />
+        <point idx="9" x="0.1642458" y="0.4256983" />
+        <point idx="10" x="0.1318436" y="0.4648045" />
+        <point idx="11" x="0.0759777" y="0.5407821" />
+        <point idx="12" x="0.0502793" y="0.5810056" />
+        <point idx="13" x="0.0234637" y="0.6312849" />
+        <point idx="14" x="0.0346369" y="0.6670391" />
+        <point idx="15" x="0.1888268" y="0.8067039" />
+      </polygon>
+    </item>
+    <item>
+      <id>6</id>
+      <name>lane_wrong_dir</name>
+      <draw_order>0</draw_order>
+      <draw_color>FF8A0000</draw_color>
+      <polygon>
+        <point idx="0" x="0.6916201" y="0.8670391" />
+        <point idx="1" x="0.6983240" y="1.0011170" />
+        <point idx="2" x="1.0011170" y="1.0011170" />
+        <point idx="3" x="1.0011170" y="0.7541900" />
+        <point idx="4" x="0.9284916" y="0.8078212" />
+        <point idx="5" x="0.8044693" y="0.8849162" />
+        <point idx="6" x="0.7407821" y="0.8826815" />
+      </polygon>
+    </item>
+    <item>
+      <id>7</id>
+      <name>lane_left_turn</name>
+      <draw_order>1</draw_order>
+      <draw_color>FF8BB803</draw_color>
+      <polygon>
+        <point idx="0" x="0.0000000" y="0.6178771" />
+        <point idx="1" x="0.0446927" y="0.6748604" />
+        <point idx="2" x="0.1329609" y="0.7597765" />
+        <point idx="3" x="0.2201117" y="0.8279330" />
+        <point idx="4" x="0.3486033" y="0.8905028" />
+        <point idx="5" x="0.3675978" y="0.8927374" />
+        <point idx="6" x="0.3486033" y="1.0011170" />
+        <point idx="7" x="0.0000000" y="1.0011170" />
+      </polygon>
+    </item>
+    <item>
+      <id>5</id>
+      <name>lane_my_dir</name>
+      <draw_order>3</draw_order>
+      <draw_color>FF00FF00</draw_color>
+      <polygon>
+        <point idx="0" x="0.5005587" y="0.2804469" />
+        <point idx="1" x="0.5195531" y="0.2994413" />
+        <point idx="2" x="0.5575419" y="0.3284916" />
+        <point idx="3" x="0.5944134" y="0.3653631" />
+        <point idx="4" x="0.6201117" y="0.4022346" />
+        <point idx="5" x="0.6491620" y="0.5329609" />
+        <point idx="6" x="0.6860335" y="0.7385475" />
+        <point idx="7" x="0.6994413" y="0.8804469" />
+        <point idx="8" x="0.6972067" y="1.0011170" />
+        <point idx="9" x="0.3385475" y="1.0011170" />
+        <point idx="10" x="0.4625698" y="0.4379888" />
+        <point idx="11" x="0.4648045" y="0.3966480" />
+        <point idx="12" x="0.4189944" y="0.2994413" />
+        <point idx="13" x="0.4178771" y="0.2849162" />
+      </polygon>
+    </item>
+  </object>
+</annotation>
