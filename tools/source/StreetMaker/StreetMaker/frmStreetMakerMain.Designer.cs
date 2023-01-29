@@ -46,13 +46,10 @@
             this.tsmiEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiReconnectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiClearAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator19 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiResizeMap = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiSettings = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiView = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiRedraw = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiShowItemNumbers = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiShowLaneNumbers = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiProcess = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiCreateDataset = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
@@ -60,6 +57,9 @@
             this.tsmiDisplayTrainVal = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisplayTrain = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisplayVal = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator21 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiDeleteDataset = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiWriteClassesAndColors = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAbort = new System.Windows.Forms.ToolStripMenuItem();
             this.ssMainStatus = new System.Windows.Forms.StatusStrip();
             this.tsslCursorValues = new System.Windows.Forms.ToolStripStatusLabel();
@@ -150,8 +150,13 @@
             this.ofdLoadStreetMap = new System.Windows.Forms.OpenFileDialog();
             this.pdPrintStreepMap = new System.Windows.Forms.PrintDialog();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
+            this.tsmiRedraw = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiShowPageLimits = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowItemNumbers = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowLaneNumbers = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiView = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
-            this.ssMainStatus.SuspendLayout();
             this.tscTools.ContentPanel.SuspendLayout();
             this.tscTools.LeftToolStripPanel.SuspendLayout();
             this.tscTools.RightToolStripPanel.SuspendLayout();
@@ -202,6 +207,7 @@
             this.tsmiNewMap.Name = "tsmiNewMap";
             this.tsmiNewMap.Size = new System.Drawing.Size(172, 22);
             this.tsmiNewMap.Text = "New Map";
+            this.tsmiNewMap.ToolTipText = "Create a new map of selectable size. Current edits will be lost.";
             this.tsmiNewMap.Click += new System.EventHandler(this.tsmiNewMap_Click);
             // 
             // toolStripSeparator14
@@ -214,6 +220,7 @@
             this.tsmiLoad.Name = "tsmiLoad";
             this.tsmiLoad.Size = new System.Drawing.Size(172, 22);
             this.tsmiLoad.Text = "Load";
+            this.tsmiLoad.ToolTipText = "Load a previously saved street map file.";
             this.tsmiLoad.Click += new System.EventHandler(this.tsmiLoad_Click);
             // 
             // tsmiSave
@@ -221,6 +228,8 @@
             this.tsmiSave.Name = "tsmiSave";
             this.tsmiSave.Size = new System.Drawing.Size(172, 22);
             this.tsmiSave.Text = "Save";
+            this.tsmiSave.ToolTipText = "Save the currently open street map design to a file. When loaded from a file, the" +
+    " same file name will be used.";
             this.tsmiSave.Click += new System.EventHandler(this.tsmiSave_Click);
             // 
             // tsmiSaveAs
@@ -228,6 +237,8 @@
             this.tsmiSaveAs.Name = "tsmiSaveAs";
             this.tsmiSaveAs.Size = new System.Drawing.Size(172, 22);
             this.tsmiSaveAs.Text = "Save As ...";
+            this.tsmiSaveAs.ToolTipText = "Save the currently open street map design to a file chosing a new name or directo" +
+    "ry.. ";
             this.tsmiSaveAs.Click += new System.EventHandler(this.tsmiSaveAs_Click);
             // 
             // toolStripSeparator13
@@ -240,6 +251,7 @@
             this.tsmiPrintSeup.Name = "tsmiPrintSeup";
             this.tsmiPrintSeup.Size = new System.Drawing.Size(172, 22);
             this.tsmiPrintSeup.Text = "Page Setup";
+            this.tsmiPrintSeup.ToolTipText = "Open printer page setup dialog.";
             this.tsmiPrintSeup.Click += new System.EventHandler(this.tsmiPrintSeup_Click);
             // 
             // tsmiPrint
@@ -247,6 +259,7 @@
             this.tsmiPrint.Name = "tsmiPrint";
             this.tsmiPrint.Size = new System.Drawing.Size(172, 22);
             this.tsmiPrint.Text = "Print";
+            this.tsmiPrint.ToolTipText = "Open the printer dialog to print the currently open street map design.";
             this.tsmiPrint.Click += new System.EventHandler(this.tsmiPrint_Click);
             // 
             // tsmiTestPrint
@@ -254,6 +267,8 @@
             this.tsmiTestPrint.Name = "tsmiTestPrint";
             this.tsmiTestPrint.Size = new System.Drawing.Size(172, 22);
             this.tsmiTestPrint.Text = "Print Outlines only";
+            this.tsmiTestPrint.ToolTipText = "Open the printer dialog to print the currently open street map design as outline " +
+    "only for testing.";
             this.tsmiTestPrint.Click += new System.EventHandler(this.tsmiPrint_Click);
             // 
             // toolStripMenuItem1
@@ -266,12 +281,15 @@
             this.tsmiExit.Name = "tsmiExit";
             this.tsmiExit.Size = new System.Drawing.Size(172, 22);
             this.tsmiExit.Text = "Exit";
+            this.tsmiExit.ToolTipText = "Exit the application.";
             // 
             // tsmiEdit
             // 
             this.tsmiEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiReconnectAll,
             this.tsmiClearAll,
+            this.toolStripSeparator19,
+            this.tsmiResizeMap,
             this.toolStripSeparator12,
             this.tsmiSettings});
             this.tsmiEdit.Name = "tsmiEdit";
@@ -283,6 +301,7 @@
             this.tsmiReconnectAll.Name = "tsmiReconnectAll";
             this.tsmiReconnectAll.Size = new System.Drawing.Size(147, 22);
             this.tsmiReconnectAll.Text = "Reconnect All";
+            this.tsmiReconnectAll.ToolTipText = "Reconnect all street elements of the current design, where possible.";
             this.tsmiReconnectAll.Click += new System.EventHandler(this.tsmiReconnectAll_Click);
             // 
             // tsmiClearAll
@@ -290,7 +309,21 @@
             this.tsmiClearAll.Name = "tsmiClearAll";
             this.tsmiClearAll.Size = new System.Drawing.Size(147, 22);
             this.tsmiClearAll.Text = "Clear All";
+            this.tsmiClearAll.ToolTipText = "Clear current street map design completely deleting everything.";
             this.tsmiClearAll.Click += new System.EventHandler(this.tsmiClearAll_Click);
+            // 
+            // toolStripSeparator19
+            // 
+            this.toolStripSeparator19.Name = "toolStripSeparator19";
+            this.toolStripSeparator19.Size = new System.Drawing.Size(144, 6);
+            // 
+            // tsmiResizeMap
+            // 
+            this.tsmiResizeMap.Name = "tsmiResizeMap";
+            this.tsmiResizeMap.Size = new System.Drawing.Size(147, 22);
+            this.tsmiResizeMap.Text = "Resize Map";
+            this.tsmiResizeMap.ToolTipText = "Change the size of the current map.";
+            this.tsmiResizeMap.Click += new System.EventHandler(this.tsmiResizeMap_Click);
             // 
             // toolStripSeparator12
             // 
@@ -302,46 +335,8 @@
             this.tsmiSettings.Name = "tsmiSettings";
             this.tsmiSettings.Size = new System.Drawing.Size(147, 22);
             this.tsmiSettings.Text = "Settings";
+            this.tsmiSettings.ToolTipText = "Open the setup dialog for the application to change any of the parameter.";
             this.tsmiSettings.Click += new System.EventHandler(this.tsmiSettings_Click);
-            // 
-            // tsmiView
-            // 
-            this.tsmiView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiRedraw,
-            this.toolStripSeparator18,
-            this.tsmiShowItemNumbers,
-            this.tsmiShowLaneNumbers});
-            this.tsmiView.Name = "tsmiView";
-            this.tsmiView.Size = new System.Drawing.Size(44, 20);
-            this.tsmiView.Text = "View";
-            // 
-            // tsmiRedraw
-            // 
-            this.tsmiRedraw.Name = "tsmiRedraw";
-            this.tsmiRedraw.Size = new System.Drawing.Size(183, 22);
-            this.tsmiRedraw.Text = "Redraw";
-            this.tsmiRedraw.Click += new System.EventHandler(this.tsmiRedraw_Click);
-            // 
-            // toolStripSeparator18
-            // 
-            this.toolStripSeparator18.Name = "toolStripSeparator18";
-            this.toolStripSeparator18.Size = new System.Drawing.Size(180, 6);
-            // 
-            // tsmiShowItemNumbers
-            // 
-            this.tsmiShowItemNumbers.CheckOnClick = true;
-            this.tsmiShowItemNumbers.Name = "tsmiShowItemNumbers";
-            this.tsmiShowItemNumbers.Size = new System.Drawing.Size(183, 22);
-            this.tsmiShowItemNumbers.Text = "Show Item Numbers";
-            this.tsmiShowItemNumbers.CheckStateChanged += new System.EventHandler(this.tsmiShowItemNumbers_CheckStateChanged);
-            // 
-            // tsmiShowLaneNumbers
-            // 
-            this.tsmiShowLaneNumbers.CheckOnClick = true;
-            this.tsmiShowLaneNumbers.Name = "tsmiShowLaneNumbers";
-            this.tsmiShowLaneNumbers.Size = new System.Drawing.Size(183, 22);
-            this.tsmiShowLaneNumbers.Text = "Show Lane Numbers";
-            this.tsmiShowLaneNumbers.CheckStateChanged += new System.EventHandler(this.tsmiShowLaneNumbers_CheckStateChanged);
             // 
             // tsmiProcess
             // 
@@ -351,7 +346,10 @@
             this.tsmiDisplayTestAndPred,
             this.tsmiDisplayTrainVal,
             this.tsmiDisplayTrain,
-            this.tsmiDisplayVal});
+            this.tsmiDisplayVal,
+            this.toolStripSeparator21,
+            this.tsmiDeleteDataset,
+            this.tsmiWriteClassesAndColors});
             this.tsmiProcess.Name = "tsmiProcess";
             this.tsmiProcess.Size = new System.Drawing.Size(59, 20);
             this.tsmiProcess.Text = "Process";
@@ -359,57 +357,85 @@
             // tsmiCreateDataset
             // 
             this.tsmiCreateDataset.Name = "tsmiCreateDataset";
-            this.tsmiCreateDataset.Size = new System.Drawing.Size(185, 22);
+            this.tsmiCreateDataset.Size = new System.Drawing.Size(205, 22);
             this.tsmiCreateDataset.Text = "Create Dataset";
+            this.tsmiCreateDataset.ToolTipText = "Create a new DataSet from the current street map design, deleting any previous da" +
+    "ta. Class text file and color map file will be generated.";
             this.tsmiCreateDataset.Click += new System.EventHandler(this.tsmiCreateDataset_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(182, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(202, 6);
             // 
             // tsmiDisplayTestAndPred
             // 
             this.tsmiDisplayTestAndPred.Name = "tsmiDisplayTestAndPred";
-            this.tsmiDisplayTestAndPred.Size = new System.Drawing.Size(185, 22);
+            this.tsmiDisplayTestAndPred.Size = new System.Drawing.Size(205, 22);
             this.tsmiDisplayTestAndPred.Text = "Display Test and Pred";
+            this.tsmiDisplayTestAndPred.ToolTipText = "If a complete DataSet exists, open the Camera View dialog for dislpaying the curr" +
+    "ent Test and Prediction data";
             this.tsmiDisplayTestAndPred.Click += new System.EventHandler(this.tsmiDisplayTestAndPred_Click);
             // 
             // tsmiDisplayTrainVal
             // 
             this.tsmiDisplayTrainVal.Name = "tsmiDisplayTrainVal";
-            this.tsmiDisplayTrainVal.Size = new System.Drawing.Size(185, 22);
+            this.tsmiDisplayTrainVal.Size = new System.Drawing.Size(205, 22);
             this.tsmiDisplayTrainVal.Text = "Display Train And Val";
+            this.tsmiDisplayTrainVal.ToolTipText = "If a complete DataSet exists, open the Camera View dialog for dislpaying the curr" +
+    "ent combined Training and Validation data.";
             this.tsmiDisplayTrainVal.Click += new System.EventHandler(this.tsmiDisplayTrainVal_Click);
             // 
             // tsmiDisplayTrain
             // 
             this.tsmiDisplayTrain.Name = "tsmiDisplayTrain";
-            this.tsmiDisplayTrain.Size = new System.Drawing.Size(185, 22);
+            this.tsmiDisplayTrain.Size = new System.Drawing.Size(205, 22);
             this.tsmiDisplayTrain.Text = "Display Train";
+            this.tsmiDisplayTrain.ToolTipText = "If a complete DataSet exists, open the Camera View dialog for dislpaying the curr" +
+    "ent Training data only.";
             this.tsmiDisplayTrain.Click += new System.EventHandler(this.tsmiDisplayTrain_Click);
             // 
             // tsmiDisplayVal
             // 
             this.tsmiDisplayVal.Name = "tsmiDisplayVal";
-            this.tsmiDisplayVal.Size = new System.Drawing.Size(185, 22);
+            this.tsmiDisplayVal.Size = new System.Drawing.Size(205, 22);
             this.tsmiDisplayVal.Text = "Display Val";
+            this.tsmiDisplayVal.ToolTipText = "If a complete DataSet exists, open the Camera View dialog for dislpaying the curr" +
+    "ent Validation data only.";
             this.tsmiDisplayVal.Click += new System.EventHandler(this.tsmiDisplayVal_Click);
+            // 
+            // toolStripSeparator21
+            // 
+            this.toolStripSeparator21.Name = "toolStripSeparator21";
+            this.toolStripSeparator21.Size = new System.Drawing.Size(202, 6);
+            // 
+            // tsmiDeleteDataset
+            // 
+            this.tsmiDeleteDataset.Name = "tsmiDeleteDataset";
+            this.tsmiDeleteDataset.Size = new System.Drawing.Size(205, 22);
+            this.tsmiDeleteDataset.Text = "Delete Dataset";
+            this.tsmiDeleteDataset.ToolTipText = "Delete all files in the Dataset output directory.";
+            this.tsmiDeleteDataset.Click += new System.EventHandler(this.tsmiDeleteDataset_Click);
+            // 
+            // tsmiWriteClassesAndColors
+            // 
+            this.tsmiWriteClassesAndColors.Name = "tsmiWriteClassesAndColors";
+            this.tsmiWriteClassesAndColors.Size = new System.Drawing.Size(205, 22);
+            this.tsmiWriteClassesAndColors.Text = "Write Classes And Colors";
+            this.tsmiWriteClassesAndColors.ToolTipText = "Write class text file and color map file for the current street map.";
+            this.tsmiWriteClassesAndColors.Click += new System.EventHandler(this.tsmiWriteClassesAndColors_Click);
             // 
             // tsmiAbort
             // 
             this.tsmiAbort.Name = "tsmiAbort";
             this.tsmiAbort.Size = new System.Drawing.Size(49, 20);
             this.tsmiAbort.Text = "Abort";
+            this.tsmiAbort.ToolTipText = "Abort the current DataSet generation process if not satisfied.";
             this.tsmiAbort.Visible = false;
             this.tsmiAbort.Click += new System.EventHandler(this.tsmiAbort_Click);
             // 
             // ssMainStatus
             // 
-            this.ssMainStatus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsslCursorValues,
-            this.tsslLocation,
-            this.tsslFileName});
             this.ssMainStatus.Location = new System.Drawing.Point(0, 939);
             this.ssMainStatus.Name = "ssMainStatus";
             this.ssMainStatus.Size = new System.Drawing.Size(1904, 22);
@@ -473,7 +499,7 @@
             // 
             this.pbDrawingArea.Location = new System.Drawing.Point(0, 0);
             this.pbDrawingArea.Name = "pbDrawingArea";
-            this.pbDrawingArea.Size = new System.Drawing.Size(500, 400);
+            this.pbDrawingArea.Size = new System.Drawing.Size(1189, 515);
             this.pbDrawingArea.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbDrawingArea.TabIndex = 2;
             this.pbDrawingArea.TabStop = false;
@@ -517,7 +543,7 @@
             this.tsbSingleLane.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSingleLane.Name = "tsbSingleLane";
             this.tsbSingleLane.Size = new System.Drawing.Size(35, 36);
-            this.tsbSingleLane.Text = "Single Lane";
+            this.tsbSingleLane.Text = "Single Lane Straight";
             this.tsbSingleLane.Click += new System.EventHandler(this.tsbSingleLane_Click);
             // 
             // tsbDoubleLaneYellowDashedLine
@@ -528,7 +554,7 @@
             this.tsbDoubleLaneYellowDashedLine.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDoubleLaneYellowDashedLine.Name = "tsbDoubleLaneYellowDashedLine";
             this.tsbDoubleLaneYellowDashedLine.Size = new System.Drawing.Size(35, 36);
-            this.tsbDoubleLaneYellowDashedLine.Text = "toolStripButton2";
+            this.tsbDoubleLaneYellowDashedLine.Text = "Dual Lane Straight separated with Yellow Dashed Line";
             this.tsbDoubleLaneYellowDashedLine.Click += new System.EventHandler(this.tsbDoubleLaneYellowDashedLine_Click);
             // 
             // tsbDoubleLaneYellowSingleLine
@@ -539,7 +565,7 @@
             this.tsbDoubleLaneYellowSingleLine.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDoubleLaneYellowSingleLine.Name = "tsbDoubleLaneYellowSingleLine";
             this.tsbDoubleLaneYellowSingleLine.Size = new System.Drawing.Size(35, 36);
-            this.tsbDoubleLaneYellowSingleLine.Text = "toolStripButton3";
+            this.tsbDoubleLaneYellowSingleLine.Text = "Dual Lane Straight separated with Yellow Solid Line";
             this.tsbDoubleLaneYellowSingleLine.Click += new System.EventHandler(this.tsbDoubleLaneYellowSingleLine_Click);
             // 
             // tsbDoubleLaneDoubleYellowLine
@@ -550,7 +576,7 @@
             this.tsbDoubleLaneDoubleYellowLine.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDoubleLaneDoubleYellowLine.Name = "tsbDoubleLaneDoubleYellowLine";
             this.tsbDoubleLaneDoubleYellowLine.Size = new System.Drawing.Size(35, 36);
-            this.tsbDoubleLaneDoubleYellowLine.Text = "toolStripButton4";
+            this.tsbDoubleLaneDoubleYellowLine.Text = "Dual Lane Straight separated with Double Yellow Line";
             this.tsbDoubleLaneDoubleYellowLine.Click += new System.EventHandler(this.tsbDoubleLaneDoubleYellowLine_Click);
             // 
             // tsbQuadLanesDoubleYellow
@@ -561,7 +587,7 @@
             this.tsbQuadLanesDoubleYellow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLanesDoubleYellow.Name = "tsbQuadLanesDoubleYellow";
             this.tsbQuadLanesDoubleYellow.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLanesDoubleYellow.Text = "toolStripButton1";
+            this.tsbQuadLanesDoubleYellow.Text = "Quad Lane Straight";
             this.tsbQuadLanesDoubleYellow.Click += new System.EventHandler(this.tsbQuadLanesDoubleYellow_Click);
             // 
             // tsbQuadLanesCenterLane
@@ -572,7 +598,7 @@
             this.tsbQuadLanesCenterLane.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLanesCenterLane.Name = "tsbQuadLanesCenterLane";
             this.tsbQuadLanesCenterLane.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLanesCenterLane.Text = "toolStripButton2";
+            this.tsbQuadLanesCenterLane.Text = "Quad Lane Straight with Center Lane";
             this.tsbQuadLanesCenterLane.Click += new System.EventHandler(this.tsbQuadLanesCenterLane_Click);
             // 
             // toolStripSeparator3
@@ -588,7 +614,7 @@
             this.tsbSingleLaneSRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSingleLaneSRight.Name = "tsbSingleLaneSRight";
             this.tsbSingleLaneSRight.Size = new System.Drawing.Size(35, 36);
-            this.tsbSingleLaneSRight.Text = "toolStripButton1";
+            this.tsbSingleLaneSRight.Text = "Single Lane S-Shaped Right";
             this.tsbSingleLaneSRight.Click += new System.EventHandler(this.tsbSingleLaneSRight_Click);
             // 
             // tsbSingleLaneSLeft
@@ -599,7 +625,7 @@
             this.tsbSingleLaneSLeft.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSingleLaneSLeft.Name = "tsbSingleLaneSLeft";
             this.tsbSingleLaneSLeft.Size = new System.Drawing.Size(35, 36);
-            this.tsbSingleLaneSLeft.Text = "toolStripButton1";
+            this.tsbSingleLaneSLeft.Text = "Single Lane S-Shaped Left";
             this.tsbSingleLaneSLeft.Click += new System.EventHandler(this.tsbSingleLaneSLeft_Click);
             // 
             // toolStripSeparator7
@@ -615,7 +641,7 @@
             this.tsbDualLaneSplit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneSplit.Name = "tsbDualLaneSplit";
             this.tsbDualLaneSplit.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneSplit.Text = "toolStripButton8";
+            this.tsbDualLaneSplit.Text = "Dual Lane Split";
             this.tsbDualLaneSplit.Click += new System.EventHandler(this.tsbDualLaneSplit_Click);
             // 
             // tsbDualLaneSplitCenterLane
@@ -626,7 +652,7 @@
             this.tsbDualLaneSplitCenterLane.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneSplitCenterLane.Name = "tsbDualLaneSplitCenterLane";
             this.tsbDualLaneSplitCenterLane.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneSplitCenterLane.Text = "toolStripButton1";
+            this.tsbDualLaneSplitCenterLane.Text = "Dual Lane Split starting Center Lane";
             this.tsbDualLaneSplitCenterLane.Click += new System.EventHandler(this.tsbDualLaneSplitCenterLane_Click);
             // 
             // tsbQuadLaneSplit
@@ -637,7 +663,7 @@
             this.tsbQuadLaneSplit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLaneSplit.Name = "tsbQuadLaneSplit";
             this.tsbQuadLaneSplit.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLaneSplit.Text = "toolStripButton1";
+            this.tsbQuadLaneSplit.Text = "Quad Lane Split";
             this.tsbQuadLaneSplit.Click += new System.EventHandler(this.tsbQuadLaneSplit_Click);
             // 
             // tsbQuadLaneSplitCenterLane
@@ -648,7 +674,7 @@
             this.tsbQuadLaneSplitCenterLane.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLaneSplitCenterLane.Name = "tsbQuadLaneSplitCenterLane";
             this.tsbQuadLaneSplitCenterLane.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLaneSplitCenterLane.Text = "toolStripButton1";
+            this.tsbQuadLaneSplitCenterLane.Text = "Quad Lane Split starting Center Lane";
             this.tsbQuadLaneSplitCenterLane.Click += new System.EventHandler(this.tsbQuadLaneSplitCenterLane_Click);
             // 
             // toolStripSeparator2
@@ -664,7 +690,7 @@
             this.tsbSingleLaneSplitRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSingleLaneSplitRight.Name = "tsbSingleLaneSplitRight";
             this.tsbSingleLaneSplitRight.Size = new System.Drawing.Size(35, 36);
-            this.tsbSingleLaneSplitRight.Text = "toolStripButton1";
+            this.tsbSingleLaneSplitRight.Text = "Single Lane expanded to 2 Lanes";
             this.tsbSingleLaneSplitRight.Click += new System.EventHandler(this.tsbSingleLaneSplitRight_Click);
             // 
             // tsbDualToQuadDoubleYellowLine
@@ -675,7 +701,7 @@
             this.tsbDualToQuadDoubleYellowLine.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualToQuadDoubleYellowLine.Name = "tsbDualToQuadDoubleYellowLine";
             this.tsbDualToQuadDoubleYellowLine.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualToQuadDoubleYellowLine.Text = "toolStripButton3";
+            this.tsbDualToQuadDoubleYellowLine.Text = "Dual Lane expanded to 4 Lanes";
             this.tsbDualToQuadDoubleYellowLine.Click += new System.EventHandler(this.tsbDualToQuadDoubleYellowLine_Click);
             // 
             // tsLeft2
@@ -712,7 +738,7 @@
             this.tsbSingleLaneCurveRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSingleLaneCurveRight.Name = "tsbSingleLaneCurveRight";
             this.tsbSingleLaneCurveRight.Size = new System.Drawing.Size(35, 36);
-            this.tsbSingleLaneCurveRight.Text = "toolStripButton1";
+            this.tsbSingleLaneCurveRight.Text = "Single Lane Curved Right";
             this.tsbSingleLaneCurveRight.Click += new System.EventHandler(this.tsbSingleLaneCurveRight_Click);
             // 
             // tsbDualLaneCurveRightDashedYellow
@@ -723,7 +749,7 @@
             this.tsbDualLaneCurveRightDashedYellow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneCurveRightDashedYellow.Name = "tsbDualLaneCurveRightDashedYellow";
             this.tsbDualLaneCurveRightDashedYellow.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneCurveRightDashedYellow.Text = "toolStripButton1";
+            this.tsbDualLaneCurveRightDashedYellow.Text = "Dual Lane Curved Right separated with Yellow Dashed Line";
             this.tsbDualLaneCurveRightDashedYellow.Click += new System.EventHandler(this.tsbDualLaneCurveRightDashedYellow_Click);
             // 
             // tsbDualLaneCurveRightSolidYellow
@@ -734,7 +760,7 @@
             this.tsbDualLaneCurveRightSolidYellow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneCurveRightSolidYellow.Name = "tsbDualLaneCurveRightSolidYellow";
             this.tsbDualLaneCurveRightSolidYellow.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneCurveRightSolidYellow.Text = "toolStripButton5";
+            this.tsbDualLaneCurveRightSolidYellow.Text = "Dual Lane Curved Right separated with Yellow Solid Center Line";
             this.tsbDualLaneCurveRightSolidYellow.Click += new System.EventHandler(this.tsbDualLaneCurveRightSolidYellow_Click);
             // 
             // tsbDualLaneCurveRightDoubleYellow
@@ -745,7 +771,7 @@
             this.tsbDualLaneCurveRightDoubleYellow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneCurveRightDoubleYellow.Name = "tsbDualLaneCurveRightDoubleYellow";
             this.tsbDualLaneCurveRightDoubleYellow.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneCurveRightDoubleYellow.Text = "toolStripButton1";
+            this.tsbDualLaneCurveRightDoubleYellow.Text = "Dual Lane Curved Right separated with Yellow Solid Center Line";
             this.tsbDualLaneCurveRightDoubleYellow.Click += new System.EventHandler(this.tsbDualLaneCurveRightDoubleYellow_Click);
             // 
             // tsbQuadLaneCurveRightDoubleYellow
@@ -756,7 +782,7 @@
             this.tsbQuadLaneCurveRightDoubleYellow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLaneCurveRightDoubleYellow.Name = "tsbQuadLaneCurveRightDoubleYellow";
             this.tsbQuadLaneCurveRightDoubleYellow.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLaneCurveRightDoubleYellow.Text = "toolStripButton1";
+            this.tsbQuadLaneCurveRightDoubleYellow.Text = "Quad Lane Curved Right";
             this.tsbQuadLaneCurveRightDoubleYellow.Click += new System.EventHandler(this.tsbQuadLaneCurveRightDoubleYellow_Click);
             // 
             // tsbQuadLaneCurveRightCenterLane
@@ -767,7 +793,7 @@
             this.tsbQuadLaneCurveRightCenterLane.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLaneCurveRightCenterLane.Name = "tsbQuadLaneCurveRightCenterLane";
             this.tsbQuadLaneCurveRightCenterLane.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLaneCurveRightCenterLane.Text = "toolStripButton1";
+            this.tsbQuadLaneCurveRightCenterLane.Text = "Quad Lane Curved Right with Center Lane";
             this.tsbQuadLaneCurveRightCenterLane.Click += new System.EventHandler(this.tsbQuadLaneCurveRightCenterLane_Click);
             // 
             // toolStripSeparator4
@@ -783,7 +809,7 @@
             this.tsbDualLaneSRightYellowSolid.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneSRightYellowSolid.Name = "tsbDualLaneSRightYellowSolid";
             this.tsbDualLaneSRightYellowSolid.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneSRightYellowSolid.Text = "toolStripButton2";
+            this.tsbDualLaneSRightYellowSolid.Text = "Dual Lane S-Shaped Right";
             this.tsbDualLaneSRightYellowSolid.Click += new System.EventHandler(this.tsbDualLaneSRightYellowSolid_Click);
             // 
             // tsbDualLaneSLeftYellowSolid
@@ -794,7 +820,7 @@
             this.tsbDualLaneSLeftYellowSolid.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneSLeftYellowSolid.Name = "tsbDualLaneSLeftYellowSolid";
             this.tsbDualLaneSLeftYellowSolid.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneSLeftYellowSolid.Text = "toolStripButton2";
+            this.tsbDualLaneSLeftYellowSolid.Text = "Dual Lane S-Shaped Left";
             this.tsbDualLaneSLeftYellowSolid.Click += new System.EventHandler(this.tsbDualLaneSLeftYellowSolid_Click);
             // 
             // toolStripSeparator8
@@ -810,7 +836,7 @@
             this.tsbDualLaneUnion.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneUnion.Name = "tsbDualLaneUnion";
             this.tsbDualLaneUnion.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneUnion.Text = "toolStripButton1";
+            this.tsbDualLaneUnion.Text = "Dual Lane Union";
             this.tsbDualLaneUnion.Click += new System.EventHandler(this.tsbDualLaneUnion_Click);
             // 
             // tsbDualLaneUnionCenterLane
@@ -821,7 +847,7 @@
             this.tsbDualLaneUnionCenterLane.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneUnionCenterLane.Name = "tsbDualLaneUnionCenterLane";
             this.tsbDualLaneUnionCenterLane.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneUnionCenterLane.Text = "toolStripButton1";
+            this.tsbDualLaneUnionCenterLane.Text = "Dual Lane Union ending Center Lane";
             this.tsbDualLaneUnionCenterLane.Click += new System.EventHandler(this.tsbDualLaneUnionCenterLane_Click);
             // 
             // tsbQuadLaneUnion
@@ -832,7 +858,7 @@
             this.tsbQuadLaneUnion.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLaneUnion.Name = "tsbQuadLaneUnion";
             this.tsbQuadLaneUnion.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLaneUnion.Text = "toolStripButton1";
+            this.tsbQuadLaneUnion.Text = "Quad Lane Union";
             this.tsbQuadLaneUnion.Click += new System.EventHandler(this.tsbQuadLaneUnion_Click);
             // 
             // tsbQuadLaaneUnionCenterLane
@@ -843,7 +869,7 @@
             this.tsbQuadLaaneUnionCenterLane.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLaaneUnionCenterLane.Name = "tsbQuadLaaneUnionCenterLane";
             this.tsbQuadLaaneUnionCenterLane.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLaaneUnionCenterLane.Text = "toolStripButton1";
+            this.tsbQuadLaaneUnionCenterLane.Text = "Quad Lane Union ending Center Lane";
             this.tsbQuadLaaneUnionCenterLane.Click += new System.EventHandler(this.tsbQuadLaaneUnionCenterLane_Click);
             // 
             // toolStripSeparator1
@@ -859,7 +885,7 @@
             this.tsbSingleLaneUnion.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSingleLaneUnion.Name = "tsbSingleLaneUnion";
             this.tsbSingleLaneUnion.Size = new System.Drawing.Size(35, 36);
-            this.tsbSingleLaneUnion.Text = "toolStripButton2";
+            this.tsbSingleLaneUnion.Text = "Single Lane merged from 2 Lanes";
             this.tsbSingleLaneUnion.Click += new System.EventHandler(this.tsbSingleLaneUnion_Click);
             // 
             // tsbQuadToDualDoubleYellowLine
@@ -870,7 +896,7 @@
             this.tsbQuadToDualDoubleYellowLine.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadToDualDoubleYellowLine.Name = "tsbQuadToDualDoubleYellowLine";
             this.tsbQuadToDualDoubleYellowLine.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadToDualDoubleYellowLine.Text = "toolStripButton4";
+            this.tsbQuadToDualDoubleYellowLine.Text = "Dual Lane merged from 4 Lanes";
             this.tsbQuadToDualDoubleYellowLine.Click += new System.EventHandler(this.tsbQuadToDualDoubleYellowLine_Click);
             // 
             // tsLeft3
@@ -900,7 +926,7 @@
             this.tsbSingleLaneCurveLeft.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSingleLaneCurveLeft.Name = "tsbSingleLaneCurveLeft";
             this.tsbSingleLaneCurveLeft.Size = new System.Drawing.Size(35, 36);
-            this.tsbSingleLaneCurveLeft.Text = "toolStripButton1";
+            this.tsbSingleLaneCurveLeft.Text = "Single Lane Curved Left";
             this.tsbSingleLaneCurveLeft.Click += new System.EventHandler(this.tsbSingleLaneCurveLeft_Click);
             // 
             // tsbDualLaneCurveLeftDashedYellow
@@ -911,7 +937,7 @@
             this.tsbDualLaneCurveLeftDashedYellow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneCurveLeftDashedYellow.Name = "tsbDualLaneCurveLeftDashedYellow";
             this.tsbDualLaneCurveLeftDashedYellow.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneCurveLeftDashedYellow.Text = "toolStripButton1";
+            this.tsbDualLaneCurveLeftDashedYellow.Text = "Dual Lane Curved Left separated with Yellow Dashed Line";
             this.tsbDualLaneCurveLeftDashedYellow.Click += new System.EventHandler(this.tsbDualLaneCurveLeftDashedYellow_Click);
             // 
             // tsbDualLaneCurveLeftSolidYellow
@@ -922,7 +948,7 @@
             this.tsbDualLaneCurveLeftSolidYellow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneCurveLeftSolidYellow.Name = "tsbDualLaneCurveLeftSolidYellow";
             this.tsbDualLaneCurveLeftSolidYellow.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneCurveLeftSolidYellow.Text = "toolStripButton2";
+            this.tsbDualLaneCurveLeftSolidYellow.Text = "Dual Lane Curved Left separated with Yellow Solid Line";
             this.tsbDualLaneCurveLeftSolidYellow.Click += new System.EventHandler(this.tsbDualLaneCurveLeftSolidYellow_Click);
             // 
             // tsbDualLaneCurveLeftDoubleYellow
@@ -933,7 +959,7 @@
             this.tsbDualLaneCurveLeftDoubleYellow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneCurveLeftDoubleYellow.Name = "tsbDualLaneCurveLeftDoubleYellow";
             this.tsbDualLaneCurveLeftDoubleYellow.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneCurveLeftDoubleYellow.Text = "toolStripButton3";
+            this.tsbDualLaneCurveLeftDoubleYellow.Text = "Dual Lane Curved Left separated with Double Yellow Line";
             this.tsbDualLaneCurveLeftDoubleYellow.Click += new System.EventHandler(this.tsbDualLaneCurveLeftDoubleYellow_Click);
             // 
             // tsbQuadLaneCurveLeftDoubleYellow
@@ -944,7 +970,7 @@
             this.tsbQuadLaneCurveLeftDoubleYellow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLaneCurveLeftDoubleYellow.Name = "tsbQuadLaneCurveLeftDoubleYellow";
             this.tsbQuadLaneCurveLeftDoubleYellow.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLaneCurveLeftDoubleYellow.Text = "toolStripButton4";
+            this.tsbQuadLaneCurveLeftDoubleYellow.Text = "Quad Lane Curved Left";
             this.tsbQuadLaneCurveLeftDoubleYellow.Click += new System.EventHandler(this.tsbQuadLaneCurveLeftDoubleYellow_Click);
             // 
             // tsbQuadLaneCurveLeftCenterLane
@@ -955,7 +981,7 @@
             this.tsbQuadLaneCurveLeftCenterLane.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLaneCurveLeftCenterLane.Name = "tsbQuadLaneCurveLeftCenterLane";
             this.tsbQuadLaneCurveLeftCenterLane.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLaneCurveLeftCenterLane.Text = "toolStripButton1";
+            this.tsbQuadLaneCurveLeftCenterLane.Text = "Quad Lane Curved Left with Center Lane";
             this.tsbQuadLaneCurveLeftCenterLane.Click += new System.EventHandler(this.tsbQuadLaneCurveLeftCenterLane_Click);
             // 
             // toolStripSeparator5
@@ -971,7 +997,7 @@
             this.tsbQuadLaneSRightYellowSolid.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLaneSRightYellowSolid.Name = "tsbQuadLaneSRightYellowSolid";
             this.tsbQuadLaneSRightYellowSolid.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLaneSRightYellowSolid.Text = "toolStripButton1";
+            this.tsbQuadLaneSRightYellowSolid.Text = "Quad Lane S-Shaped Right";
             this.tsbQuadLaneSRightYellowSolid.Click += new System.EventHandler(this.tsbQuadLaneSRightYellowSolid_Click);
             // 
             // tsbQuadLaneSLeftYellowSolid
@@ -982,7 +1008,7 @@
             this.tsbQuadLaneSLeftYellowSolid.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLaneSLeftYellowSolid.Name = "tsbQuadLaneSLeftYellowSolid";
             this.tsbQuadLaneSLeftYellowSolid.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLaneSLeftYellowSolid.Text = "toolStripButton3";
+            this.tsbQuadLaneSLeftYellowSolid.Text = "Quad Lane S-Shaped Left";
             this.tsbQuadLaneSLeftYellowSolid.Click += new System.EventHandler(this.tsbQuadLaneSLeftYellowSolid_Click);
             // 
             // toolStripSeparator9
@@ -1003,7 +1029,7 @@
             this.tsbArrowStraightLeft,
             this.tsbArrowLeftOnly,
             this.tsbMergeLeft});
-            this.tsRight1.Location = new System.Drawing.Point(0, 4);
+            this.tsRight1.Location = new System.Drawing.Point(0, 3);
             this.tsRight1.Name = "tsRight1";
             this.tsRight1.Size = new System.Drawing.Size(37, 257);
             this.tsRight1.TabIndex = 0;
@@ -1016,7 +1042,7 @@
             this.tsbSingleLaneExitRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSingleLaneExitRight.Name = "tsbSingleLaneExitRight";
             this.tsbSingleLaneExitRight.Size = new System.Drawing.Size(35, 36);
-            this.tsbSingleLaneExitRight.Text = "toolStripButton3";
+            this.tsbSingleLaneExitRight.Text = "Single Lane with Exit Lane";
             this.tsbSingleLaneExitRight.Click += new System.EventHandler(this.tsbSingleLaneExitRight_Click);
             // 
             // tsbSingleLaneJunctionRight
@@ -1027,7 +1053,7 @@
             this.tsbSingleLaneJunctionRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSingleLaneJunctionRight.Name = "tsbSingleLaneJunctionRight";
             this.tsbSingleLaneJunctionRight.Size = new System.Drawing.Size(35, 36);
-            this.tsbSingleLaneJunctionRight.Text = "toolStripButton6";
+            this.tsbSingleLaneJunctionRight.Text = "Single Lane with Junction Lane";
             this.tsbSingleLaneJunctionRight.Click += new System.EventHandler(this.tsbSingleLaneJunctionRight_Click);
             // 
             // toolStripSeparator6
@@ -1043,7 +1069,7 @@
             this.tsbDoubleLaneTintersection.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDoubleLaneTintersection.Name = "tsbDoubleLaneTintersection";
             this.tsbDoubleLaneTintersection.Size = new System.Drawing.Size(35, 36);
-            this.tsbDoubleLaneTintersection.Text = "toolStripButton6";
+            this.tsbDoubleLaneTintersection.Text = "T-Intersection";
             this.tsbDoubleLaneTintersection.Click += new System.EventHandler(this.tsbDoubleLaneTintersection_Click);
             // 
             // tsbDoubleLaneRoundabout
@@ -1071,7 +1097,7 @@
             this.tsbArrowStraightLeft.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbArrowStraightLeft.Name = "tsbArrowStraightLeft";
             this.tsbArrowStraightLeft.Size = new System.Drawing.Size(35, 36);
-            this.tsbArrowStraightLeft.Text = "toolStripButton1";
+            this.tsbArrowStraightLeft.Text = "Arrow Straight Left";
             this.tsbArrowStraightLeft.Click += new System.EventHandler(this.tsbArrowStraightLeft_Click);
             // 
             // tsbArrowLeftOnly
@@ -1082,7 +1108,7 @@
             this.tsbArrowLeftOnly.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbArrowLeftOnly.Name = "tsbArrowLeftOnly";
             this.tsbArrowLeftOnly.Size = new System.Drawing.Size(35, 36);
-            this.tsbArrowLeftOnly.Text = "toolStripButton2";
+            this.tsbArrowLeftOnly.Text = "Arrow Left Only";
             this.tsbArrowLeftOnly.Click += new System.EventHandler(this.tsbArrowLeftOnly_Click);
             // 
             // tsbMergeLeft
@@ -1093,7 +1119,7 @@
             this.tsbMergeLeft.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbMergeLeft.Name = "tsbMergeLeft";
             this.tsbMergeLeft.Size = new System.Drawing.Size(35, 36);
-            this.tsbMergeLeft.Text = "toolStripButton1";
+            this.tsbMergeLeft.Text = "Arrow Merge Left";
             this.tsbMergeLeft.Click += new System.EventHandler(this.tsbMergeLeft_Click);
             // 
             // tsRight2
@@ -1109,7 +1135,7 @@
             this.tsbArrowStraightOnly,
             this.tsbArrowLeftRight,
             this.tsbParking});
-            this.tsRight2.Location = new System.Drawing.Point(37, 4);
+            this.tsRight2.Location = new System.Drawing.Point(37, 3);
             this.tsRight2.Name = "tsRight2";
             this.tsRight2.Size = new System.Drawing.Size(37, 257);
             this.tsRight2.TabIndex = 1;
@@ -1122,7 +1148,7 @@
             this.tsbDualLaneExitRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneExitRight.Name = "tsbDualLaneExitRight";
             this.tsbDualLaneExitRight.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneExitRight.Text = "toolStripButton2";
+            this.tsbDualLaneExitRight.Text = "Dual Lane with Exit Lane";
             this.tsbDualLaneExitRight.Click += new System.EventHandler(this.tsbDualLaneExitRight_Click);
             // 
             // tsbDualLaneJunctionRight
@@ -1133,7 +1159,7 @@
             this.tsbDualLaneJunctionRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDualLaneJunctionRight.Name = "tsbDualLaneJunctionRight";
             this.tsbDualLaneJunctionRight.Size = new System.Drawing.Size(35, 36);
-            this.tsbDualLaneJunctionRight.Text = "toolStripButton5";
+            this.tsbDualLaneJunctionRight.Text = "Dual Lane with Junction Lane";
             this.tsbDualLaneJunctionRight.Click += new System.EventHandler(this.tsbDualLaneJunctionRight_Click);
             // 
             // toolStripSeparator10
@@ -1149,7 +1175,7 @@
             this.tsbDoubleLane3wayIntersection.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDoubleLane3wayIntersection.Name = "tsbDoubleLane3wayIntersection";
             this.tsbDoubleLane3wayIntersection.Size = new System.Drawing.Size(35, 36);
-            this.tsbDoubleLane3wayIntersection.Text = "toolStripButton1";
+            this.tsbDoubleLane3wayIntersection.Text = "3-Way Intersection";
             this.tsbDoubleLane3wayIntersection.Click += new System.EventHandler(this.tsbDoubleLane3wayIntersection_Click);
             // 
             // tsbDoubleLaneRoundabout2
@@ -1177,7 +1203,7 @@
             this.tsbArrowStraightOnly.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbArrowStraightOnly.Name = "tsbArrowStraightOnly";
             this.tsbArrowStraightOnly.Size = new System.Drawing.Size(35, 36);
-            this.tsbArrowStraightOnly.Text = "toolStripButton3";
+            this.tsbArrowStraightOnly.Text = "Arrow Straight Only";
             this.tsbArrowStraightOnly.Click += new System.EventHandler(this.tsbArrowStraightOnly_Click);
             // 
             // tsbArrowLeftRight
@@ -1188,7 +1214,7 @@
             this.tsbArrowLeftRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbArrowLeftRight.Name = "tsbArrowLeftRight";
             this.tsbArrowLeftRight.Size = new System.Drawing.Size(35, 36);
-            this.tsbArrowLeftRight.Text = "toolStripButton4";
+            this.tsbArrowLeftRight.Text = "Arrow Left Right Only";
             this.tsbArrowLeftRight.Click += new System.EventHandler(this.tsbArrowLeftRight_Click);
             // 
             // tsbParking
@@ -1199,7 +1225,7 @@
             this.tsbParking.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbParking.Name = "tsbParking";
             this.tsbParking.Size = new System.Drawing.Size(35, 36);
-            this.tsbParking.Text = "toolStripButton2";
+            this.tsbParking.Text = "Parking Sign";
             this.tsbParking.Click += new System.EventHandler(this.tsbParking_Click);
             // 
             // tsRight3
@@ -1215,7 +1241,7 @@
             this.tsbArrowStraightRight,
             this.tsbArrowRightOnly,
             this.tsbMergeRight});
-            this.tsRight3.Location = new System.Drawing.Point(74, 5);
+            this.tsRight3.Location = new System.Drawing.Point(74, 3);
             this.tsRight3.Name = "tsRight3";
             this.tsRight3.Size = new System.Drawing.Size(37, 257);
             this.tsRight3.TabIndex = 2;
@@ -1228,7 +1254,7 @@
             this.tsbQuadLaneExitRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLaneExitRight.Name = "tsbQuadLaneExitRight";
             this.tsbQuadLaneExitRight.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLaneExitRight.Text = "toolStripButton1";
+            this.tsbQuadLaneExitRight.Text = "Quad Lane with Exit Lane";
             this.tsbQuadLaneExitRight.Click += new System.EventHandler(this.tsbQuadLaneExitRight_Click);
             // 
             // tsbQuadLaneJunctionRight
@@ -1239,7 +1265,7 @@
             this.tsbQuadLaneJunctionRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbQuadLaneJunctionRight.Name = "tsbQuadLaneJunctionRight";
             this.tsbQuadLaneJunctionRight.Size = new System.Drawing.Size(35, 36);
-            this.tsbQuadLaneJunctionRight.Text = "toolStripButton4";
+            this.tsbQuadLaneJunctionRight.Text = "Quad Lane with Junction Lane";
             this.tsbQuadLaneJunctionRight.Click += new System.EventHandler(this.tsbQuadLaneJunctionRight_Click);
             // 
             // toolStripSeparator11
@@ -1255,7 +1281,7 @@
             this.tsbDoubleLane4wayIntersection.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDoubleLane4wayIntersection.Name = "tsbDoubleLane4wayIntersection";
             this.tsbDoubleLane4wayIntersection.Size = new System.Drawing.Size(35, 36);
-            this.tsbDoubleLane4wayIntersection.Text = "toolStripButton1";
+            this.tsbDoubleLane4wayIntersection.Text = "4-Way Intersection";
             this.tsbDoubleLane4wayIntersection.Click += new System.EventHandler(this.tsbDoubleLane4wayIntersection_Click);
             // 
             // tsbDoubleLaneRoundabout3
@@ -1283,7 +1309,7 @@
             this.tsbArrowStraightRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbArrowStraightRight.Name = "tsbArrowStraightRight";
             this.tsbArrowStraightRight.Size = new System.Drawing.Size(35, 36);
-            this.tsbArrowStraightRight.Text = "toolStripButton5";
+            this.tsbArrowStraightRight.Text = "Arrow Straight Right";
             this.tsbArrowStraightRight.Click += new System.EventHandler(this.tsbArrowStraightRight_Click);
             // 
             // tsbArrowRightOnly
@@ -1294,7 +1320,7 @@
             this.tsbArrowRightOnly.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbArrowRightOnly.Name = "tsbArrowRightOnly";
             this.tsbArrowRightOnly.Size = new System.Drawing.Size(35, 36);
-            this.tsbArrowRightOnly.Text = "toolStripButton6";
+            this.tsbArrowRightOnly.Text = "Arrow Right Only";
             this.tsbArrowRightOnly.Click += new System.EventHandler(this.tsbArrowRightOnly_Click);
             // 
             // tsbMergeRight
@@ -1305,7 +1331,7 @@
             this.tsbMergeRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbMergeRight.Name = "tsbMergeRight";
             this.tsbMergeRight.Size = new System.Drawing.Size(35, 36);
-            this.tsbMergeRight.Text = "toolStripButton3";
+            this.tsbMergeRight.Text = "Arrow Merge Right";
             this.tsbMergeRight.Click += new System.EventHandler(this.tsbMergeRight_Click);
             // 
             // toolTip1
@@ -1315,18 +1341,69 @@
             // sfdSaveStreetMap
             // 
             this.sfdSaveStreetMap.DefaultExt = "Map";
-            this.sfdSaveStreetMap.Filter = "StreetMap Files|*.Map";
+            this.sfdSaveStreetMap.Filter = "StreetMap Files|*.smap";
             this.sfdSaveStreetMap.Title = "Save Street Map ";
             // 
             // ofdLoadStreetMap
             // 
             this.ofdLoadStreetMap.DefaultExt = "Map";
-            this.ofdLoadStreetMap.Filter = "StreetMap Files|*.Map";
+            this.ofdLoadStreetMap.Filter = "StreetMap Files|*.smap";
             this.ofdLoadStreetMap.Title = "Load Street Map";
             // 
             // pdPrintStreepMap
             // 
             this.pdPrintStreepMap.UseEXDialog = true;
+            // 
+            // tsmiRedraw
+            // 
+            this.tsmiRedraw.Name = "tsmiRedraw";
+            this.tsmiRedraw.Size = new System.Drawing.Size(183, 22);
+            this.tsmiRedraw.Text = "Redraw";
+            this.tsmiRedraw.ToolTipText = "Redraw the current street map design to get rid of any possible edit artefacts.";
+            this.tsmiRedraw.Click += new System.EventHandler(this.tsmiRedraw_Click);
+            // 
+            // toolStripSeparator18
+            // 
+            this.toolStripSeparator18.Name = "toolStripSeparator18";
+            this.toolStripSeparator18.Size = new System.Drawing.Size(180, 6);
+            // 
+            // tsmiShowPageLimits
+            // 
+            this.tsmiShowPageLimits.CheckOnClick = true;
+            this.tsmiShowPageLimits.Name = "tsmiShowPageLimits";
+            this.tsmiShowPageLimits.Size = new System.Drawing.Size(183, 22);
+            this.tsmiShowPageLimits.Text = "Show Page Limits";
+            this.tsmiShowPageLimits.CheckStateChanged += new System.EventHandler(this.tsmiShowPageLimits_CheckStateChanged);
+            // 
+            // tsmiShowItemNumbers
+            // 
+            this.tsmiShowItemNumbers.CheckOnClick = true;
+            this.tsmiShowItemNumbers.Name = "tsmiShowItemNumbers";
+            this.tsmiShowItemNumbers.Size = new System.Drawing.Size(183, 22);
+            this.tsmiShowItemNumbers.Text = "Show Item Numbers";
+            this.tsmiShowItemNumbers.ToolTipText = "Turn on or off displaying all item numbers for all street elements.";
+            this.tsmiShowItemNumbers.CheckStateChanged += new System.EventHandler(this.tsmiShowItemNumbers_CheckStateChanged);
+            // 
+            // tsmiShowLaneNumbers
+            // 
+            this.tsmiShowLaneNumbers.CheckOnClick = true;
+            this.tsmiShowLaneNumbers.Name = "tsmiShowLaneNumbers";
+            this.tsmiShowLaneNumbers.Size = new System.Drawing.Size(183, 22);
+            this.tsmiShowLaneNumbers.Text = "Show Lane Numbers";
+            this.tsmiShowLaneNumbers.ToolTipText = "Turn on or off displaying the individual lane numbers for all street elements.";
+            this.tsmiShowLaneNumbers.CheckStateChanged += new System.EventHandler(this.tsmiShowLaneNumbers_CheckStateChanged);
+            // 
+            // tsmiView
+            // 
+            this.tsmiView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiRedraw,
+            this.toolStripSeparator18,
+            this.tsmiShowPageLimits,
+            this.tsmiShowItemNumbers,
+            this.tsmiShowLaneNumbers});
+            this.tsmiView.Name = "tsmiView";
+            this.tsmiView.Size = new System.Drawing.Size(44, 20);
+            this.tsmiView.Text = "View";
             // 
             // frmStreetMakerMain
             // 
@@ -1341,13 +1418,11 @@
             this.MainMenuStrip = this.msMainMenu;
             this.Name = "frmStreetMakerMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Street Generator";
+            this.Text = "Street Maker";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmStreetMakerMain_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.frmStreetMakerMain_KeyUp);
             this.msMainMenu.ResumeLayout(false);
             this.msMainMenu.PerformLayout();
-            this.ssMainStatus.ResumeLayout(false);
-            this.ssMainStatus.PerformLayout();
             this.tscTools.ContentPanel.ResumeLayout(false);
             this.tscTools.LeftToolStripPanel.ResumeLayout(false);
             this.tscTools.LeftToolStripPanel.PerformLayout();
@@ -1384,14 +1459,12 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiExit;
         private System.Windows.Forms.ToolStripMenuItem tsmiEdit;
         private System.Windows.Forms.ToolStripMenuItem tsmiSettings;
-        private System.Windows.Forms.ToolStripMenuItem tsmiView;
         private System.Windows.Forms.StatusStrip ssMainStatus;
         private System.Windows.Forms.ToolStripContainer tscTools;
         private System.Windows.Forms.Panel pnDrawingArea;
         private System.Windows.Forms.PictureBox pbDrawingArea;
         private System.Windows.Forms.ToolStripStatusLabel tsslCursorValues;
         private System.Windows.Forms.ToolStripStatusLabel tsslLocation;
-        private System.Windows.Forms.ToolStripMenuItem tsmiRedraw;
         private System.Windows.Forms.ToolStrip tsLeft1;
         private System.Windows.Forms.ToolStripButton tsbSingleLane;
         private System.Windows.Forms.ToolStripButton tsbDoubleLaneYellowDashedLine;
@@ -1482,11 +1555,8 @@
         private System.Windows.Forms.ToolStripButton tsbParking;
         private System.Windows.Forms.ToolStripButton tsbMergeRight;
         private System.Windows.Forms.ToolStripStatusLabel tsslFileName;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator18;
-        private System.Windows.Forms.ToolStripMenuItem tsmiShowItemNumbers;
         private System.Windows.Forms.ToolStripMenuItem tsmiProcess;
         private System.Windows.Forms.ToolStripMenuItem tsmiCreateDataset;
-        private System.Windows.Forms.ToolStripMenuItem tsmiShowLaneNumbers;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplayTestAndPred;
         private System.Windows.Forms.ToolStripMenuItem tsmiAbort;
@@ -1496,6 +1566,17 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiTestPrint;
         private System.Windows.Forms.PageSetupDialog pageSetupDialog1;
         private System.Windows.Forms.ToolStripMenuItem tsmiPrintSeup;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator19;
+        private System.Windows.Forms.ToolStripMenuItem tsmiResizeMap;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator21;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDeleteDataset;
+        private System.Windows.Forms.ToolStripMenuItem tsmiWriteClassesAndColors;
+        private System.Windows.Forms.ToolStripMenuItem tsmiView;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRedraw;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator18;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowPageLimits;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowItemNumbers;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowLaneNumbers;
     }
 }
 

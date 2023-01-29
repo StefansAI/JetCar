@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMultiStreetSettings));
             this.cbStreetType = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -68,6 +69,7 @@
             this.nudRampRadius = new System.Windows.Forms.NumericUpDown();
             this.label16 = new System.Windows.Forms.Label();
             this.ckbFineSteps = new System.Windows.Forms.CheckBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.nudLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSOffset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudRightLaneCount)).BeginInit();
@@ -87,6 +89,8 @@
             this.cbStreetType.Name = "cbStreetType";
             this.cbStreetType.Size = new System.Drawing.Size(121, 21);
             this.cbStreetType.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.cbStreetType, "Displays the current type of the street element and allows changing to a complete" +
+        "ly different one. Changing the type might require lane adjustments.");
             this.cbStreetType.SelectedIndexChanged += new System.EventHandler(this.cbStreetType_SelectedIndexChanged);
             // 
             // label1
@@ -105,6 +109,7 @@
             this.nudLength.Name = "nudLength";
             this.nudLength.Size = new System.Drawing.Size(77, 20);
             this.nudLength.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.nudLength, "Straight length of the street element. Does not apply to curves.");
             this.nudLength.ValueChanged += new System.EventHandler(this.nud_ValueChanged);
             // 
             // lbLength
@@ -132,6 +137,7 @@
             this.nudSOffset.Name = "nudSOffset";
             this.nudSOffset.Size = new System.Drawing.Size(77, 20);
             this.nudSOffset.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.nudSOffset, "Offset from the center line at the end of an S-shaped street element only.");
             this.nudSOffset.ValueChanged += new System.EventHandler(this.nud_ValueChanged);
             // 
             // cbCenterDivider2
@@ -141,6 +147,8 @@
             this.cbCenterDivider2.Name = "cbCenterDivider2";
             this.cbCenterDivider2.Size = new System.Drawing.Size(121, 21);
             this.cbCenterDivider2.TabIndex = 22;
+            this.toolTip1.SetToolTip(this.cbCenterDivider2, "Divider lane type left side of the Center Lane, when present. It is normally Doub" +
+        "le Yellow Dashed Solid Line.");
             // 
             // label46
             // 
@@ -158,6 +166,8 @@
             this.cbRightBorder.Name = "cbRightBorder";
             this.cbRightBorder.Size = new System.Drawing.Size(121, 21);
             this.cbRightBorder.TabIndex = 18;
+            this.toolTip1.SetToolTip(this.cbRightBorder, "Border type on the right side of the right lanes in driving direction. Normally i" +
+        "t is the ShoulderLine, but can also be set to other line types.");
             // 
             // label9
             // 
@@ -175,6 +185,8 @@
             this.cbLeftBorder.Name = "cbLeftBorder";
             this.cbLeftBorder.Size = new System.Drawing.Size(121, 21);
             this.cbLeftBorder.TabIndex = 16;
+            this.toolTip1.SetToolTip(this.cbLeftBorder, "Border type on the left side of the left lanes in driving direction. Normally it " +
+        "is the ShoulderLine, but can also be set to other line types.");
             // 
             // label8
             // 
@@ -192,6 +204,7 @@
             this.cbRightLines.Name = "cbRightLines";
             this.cbRightLines.Size = new System.Drawing.Size(121, 21);
             this.cbRightLines.TabIndex = 10;
+            this.toolTip1.SetToolTip(this.cbRightLines, "Line type of the lines between multiple right lanes in driving direction.");
             // 
             // label6
             // 
@@ -209,6 +222,7 @@
             this.nudRightLaneCount.Size = new System.Drawing.Size(36, 20);
             this.nudRightLaneCount.TabIndex = 9;
             this.nudRightLaneCount.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudRightLaneCount, "Number of lanes on the right side in the driving direction.");
             this.nudRightLaneCount.Value = new decimal(new int[] {
             3,
             0,
@@ -232,6 +246,8 @@
             this.cbCenterDivider.Name = "cbCenterDivider";
             this.cbCenterDivider.Size = new System.Drawing.Size(121, 21);
             this.cbCenterDivider.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.cbCenterDivider, "Lane type dividing both directions or to the right side of the Center Lane, when " +
+        "present. It is often a Yellow Solid Line.");
             this.cbCenterDivider.SelectedIndexChanged += new System.EventHandler(this.cbCenterDivider_SelectedIndexChanged);
             // 
             // label5
@@ -250,6 +266,8 @@
             this.cbLeftLines.Name = "cbLeftLines";
             this.cbLeftLines.Size = new System.Drawing.Size(121, 21);
             this.cbLeftLines.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.cbLeftLines, "Line type of the lines between multiple left lanes, the lanes left of the driving" +
+        " direction. It is mostly White Dashed Line.");
             // 
             // label2
             // 
@@ -267,6 +285,7 @@
             this.nudCenterLaneCount.Size = new System.Drawing.Size(36, 20);
             this.nudCenterLaneCount.TabIndex = 5;
             this.nudCenterLaneCount.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudCenterLaneCount, "Number of Center Lanes between left and right lanes.");
             this.nudCenterLaneCount.Value = new decimal(new int[] {
             2,
             0,
@@ -290,6 +309,7 @@
             this.nudLeftLaneCount.Size = new System.Drawing.Size(36, 20);
             this.nudLeftLaneCount.TabIndex = 3;
             this.nudLeftLaneCount.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudLeftLaneCount, "Number of lanes left from the driving direction.");
             this.nudLeftLaneCount.Value = new decimal(new int[] {
             3,
             0,
@@ -313,6 +333,7 @@
             this.nudInnerRadius.Name = "nudInnerRadius";
             this.nudInnerRadius.Size = new System.Drawing.Size(77, 20);
             this.nudInnerRadius.TabIndex = 25;
+            this.toolTip1.SetToolTip(this.nudInnerRadius, "Inner radius of a curve. Only valid for curved streetelements.");
             this.nudInnerRadius.ValueChanged += new System.EventHandler(this.nud_ValueChanged);
             // 
             // label10
@@ -332,6 +353,7 @@
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 27;
             this.btnCancel.Text = "Cancel";
+            this.toolTip1.SetToolTip(this.btnCancel, "The Cancel button will simply close this dialog without applying any changes.");
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -343,6 +365,7 @@
             this.btnOk.Size = new System.Drawing.Size(75, 23);
             this.btnOk.TabIndex = 26;
             this.btnOk.Text = "Ok";
+            this.toolTip1.SetToolTip(this.btnOk, "The OK button will save any changes to the selected street element and exit.");
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
@@ -368,6 +391,7 @@
             this.nudAngle.Name = "nudAngle";
             this.nudAngle.Size = new System.Drawing.Size(77, 20);
             this.nudAngle.TabIndex = 29;
+            this.toolTip1.SetToolTip(this.nudAngle, "Angle of the complete element on the drawing in degrees.");
             this.nudAngle.ValueChanged += new System.EventHandler(this.nud_ValueChanged);
             // 
             // label12
@@ -386,6 +410,7 @@
             this.nudCurveAngle.Name = "nudCurveAngle";
             this.nudCurveAngle.Size = new System.Drawing.Size(77, 20);
             this.nudCurveAngle.TabIndex = 31;
+            this.toolTip1.SetToolTip(this.nudCurveAngle, "Circular angle of a curved street element. Not valid for othere types.");
             this.nudCurveAngle.ValueChanged += new System.EventHandler(this.nud_ValueChanged);
             // 
             // label13
@@ -404,6 +429,7 @@
             this.cbRampType.Name = "cbRampType";
             this.cbRampType.Size = new System.Drawing.Size(121, 21);
             this.cbRampType.TabIndex = 32;
+            this.toolTip1.SetToolTip(this.cbRampType, "Defines any additional on or off ramp lane at the right side.");
             this.cbRampType.SelectedIndexChanged += new System.EventHandler(this.cbRampType_SelectedIndexChanged);
             // 
             // label14
@@ -423,6 +449,7 @@
             this.nudRampCurveAngle.Name = "nudRampCurveAngle";
             this.nudRampCurveAngle.Size = new System.Drawing.Size(77, 20);
             this.nudRampCurveAngle.TabIndex = 37;
+            this.toolTip1.SetToolTip(this.nudRampCurveAngle, "The on or off ramp is a curved lane with the curve angle defined here.");
             this.nudRampCurveAngle.ValueChanged += new System.EventHandler(this.nud_ValueChanged);
             // 
             // label15
@@ -442,6 +469,7 @@
             this.nudRampRadius.Name = "nudRampRadius";
             this.nudRampRadius.Size = new System.Drawing.Size(77, 20);
             this.nudRampRadius.TabIndex = 35;
+            this.toolTip1.SetToolTip(this.nudRampRadius, "The on or off ramp is a curved lane with the inner radius defined here.");
             this.nudRampRadius.ValueChanged += new System.EventHandler(this.nud_ValueChanged);
             // 
             // label16
@@ -461,6 +489,8 @@
             this.ckbFineSteps.Size = new System.Drawing.Size(76, 17);
             this.ckbFineSteps.TabIndex = 38;
             this.ckbFineSteps.Text = "Fine Steps";
+            this.toolTip1.SetToolTip(this.ckbFineSteps, "When checked, the dialog can stay open and fine changes will be applied immediate" +
+        "ly.");
             this.ckbFineSteps.UseVisualStyleBackColor = true;
             this.ckbFineSteps.CheckedChanged += new System.EventHandler(this.ckbFineSteps_CheckedChanged);
             // 
@@ -576,5 +606,6 @@
         private System.Windows.Forms.NumericUpDown nudRampRadius;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.CheckBox ckbFineSteps;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

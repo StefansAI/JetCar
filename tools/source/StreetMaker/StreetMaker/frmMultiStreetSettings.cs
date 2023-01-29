@@ -32,6 +32,8 @@ namespace StreetMaker
         private MultiLaneStreet newMultiLaneStreet;
         /// <summary>Reflects the result from checking all GUI values against the original parameter, set to true if any change is detected.</summary>
         private bool hasChanged;
+        /// <summary>Normally true to close the dialog with the OK button, but could be set to false when parameter are not valid</summary>
+        private bool canClose;
         /// <summary>Set to true after the form GUI elements are loaded.</summary>
         private bool loaded;
         #endregion Private Fields
@@ -195,9 +197,18 @@ namespace StreetMaker
 
             if (hasChanged == true)
             {
-                newMultiLaneStreet = new MultiLaneStreet(MainForm.AppSettings, (StreetType)cbStreetType.SelectedIndex, laneCountRight, laneCountCenter, laneCountLeft,
-                                                        rightBorderLine, rightLaneLine, dividerLine, dividerLine2, leftLaneLine, leftBorderLine, (double)nudInnerRadius.Value, 
-                                                        rampType, rampRadius, rampCurveAngle);
+                try
+                {
+                    newMultiLaneStreet = new MultiLaneStreet(MainForm.AppSettings, (StreetType)cbStreetType.SelectedIndex, laneCountRight, laneCountCenter, laneCountLeft,
+                                                            rightBorderLine, rightLaneLine, dividerLine, dividerLine2, leftLaneLine, leftBorderLine, (double)nudInnerRadius.Value,
+                                                            rampType, rampRadius, rampCurveAngle);
+                    canClose = true;
+                }
+                catch
+                {
+                    MessageBox.Show("Could not apply the current parameter selection to this street element.\nPlease change parameter like number of lanes etc. until valid.","Warning");
+                    canClose = false;
+                }
             }
         }
 
@@ -211,7 +222,7 @@ namespace StreetMaker
             {
                 MainForm.SetEnabled(false);
                 SaveForm();
-                if (hasChanged == true)
+                if ((canClose == true) && (hasChanged == true))
                 {
                     newMultiLaneStreet.SetParameter((double)nudLength.Value, (double)nudCurveAngle.Value, (double)nudSOffset.Value);
                     newMultiLaneStreet.SetAngleAndLocation((double)nudAngle.Value, MultiLaneStreet.Lanes[0].Connectors[0].CenterP);
@@ -230,7 +241,8 @@ namespace StreetMaker
         private void btnOk_Click(object sender, EventArgs e)
         {
             UpdateMainForm();
-            Close();
+            if (canClose == true)
+                Close();
         }
 
         /// <summary>

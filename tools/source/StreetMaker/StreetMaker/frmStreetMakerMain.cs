@@ -81,8 +81,8 @@ namespace StreetMaker
 
             AppSettings = new AppSettings(Application.StartupPath + "\\" + APP_SETTINGS_FILE_NAME);
 
-            ofdLoadStreetMap.InitialDirectory = AppSettings.PathToDataStorage;
-            sfdSaveStreetMap.InitialDirectory = AppSettings.PathToDataStorage;
+            ofdLoadStreetMap.InitialDirectory = AppSettings.PathToDataStorage + AppSettings.SubDirStreetmaps;
+            sfdSaveStreetMap.InitialDirectory = AppSettings.PathToDataStorage + AppSettings.SubDirStreetmaps;
 
             StreetMap = new StreetMap(ref AppSettings);
             StreetMap.ConnectionIssueChange += StreetMap_ConnectionIssueChange;
@@ -131,7 +131,7 @@ namespace StreetMaker
                     frmConnectionIssues = new frmConnectionIssues(this);
                 else
                     frmConnectionIssues.Hide();
-               
+
                 frmConnectionIssues.LoadIssues();
                 frmConnectionIssues.Show(this);
             }
@@ -188,6 +188,7 @@ namespace StreetMaker
             StreetBitmap = new Bitmap((int)StreetMap.DrawingSize.Width, (int)StreetMap.DrawingSize.Height);
             ClearStreetBitMap();
             pbDrawingArea.Image = StreetBitmap;
+
             ZoomFactorMin = new SizeF((float)(pnDrawingArea.Width / StreetMap.DrawingSize.Width), (float)(pnDrawingArea.Height / StreetMap.DrawingSize.Height));
             ZoomFactor = ZoomFactorMin;
             ZoomFactorMax = new SizeF(4, 4);
@@ -266,6 +267,28 @@ namespace StreetMaker
         private void pbDrawingArea_Paint(object sender, PaintEventArgs e)
         {
             StreetMap.Paint(e.Graphics, ZoomFactor);
+            if (tsmiShowPageLimits.Checked == true)
+            {
+                int w, h;
+                if (AppSettings.PrintPageSettings.Landscape == true)
+                {
+                    w = AppSettings.PrintPageSettings.PaperSize.Height - AppSettings.PrintPageSettings.Margins.Left - AppSettings.PrintPageSettings.Margins.Right;
+                    h = AppSettings.PrintPageSettings.PaperSize.Width - AppSettings.PrintPageSettings.Margins.Top - AppSettings.PrintPageSettings.Margins.Bottom;
+                }
+                else
+                {
+                    w = AppSettings.PrintPageSettings.PaperSize.Width - AppSettings.PrintPageSettings.Margins.Left - AppSettings.PrintPageSettings.Margins.Right;
+                    h = AppSettings.PrintPageSettings.PaperSize.Height - AppSettings.PrintPageSettings.Margins.Top - AppSettings.PrintPageSettings.Margins.Bottom;
+                }
+                float dx = (25.4f * w / 100f) * ZoomFactor.Width;
+                float dy = (25.4f * h / 100f) * ZoomFactor.Height;
+                Pen pen = new Pen(Color.LightGray);
+                for (float x = dx; x < StreetMap.DrawingSize.Width * ZoomFactor.Width; x += dx)
+                    e.Graphics.DrawLine(pen, new Point((int)x, 0), new Point((int)x, (int)StreetMap.DrawingSize.Height));
+
+                for (float y = dy; y < StreetMap.DrawingSize.Height * ZoomFactor.Height; y += dy)
+                    e.Graphics.DrawLine(pen, new Point(0, (int)y), new Point((int)StreetMap.DrawingSize.Width, (int)y));
+            }
         }
 
 
@@ -301,7 +324,7 @@ namespace StreetMaker
                 pbDrawingArea.Size = pnDrawingArea.Size;
                 pbDrawingArea.Location = new Point(0, 0);
             }
-            tsslLocation.Text = "Zoom:"+ZoomFactor.ToString()+ "  Location: " + pbDrawingArea.Location.ToString();
+            tsslLocation.Text = "Zoom:" + ZoomFactor.ToString() + "  Location: " + pbDrawingArea.Location.ToString();
         }
 
         /// <summary>
@@ -390,7 +413,7 @@ namespace StreetMaker
                 tsslCursorValues.Text = "X: " + BitmapCoord.X.ToString("F1") + "  Y: " + BitmapCoord.Y.ToString("F1") + " Color: " + color.ToString();
                 tsslCursorValues.Invalidate();
 
-                if (((StreetEditMode == StreetEditMode.AddNewStreetElement) || (StreetEditMode == StreetEditMode.MoveActiveStreetElement))&& (StreetMap.ActiveElement != null))
+                if (((StreetEditMode == StreetEditMode.AddNewStreetElement) || (StreetEditMode == StreetEditMode.MoveActiveStreetElement)) && (StreetMap.ActiveElement != null))
                 {
                     StreetMap.ActiveElement.MoveToLocation(BitmapCoord);
                     StreetMap.CheckConnectionDistance();
@@ -472,8 +495,10 @@ namespace StreetMaker
         {
             StreetMap.ActiveElement = null;
             StreetMap.ActiveOverlay = null;
+            StreetEditMode = StreetEditMode.Nothing;
             pbDrawingArea.Invalidate();
         }
+
 
         #endregion Drawing Area Mouse Events
 
@@ -552,7 +577,7 @@ namespace StreetMaker
                         StreetEditMode = StreetEditMode.Nothing;
                         RedrawStreetBitmap();
                     }
-                 
+
                     e.Handled = true;
                     pbDrawingArea.Invalidate();
                 }
@@ -678,13 +703,19 @@ namespace StreetMaker
                 else
                     frmStreetElementSettings = new frmMultiStreetSettings(this, (StreetMap.ActiveElement as MultiLaneStreet));
 
+#if SCREEN_BOUNDS
                 Point p = pbDrawingArea.PointToScreen(Position);
                 int dx = Math.Max((p.X + frmStreetElementSettings.Width) - (Screen.FromPoint(Position).Bounds.Width - 64), 0);
                 int dy = Math.Max((p.Y + frmStreetElementSettings.Height) - (Screen.FromPoint(Position).Bounds.Height - 64), 0);
+#else
+                Point p = pbDrawingArea.PointToScreen(Position);
+                int dx = Math.Max(p.X + frmStreetElementSettings.Width + 64 - Width, 0);
+                int dy = Math.Max(p.Y + frmStreetElementSettings.Height + 64 - Height, 0);
+#endif
                 frmStreetElementSettings.Location = new Point(p.X - dx, p.Y - dy);
                 frmStreetElementSettings.Show();
             }
-    }
+        }
         #endregion Hotkey Handling
 
         #region Menu Handler
@@ -696,7 +727,7 @@ namespace StreetMaker
         /// <param name="e">Event arguments.</param>
         private void tsmiNewMap_Click(object sender, EventArgs e)
         {
-            frmNewMap frmNewMap = new frmNewMap(StreetMap.DrawingSize, AppSettings.DisplayMeasurementUnit);
+            frmNewMap frmNewMap = new frmNewMap("New Map Size", StreetMap.DrawingSize, new SizeF(100, 100), AppSettings.DisplayMeasurementUnit);
             if (frmNewMap.ShowDialog() == DialogResult.OK)
             {
                 StreetMap.Init(frmNewMap.DrawingSize);
@@ -826,6 +857,39 @@ namespace StreetMaker
         }
 
         /// <summary>
+        /// ToolStripMenuItem "Resize Mapl" click event handler to open the dialog for changing the size of the current map.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void tsmiResizeMap_Click(object sender, EventArgs e)
+        {
+            frmNewMap frmResizeMap = new frmNewMap("Change Current Map Size", StreetMap.DrawingSize, StreetMap.GetMapMinimumSize(), AppSettings.DisplayMeasurementUnit);
+            if (frmResizeMap.ShowDialog() == DialogResult.OK)
+            {
+                SetEnabled(false);
+                StreetMap.ResizeMap(frmResizeMap.DrawingSize);
+                InitializeDrawing();
+                RedrawStreetBitmap();
+                SetEnabled(true);
+            }
+        }
+
+
+        /// <summary>
+        /// ToolStripMenuItem "Settings" click event handler to open the AppSettings form for editing.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void tsmiSettings_Click(object sender, EventArgs e)
+        {
+            StreetMap.GetUsedClassCount();
+            frmAppSettingsSetup frmAppSettingsSetup = new frmAppSettingsSetup(this);
+            if (frmAppSettingsSetup.ShowDialog() == DialogResult.OK)
+                AppSettings.SaveSettings();
+        }
+
+
+        /// <summary>
         /// ToolStripMenuItem "Redraw" click event handler to redraw the street bitmap completely new.
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
@@ -838,19 +902,17 @@ namespace StreetMaker
         }
 
         /// <summary>
-        /// ToolStripMenuItem "Settings" click event handler to open the AppSettings form for editing.
+        /// ToolStripMenuItem "Show Page Limits" check changed event handler to enable or disable showing the print page limits.
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
         /// <param name="e">Event arguments.</param>
-        private void tsmiSettings_Click(object sender, EventArgs e)
+        private void tsmiShowPageLimits_CheckStateChanged(object sender, EventArgs e)
         {
-            frmAppSettingsSetup frmAppSettingsSetup = new frmAppSettingsSetup(this);
-            if (frmAppSettingsSetup.ShowDialog() == DialogResult.OK)
-                AppSettings.SaveSettings();
+            pbDrawingArea.Invalidate();
         }
 
         /// <summary>
-        /// ToolStripMenuItem "Show Item Numbers" click event handler to enable or disable showing streetmap item numbers.
+        /// ToolStripMenuItem "Show Item Numbers" check changed event handler to enable or disable showing streetmap item numbers.
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
         /// <param name="e">Event arguments.</param>
@@ -861,7 +923,7 @@ namespace StreetMaker
         }
 
         /// <summary>
-        /// ToolStripMenuItem "Show Lane Numbers" click event handler to enable or disable showing streetmap lane numbers.
+        /// ToolStripMenuItem "Show Lane Numbers" check changed event handler to enable or disable showing streetmap lane numbers.
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
         /// <param name="e">Event arguments.</param>
@@ -871,6 +933,7 @@ namespace StreetMaker
             pbDrawingArea.Invalidate();
         }
 
+
         /// <summary>
         /// ToolStripMenuItem "Create Dataset" click event handler to start creating virtual images and masks as dataset for Jupyter notebook.
         /// </summary>
@@ -878,6 +941,11 @@ namespace StreetMaker
         /// <param name="e">Event arguments.</param>
         private void tsmiCreateDataset_Click(object sender, EventArgs e)
         {
+            if (StreetMap.Items.Count == 0)
+            {
+                MessageBox.Show("Cannot create dataset. The street map is empty.", "Information");
+                return;
+            }
             if (MessageBox.Show("Do you want to start the very time consuming process of creating a new DataSet deleting any previous one?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 SetEnabled(false);
@@ -908,7 +976,7 @@ namespace StreetMaker
         {
             if (frmCameraView != null)
                 frmCameraView.Close();
-            
+
             frmCameraView = new frmCameraView(this, new string[] { AppSettings.SubDirTest });
             frmCameraView.Show();
         }
@@ -954,6 +1022,37 @@ namespace StreetMaker
 
             frmCameraView = new frmCameraView(this, new string[] { AppSettings.SubDirVal });
             frmCameraView.Show();
+        }
+
+        /// <summary>
+        /// Allows deleting all files from the dataset output folders.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void tsmiDeleteDataset_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Do you really want to delete all files in the dataset?","Confimation",MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                SetEnabled(false);
+                StreetMap.ClearDataset(AppSettings.PathToDataStorage);
+                SetEnabled(true);
+            }
+        }
+
+        /// <summary>
+        /// Write class text file and color map file for the current street map.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void tsmiWriteClassesAndColors_Click(object sender, EventArgs e)
+        {
+            if (StreetMap.Items.Count == 0)
+                MessageBox.Show("The street map is empty. There is nothing to write!","Information");
+            else
+            {
+                StreetMap.GetUsedClassCount();
+                StreetMap.WriteClassFileAndColorMap(AppSettings.PathToDataStorage);
+            }
         }
 
         /// <summary>
@@ -1013,7 +1112,7 @@ namespace StreetMaker
         {
             if (StreetEditMode == StreetEditMode.Nothing)
             {
-                StreetMap.ActiveElement = new MultiLaneStreet(AppSettings, StreetType.Straight, 1,0, 1, LineType.SingleYellowSolid);
+                StreetMap.ActiveElement = new MultiLaneStreet(AppSettings, StreetType.Straight, 1, 0, 1, LineType.SingleYellowSolid);
                 StreetEditMode = StreetEditMode.AddNewStreetElement;
             }
         }
@@ -1027,7 +1126,7 @@ namespace StreetMaker
         {
             if (StreetEditMode == StreetEditMode.Nothing)
             {
-                StreetMap.ActiveElement = new MultiLaneStreet(AppSettings, StreetType.Straight, 1,0, 1, LineType.DoubleYellowSolid);
+                StreetMap.ActiveElement = new MultiLaneStreet(AppSettings, StreetType.Straight, 1, 0, 1, LineType.DoubleYellowSolid);
                 StreetEditMode = StreetEditMode.AddNewStreetElement;
             }
         }
@@ -1509,8 +1608,8 @@ namespace StreetMaker
         {
             if (StreetEditMode == StreetEditMode.Nothing)
             {
-                StreetMap.ActiveElement = new MultiLaneStreet(AppSettings, StreetType.Straight, 1, 0, 0, LineType.ShoulderLine, LineType.SingleWhiteDashed, LineType.ShoulderLine, LineType.ShoulderLine, 
-                    LineType.SingleWhiteDashed,LineType.ShoulderLine, AppSettings.MinInnerRadius,RampType.ExitRamp, AppSettings.DefaultRampRadius, AppSettings.DefaultRampCurveAngle);
+                StreetMap.ActiveElement = new MultiLaneStreet(AppSettings, StreetType.Straight, 1, 0, 0, LineType.ShoulderLine, LineType.SingleWhiteDashed, LineType.ShoulderLine, LineType.ShoulderLine,
+                    LineType.SingleWhiteDashed, LineType.ShoulderLine, AppSettings.MinInnerRadius, RampType.ExitRamp, AppSettings.DefaultRampRadius, AppSettings.DefaultRampCurveAngle);
                 StreetEditMode = StreetEditMode.AddNewStreetElement;
             }
         }
@@ -1620,7 +1719,7 @@ namespace StreetMaker
             if (StreetEditMode == StreetEditMode.Nothing)
             {
                 StreetMap.ActiveElement = new Intersection(AppSettings, new StreetDescriptor[] {
-                    new StreetDescriptor(AppSettings, 1, 0, 1, CrosswalkType.None, StopYieldType.StopLineText, LineType.SingleWhiteSolid, LineType.DoubleYellowSolid),     
+                    new StreetDescriptor(AppSettings, 1, 0, 1, CrosswalkType.None, StopYieldType.StopLineText, LineType.SingleWhiteSolid, LineType.DoubleYellowSolid),
                     new StreetDescriptor(AppSettings, 1, 0, 1, CrosswalkType.None, StopYieldType.StopLineText, LineType.SingleWhiteSolid, LineType.DoubleYellowSolid),
                     new StreetDescriptor(AppSettings, 1, 0, 1, CrosswalkType.None, StopYieldType.StopLineText, LineType.SingleWhiteSolid, LineType.DoubleYellowSolid) });
                 StreetEditMode = StreetEditMode.AddNewStreetElement;
@@ -1827,7 +1926,9 @@ namespace StreetMaker
         }
 
 
+
         #endregion Public Methods
+
 
     }
 }

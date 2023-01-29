@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAppSettingsSetup));
@@ -164,6 +165,8 @@
             this.pnControl = new System.Windows.Forms.Panel();
             this.tcMain = new System.Windows.Forms.TabControl();
             this.tpDrawingSettings = new System.Windows.Forms.TabPage();
+            this.tbSubDirStreetmaps = new System.Windows.Forms.TextBox();
+            this.label100 = new System.Windows.Forms.Label();
             this.btnBrowseDataPath = new System.Windows.Forms.Button();
             this.tbPathToDataStorage = new System.Windows.Forms.TextBox();
             this.label68 = new System.Windows.Forms.Label();
@@ -174,6 +177,12 @@
             this.tbClassTextFileName = new System.Windows.Forms.TextBox();
             this.label92 = new System.Windows.Forms.Label();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label99 = new System.Windows.Forms.Label();
+            this.nudColorCorrBlue = new System.Windows.Forms.NumericUpDown();
+            this.nudColorCorrGreen = new System.Windows.Forms.NumericUpDown();
+            this.label97 = new System.Windows.Forms.Label();
+            this.label98 = new System.Windows.Forms.Label();
+            this.nudColorCorrRed = new System.Windows.Forms.NumericUpDown();
             this.ckbDrawWrongDirItems = new System.Windows.Forms.CheckBox();
             this.label96 = new System.Windows.Forms.Label();
             this.nudMarkMaxDetailDistance = new System.Windows.Forms.NumericUpDown();
@@ -200,6 +209,9 @@
             this.label77 = new System.Windows.Forms.Label();
             this.nudCameraHFOV = new System.Windows.Forms.NumericUpDown();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.ckbCenterBrightnessResults = new System.Windows.Forms.CheckBox();
+            this.ckbTestCenterViewsOnly = new System.Windows.Forms.CheckBox();
+            this.ckbValidateCenterViewsOnly = new System.Windows.Forms.CheckBox();
             this.nudImageStepSize = new System.Windows.Forms.NumericUpDown();
             this.label89 = new System.Windows.Forms.Label();
             this.nudTestOutRatio = new System.Windows.Forms.NumericUpDown();
@@ -259,6 +271,7 @@
             this.label87 = new System.Windows.Forms.Label();
             this.fbdSelectPath = new System.Windows.Forms.FolderBrowserDialog();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.gbDefaultDrawingSize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDefaultDrawingHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDefaultDrawingWidth)).BeginInit();
@@ -306,6 +319,9 @@
             this.tpDataGeneration.SuspendLayout();
             this.groupBox12.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrBlue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrGreen)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrRed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMarkMaxDetailDistance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMarkLaneMaxDistSide)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMarkLaneMaxDistFront)).BeginInit();
@@ -358,6 +374,7 @@
             this.nudDefaultDrawingHeight.Size = new System.Drawing.Size(81, 20);
             this.nudDefaultDrawingHeight.TabIndex = 2;
             this.nudDefaultDrawingHeight.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudDefaultDrawingHeight, "Street map size height defaults for generating a new map.");
             this.nudDefaultDrawingHeight.ValueChanged += new System.EventHandler(this.nudDefaultDrawingHeight_ValueChanged);
             // 
             // label2
@@ -382,6 +399,7 @@
             this.nudDefaultDrawingWidth.Size = new System.Drawing.Size(81, 20);
             this.nudDefaultDrawingWidth.TabIndex = 1;
             this.nudDefaultDrawingWidth.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudDefaultDrawingWidth, "Street map size width defaults for generating a new map.");
             this.nudDefaultDrawingWidth.ValueChanged += new System.EventHandler(this.nudDefaultDrawingWidth_ValueChanged);
             // 
             // label1
@@ -409,6 +427,7 @@
             this.cbMeasurementUnit.Name = "cbMeasurementUnit";
             this.cbMeasurementUnit.Size = new System.Drawing.Size(110, 21);
             this.cbMeasurementUnit.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.cbMeasurementUnit, "Measurement unit selection for all distances.");
             this.cbMeasurementUnit.SelectedIndexChanged += new System.EventHandler(this.cbMeasurementUnit_SelectedIndexChanged);
             // 
             // groupBox1
@@ -476,11 +495,12 @@
             this.nudMaxLaneCountCenter.Size = new System.Drawing.Size(81, 20);
             this.nudMaxLaneCountCenter.TabIndex = 46;
             this.nudMaxLaneCountCenter.Tag = "";
+            this.toolTip1.SetToolTip(this.nudMaxLaneCountCenter, "Maximum number of center lanes allowed in the design.");
             this.nudMaxLaneCountCenter.ValueChanged += new System.EventHandler(this.nudMaxLaneCountCenter_ValueChanged);
             // 
             // nudMinCurveAngle
             // 
-            this.nudMinCurveAngle.DecimalPlaces = 1;
+            this.nudMinCurveAngle.DecimalPlaces = 3;
             this.nudMinCurveAngle.Location = new System.Drawing.Point(178, 357);
             this.nudMinCurveAngle.Maximum = new decimal(new int[] {
             360,
@@ -491,6 +511,7 @@
             this.nudMinCurveAngle.Size = new System.Drawing.Size(81, 20);
             this.nudMinCurveAngle.TabIndex = 44;
             this.nudMinCurveAngle.Tag = "";
+            this.toolTip1.SetToolTip(this.nudMinCurveAngle, "Minimum circular angle of any curved street element.");
             this.nudMinCurveAngle.ValueChanged += new System.EventHandler(this.nudMinCurveAngle_ValueChanged);
             // 
             // label27
@@ -524,6 +545,7 @@
             this.nudMinArrowOverlayStep.Size = new System.Drawing.Size(81, 20);
             this.nudMinArrowOverlayStep.TabIndex = 42;
             this.nudMinArrowOverlayStep.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudMinArrowOverlayStep, "Step size to snap the overlays on in a lane.");
             this.nudMinArrowOverlayStep.ValueChanged += new System.EventHandler(this.nudMinArrowOverlayStep_ValueChanged);
             // 
             // label24
@@ -547,6 +569,7 @@
             this.nudMaxLaneCountLeftRight.Size = new System.Drawing.Size(81, 20);
             this.nudMaxLaneCountLeftRight.TabIndex = 44;
             this.nudMaxLaneCountLeftRight.Tag = "";
+            this.toolTip1.SetToolTip(this.nudMaxLaneCountLeftRight, "Maximum number of lanes left and right allowed in the design.");
             this.nudMaxLaneCountLeftRight.ValueChanged += new System.EventHandler(this.nudMaxLaneCountLeftRight_ValueChanged);
             // 
             // nudMaxArrowOverlayLength
@@ -562,6 +585,7 @@
             this.nudMaxArrowOverlayLength.Size = new System.Drawing.Size(81, 20);
             this.nudMaxArrowOverlayLength.TabIndex = 40;
             this.nudMaxArrowOverlayLength.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudMaxArrowOverlayLength, "Maximum length of any overlay arrow sign.");
             this.nudMaxArrowOverlayLength.ValueChanged += new System.EventHandler(this.nudMaxArrowOverlayLength_ValueChanged);
             // 
             // label25
@@ -595,6 +619,7 @@
             this.nudMaxArrowOverlayWidth.Size = new System.Drawing.Size(81, 20);
             this.nudMaxArrowOverlayWidth.TabIndex = 38;
             this.nudMaxArrowOverlayWidth.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudMaxArrowOverlayWidth, "Maximum width of any overlay arrow sign.");
             this.nudMaxArrowOverlayWidth.ValueChanged += new System.EventHandler(this.nudMaxArrowOverlayWidth_ValueChanged);
             // 
             // label22
@@ -619,6 +644,8 @@
             this.nudLengthStep.Size = new System.Drawing.Size(81, 20);
             this.nudLengthStep.TabIndex = 36;
             this.nudLengthStep.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudLengthStep, "Length step for increasing or decreasing the straight length via hot key or up/do" +
+        "wn buttons in dialogs.");
             this.nudLengthStep.ValueChanged += new System.EventHandler(this.nudLengthStep_ValueChanged);
             // 
             // label21
@@ -632,7 +659,7 @@
             // 
             // nudAngleStep
             // 
-            this.nudAngleStep.DecimalPlaces = 1;
+            this.nudAngleStep.DecimalPlaces = 3;
             this.nudAngleStep.Location = new System.Drawing.Point(178, 409);
             this.nudAngleStep.Maximum = new decimal(new int[] {
             360,
@@ -643,6 +670,8 @@
             this.nudAngleStep.Size = new System.Drawing.Size(81, 20);
             this.nudAngleStep.TabIndex = 34;
             this.nudAngleStep.Tag = "";
+            this.toolTip1.SetToolTip(this.nudAngleStep, "Angle step for increasing or decreasing the curve angle via hot key or up/down bu" +
+        "ttons in dialogs.");
             this.nudAngleStep.ValueChanged += new System.EventHandler(this.nudAngleStep_ValueChanged);
             // 
             // label20
@@ -656,7 +685,7 @@
             // 
             // nudMaxCurveAngle
             // 
-            this.nudMaxCurveAngle.DecimalPlaces = 1;
+            this.nudMaxCurveAngle.DecimalPlaces = 3;
             this.nudMaxCurveAngle.Location = new System.Drawing.Point(178, 383);
             this.nudMaxCurveAngle.Maximum = new decimal(new int[] {
             360,
@@ -667,6 +696,7 @@
             this.nudMaxCurveAngle.Size = new System.Drawing.Size(81, 20);
             this.nudMaxCurveAngle.TabIndex = 32;
             this.nudMaxCurveAngle.Tag = "";
+            this.toolTip1.SetToolTip(this.nudMaxCurveAngle, "Maximum circular angle of any curved street element.");
             this.nudMaxCurveAngle.ValueChanged += new System.EventHandler(this.nudMaxCurveAngle_ValueChanged);
             // 
             // label19
@@ -690,6 +720,7 @@
             this.nudCornerRadius.Size = new System.Drawing.Size(81, 20);
             this.nudCornerRadius.TabIndex = 28;
             this.nudCornerRadius.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudCornerRadius, "Standard radius of the corner rounds of all intersections.");
             this.nudCornerRadius.ValueChanged += new System.EventHandler(this.nudCornerRadius_ValueChanged);
             // 
             // label17
@@ -713,6 +744,7 @@
             this.nudMinInnerRadius.Size = new System.Drawing.Size(81, 20);
             this.nudMinInnerRadius.TabIndex = 26;
             this.nudMinInnerRadius.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudMinInnerRadius, "Minimum inner radius limit of all curved street elements.");
             this.nudMinInnerRadius.ValueChanged += new System.EventHandler(this.nudMinInnerRadius_ValueChanged);
             // 
             // label16
@@ -737,6 +769,7 @@
             this.nudMinStraightLength.Size = new System.Drawing.Size(81, 20);
             this.nudMinStraightLength.TabIndex = 24;
             this.nudMinStraightLength.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudMinStraightLength, "Minimum length limit of all straight street elements.");
             this.nudMinStraightLength.ValueChanged += new System.EventHandler(this.nudMinStraightLength_ValueChanged);
             // 
             // label15
@@ -761,6 +794,7 @@
             this.nudDashLength.Size = new System.Drawing.Size(81, 20);
             this.nudDashLength.TabIndex = 22;
             this.nudDashLength.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudDashLength, "Length of the dashes and gaps in all dashed lines.");
             this.nudDashLength.ValueChanged += new System.EventHandler(this.nudDashLength_ValueChanged);
             // 
             // label14
@@ -785,6 +819,7 @@
             this.nudCrosswalkBorder.Size = new System.Drawing.Size(81, 20);
             this.nudCrosswalkBorder.TabIndex = 20;
             this.nudCrosswalkBorder.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudCrosswalkBorder, "Border space on both sides of the crosswalk.");
             this.nudCrosswalkBorder.ValueChanged += new System.EventHandler(this.nudCrosswalkBorder_ValueChanged);
             // 
             // label13
@@ -809,6 +844,7 @@
             this.nudCrosswalkStripeWidth.Size = new System.Drawing.Size(81, 20);
             this.nudCrosswalkStripeWidth.TabIndex = 18;
             this.nudCrosswalkStripeWidth.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudCrosswalkStripeWidth, "Width of the zebra stripes of a zebra crosswalk.");
             this.nudCrosswalkStripeWidth.ValueChanged += new System.EventHandler(this.nudCrosswalkStripeWidth_ValueChanged);
             // 
             // label12
@@ -833,6 +869,7 @@
             this.nudCrosswalkLineWidth.Size = new System.Drawing.Size(81, 20);
             this.nudCrosswalkLineWidth.TabIndex = 16;
             this.nudCrosswalkLineWidth.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudCrosswalkLineWidth, "Width of the lines of a parallel line crosswalk.");
             this.nudCrosswalkLineWidth.ValueChanged += new System.EventHandler(this.nudCrosswalkLineWidth_ValueChanged);
             // 
             // label11
@@ -857,6 +894,7 @@
             this.nudCrosswalkWidth.Size = new System.Drawing.Size(81, 20);
             this.nudCrosswalkWidth.TabIndex = 14;
             this.nudCrosswalkWidth.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudCrosswalkWidth, "Width of the crosswalk.");
             this.nudCrosswalkWidth.ValueChanged += new System.EventHandler(this.nudCrosswalkWidth_ValueChanged);
             // 
             // label10
@@ -881,6 +919,8 @@
             this.nudStopLineOffset.Size = new System.Drawing.Size(81, 20);
             this.nudStopLineOffset.TabIndex = 12;
             this.nudStopLineOffset.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudStopLineOffset, "Offset of the stop line or yield line from the intersection area or the crosswalk" +
+        " if present.");
             this.nudStopLineOffset.ValueChanged += new System.EventHandler(this.nudStopLineOffset_ValueChanged);
             // 
             // label9
@@ -905,6 +945,7 @@
             this.nudStopLineWidth.Size = new System.Drawing.Size(81, 20);
             this.nudStopLineWidth.TabIndex = 10;
             this.nudStopLineWidth.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudStopLineWidth, "Width of the stop line or yield line.");
             this.nudStopLineWidth.ValueChanged += new System.EventHandler(this.nudStopLineWidth_ValueChanged);
             // 
             // label8
@@ -929,6 +970,7 @@
             this.nudLineSpace.Size = new System.Drawing.Size(81, 20);
             this.nudLineSpace.TabIndex = 6;
             this.nudLineSpace.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudLineSpace, "Width of the space between the 2 lines of a double line.");
             this.nudLineSpace.ValueChanged += new System.EventHandler(this.nudLineSpace_ValueChanged);
             // 
             // label6
@@ -953,6 +995,7 @@
             this.nudLineWidth.Size = new System.Drawing.Size(81, 20);
             this.nudLineWidth.TabIndex = 4;
             this.nudLineWidth.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudLineWidth, "Width of all lane border lines like shoulder lines, dashed lines etc.");
             this.nudLineWidth.ValueChanged += new System.EventHandler(this.nudLineWidth_ValueChanged);
             // 
             // label5
@@ -977,6 +1020,7 @@
             this.nudLaneWidth.Size = new System.Drawing.Size(81, 20);
             this.nudLaneWidth.TabIndex = 2;
             this.nudLaneWidth.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudLaneWidth, "Total width of a lane including border lines.");
             this.nudLaneWidth.ValueChanged += new System.EventHandler(this.nudLaneWidth_ValueChanged);
             // 
             // label4
@@ -1004,7 +1048,7 @@
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Location = new System.Drawing.Point(306, 85);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(284, 190);
+            this.groupBox2.Size = new System.Drawing.Size(284, 216);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Element Colors";
@@ -1015,6 +1059,7 @@
             this.btnBackgroundColor.Name = "btnBackgroundColor";
             this.btnBackgroundColor.Size = new System.Drawing.Size(81, 20);
             this.btnBackgroundColor.TabIndex = 16;
+            this.toolTip1.SetToolTip(this.btnBackgroundColor, "Color of the background space outside of streets.");
             this.btnBackgroundColor.UseVisualStyleBackColor = true;
             this.btnBackgroundColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1033,6 +1078,7 @@
             this.btnArrowOverlayColor.Name = "btnArrowOverlayColor";
             this.btnArrowOverlayColor.Size = new System.Drawing.Size(81, 20);
             this.btnArrowOverlayColor.TabIndex = 14;
+            this.toolTip1.SetToolTip(this.btnArrowOverlayColor, "Color of all overlays like arrows.");
             this.btnArrowOverlayColor.UseVisualStyleBackColor = true;
             this.btnArrowOverlayColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1051,6 +1097,7 @@
             this.btnStopLineColor.Name = "btnStopLineColor";
             this.btnStopLineColor.Size = new System.Drawing.Size(81, 20);
             this.btnStopLineColor.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.btnStopLineColor, "Color of the stop line.");
             this.btnStopLineColor.UseVisualStyleBackColor = true;
             this.btnStopLineColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1069,6 +1116,7 @@
             this.btnLineColorYellow.Name = "btnLineColorYellow";
             this.btnLineColorYellow.Size = new System.Drawing.Size(81, 20);
             this.btnLineColorYellow.TabIndex = 10;
+            this.toolTip1.SetToolTip(this.btnLineColorYellow, "Color of all the normally yellow lines.");
             this.btnLineColorYellow.UseVisualStyleBackColor = true;
             this.btnLineColorYellow.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1087,6 +1135,7 @@
             this.btnLineColorWhite.Name = "btnLineColorWhite";
             this.btnLineColorWhite.Size = new System.Drawing.Size(81, 20);
             this.btnLineColorWhite.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.btnLineColorWhite, "Color of all the shoulder lines and other normally white lines.");
             this.btnLineColorWhite.UseVisualStyleBackColor = true;
             this.btnLineColorWhite.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1105,6 +1154,7 @@
             this.btnLaneColor.Name = "btnLaneColor";
             this.btnLaneColor.Size = new System.Drawing.Size(81, 20);
             this.btnLaneColor.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.btnLaneColor, "Color of the lane pavement.");
             this.btnLaneColor.UseVisualStyleBackColor = true;
             this.btnLaneColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1141,9 +1191,9 @@
             this.groupBox3.Controls.Add(this.label52);
             this.groupBox3.Controls.Add(this.nudDefaultStraightLength);
             this.groupBox3.Controls.Add(this.label53);
-            this.groupBox3.Location = new System.Drawing.Point(306, 373);
+            this.groupBox3.Location = new System.Drawing.Point(306, 346);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(284, 308);
+            this.groupBox3.Size = new System.Drawing.Size(284, 335);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "GUI";
@@ -1161,6 +1211,7 @@
             this.nudOverlayOutlineLineWidth.Size = new System.Drawing.Size(81, 20);
             this.nudOverlayOutlineLineWidth.TabIndex = 24;
             this.nudOverlayOutlineLineWidth.Tag = "";
+            this.toolTip1.SetToolTip(this.nudOverlayOutlineLineWidth, "Overlay outline line width activated when hovering over it with mouse.");
             this.nudOverlayOutlineLineWidth.ValueChanged += new System.EventHandler(this.nudOverlayOutlineLineWidth_ValueChanged);
             // 
             // label43
@@ -1185,6 +1236,7 @@
             this.nudStreetOutlineLineWidth.Size = new System.Drawing.Size(81, 20);
             this.nudStreetOutlineLineWidth.TabIndex = 22;
             this.nudStreetOutlineLineWidth.Tag = "";
+            this.toolTip1.SetToolTip(this.nudStreetOutlineLineWidth, "Street and lane outline line width activated when hovering over it with mouse.");
             this.nudStreetOutlineLineWidth.ValueChanged += new System.EventHandler(this.nudStreetOutlineLineWidth_ValueChanged);
             // 
             // label44
@@ -1209,6 +1261,7 @@
             this.nudConnectionSnapDistance.Size = new System.Drawing.Size(81, 20);
             this.nudConnectionSnapDistance.TabIndex = 20;
             this.nudConnectionSnapDistance.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudConnectionSnapDistance, "Minimum distance between 2 opposite connectors to snap them togeter.");
             this.nudConnectionSnapDistance.ValueChanged += new System.EventHandler(this.nudConnectionSnapDistance_ValueChanged);
             // 
             // label45
@@ -1233,6 +1286,8 @@
             this.nudConnectionDrawDistance.Size = new System.Drawing.Size(81, 20);
             this.nudConnectionDrawDistance.TabIndex = 18;
             this.nudConnectionDrawDistance.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudConnectionDrawDistance, "Minimum distance between 2 opposite connectors to draw a line for possible connec" +
+        "tion.");
             this.nudConnectionDrawDistance.ValueChanged += new System.EventHandler(this.nudConnectionDrawDistance_ValueChanged);
             // 
             // label46
@@ -1257,6 +1312,8 @@
             this.nudPointCatchDistance.Size = new System.Drawing.Size(81, 20);
             this.nudPointCatchDistance.TabIndex = 16;
             this.nudPointCatchDistance.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudPointCatchDistance, "Minimum distance from a lane connector center point to catch it with the mouse fo" +
+        "r moving or sizing.");
             this.nudPointCatchDistance.ValueChanged += new System.EventHandler(this.nudPointCatchDistance_ValueChanged);
             // 
             // label47
@@ -1281,6 +1338,8 @@
             this.nudDefaultRoundaboutRadius.Size = new System.Drawing.Size(81, 20);
             this.nudDefaultRoundaboutRadius.TabIndex = 14;
             this.nudDefaultRoundaboutRadius.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudDefaultRoundaboutRadius, "Default radius of a roundabout.");
+            this.nudDefaultRoundaboutRadius.Visible = false;
             this.nudDefaultRoundaboutRadius.ValueChanged += new System.EventHandler(this.nudDefaultRoundaboutRadius_ValueChanged);
             // 
             // label48
@@ -1291,6 +1350,7 @@
             this.label48.Size = new System.Drawing.Size(142, 13);
             this.label48.TabIndex = 15;
             this.label48.Text = "Default Roundabout Radius:";
+            this.label48.Visible = false;
             // 
             // nudDefaultRampRadius
             // 
@@ -1305,6 +1365,8 @@
             this.nudDefaultRampRadius.Size = new System.Drawing.Size(81, 20);
             this.nudDefaultRampRadius.TabIndex = 12;
             this.nudDefaultRampRadius.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudDefaultRampRadius, "Default inner radius of the on or off ramp when creating a street element with ra" +
+        "mp.");
             this.nudDefaultRampRadius.ValueChanged += new System.EventHandler(this.nudDefaultRampRadius_ValueChanged);
             // 
             // label49
@@ -1329,6 +1391,8 @@
             this.nudDefaultRampCurveAngle.Size = new System.Drawing.Size(81, 20);
             this.nudDefaultRampCurveAngle.TabIndex = 10;
             this.nudDefaultRampCurveAngle.Tag = "";
+            this.toolTip1.SetToolTip(this.nudDefaultRampCurveAngle, "Default curve angle of the on or off ramp when creating a street element with ram" +
+        "p.");
             this.nudDefaultRampCurveAngle.ValueChanged += new System.EventHandler(this.nudDefaultRampCurveAngle_ValueChanged);
             // 
             // label50
@@ -1353,6 +1417,7 @@
             this.nudDefaultCurveAngle.Size = new System.Drawing.Size(81, 20);
             this.nudDefaultCurveAngle.TabIndex = 6;
             this.nudDefaultCurveAngle.Tag = "";
+            this.toolTip1.SetToolTip(this.nudDefaultCurveAngle, "Default curve angle when creating a curved street element.");
             this.nudDefaultCurveAngle.ValueChanged += new System.EventHandler(this.nudDefaultCurveAngle_ValueChanged);
             // 
             // label51
@@ -1377,6 +1442,7 @@
             this.nudDefaultJunctionLength.Size = new System.Drawing.Size(81, 20);
             this.nudDefaultJunctionLength.TabIndex = 4;
             this.nudDefaultJunctionLength.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudDefaultJunctionLength, "Default length of the street part when creating an intersection.");
             this.nudDefaultJunctionLength.ValueChanged += new System.EventHandler(this.nudDefaultJunctionLength_ValueChanged);
             // 
             // label52
@@ -1391,7 +1457,7 @@
             // nudDefaultStraightLength
             // 
             this.nudDefaultStraightLength.DecimalPlaces = 6;
-            this.nudDefaultStraightLength.Location = new System.Drawing.Point(178, 19);
+            this.nudDefaultStraightLength.Location = new System.Drawing.Point(178, 18);
             this.nudDefaultStraightLength.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -1401,6 +1467,7 @@
             this.nudDefaultStraightLength.Size = new System.Drawing.Size(81, 20);
             this.nudDefaultStraightLength.TabIndex = 2;
             this.nudDefaultStraightLength.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudDefaultStraightLength, "Default length when creating a straight street element.");
             this.nudDefaultStraightLength.ValueChanged += new System.EventHandler(this.nudDefaultStraightLength_ValueChanged);
             // 
             // label53
@@ -1441,6 +1508,8 @@
             this.btnConnectionSnapColor.Name = "btnConnectionSnapColor";
             this.btnConnectionSnapColor.Size = new System.Drawing.Size(81, 20);
             this.btnConnectionSnapColor.TabIndex = 18;
+            this.toolTip1.SetToolTip(this.btnConnectionSnapColor, "Color of the line indicating a possible snap between 2 matching connectors when t" +
+        "he distance is close enough.");
             this.btnConnectionSnapColor.UseVisualStyleBackColor = true;
             this.btnConnectionSnapColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1459,6 +1528,8 @@
             this.btnConnectionDrawColor.Name = "btnConnectionDrawColor";
             this.btnConnectionDrawColor.Size = new System.Drawing.Size(81, 20);
             this.btnConnectionDrawColor.TabIndex = 16;
+            this.toolTip1.SetToolTip(this.btnConnectionDrawColor, "Color of the line indicating a possible connection between 2 matching connectors." +
+        "");
             this.btnConnectionDrawColor.UseVisualStyleBackColor = true;
             this.btnConnectionDrawColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1477,6 +1548,7 @@
             this.btnConnectorNoDirColor.Name = "btnConnectorNoDirColor";
             this.btnConnectorNoDirColor.Size = new System.Drawing.Size(81, 20);
             this.btnConnectorNoDirColor.TabIndex = 14;
+            this.toolTip1.SetToolTip(this.btnConnectorNoDirColor, "Color of the none-directional connector of a lane.");
             this.btnConnectorNoDirColor.UseVisualStyleBackColor = true;
             this.btnConnectorNoDirColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1495,6 +1567,7 @@
             this.btnConnectorOutColor.Name = "btnConnectorOutColor";
             this.btnConnectorOutColor.Size = new System.Drawing.Size(81, 20);
             this.btnConnectorOutColor.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.btnConnectorOutColor, "Color of the out-direction connector of a lane.");
             this.btnConnectorOutColor.UseVisualStyleBackColor = true;
             this.btnConnectorOutColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1513,6 +1586,7 @@
             this.btnConnectorInColor.Name = "btnConnectorInColor";
             this.btnConnectorInColor.Size = new System.Drawing.Size(81, 20);
             this.btnConnectorInColor.TabIndex = 10;
+            this.toolTip1.SetToolTip(this.btnConnectorInColor, "Color of the in-direction connector of a lane.");
             this.btnConnectorInColor.UseVisualStyleBackColor = true;
             this.btnConnectorInColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1531,6 +1605,7 @@
             this.btnOverlayOutlineColor.Name = "btnOverlayOutlineColor";
             this.btnOverlayOutlineColor.Size = new System.Drawing.Size(81, 20);
             this.btnOverlayOutlineColor.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.btnOverlayOutlineColor, "Color of the outlines displayed when selecting an overlay.");
             this.btnOverlayOutlineColor.UseVisualStyleBackColor = true;
             this.btnOverlayOutlineColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1549,6 +1624,8 @@
             this.btnStreetOutlineColor.Name = "btnStreetOutlineColor";
             this.btnStreetOutlineColor.Size = new System.Drawing.Size(81, 20);
             this.btnStreetOutlineColor.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.btnStreetOutlineColor, "Color of the outlines displayed when selecting one street element or a group of t" +
+        "hem.");
             this.btnStreetOutlineColor.UseVisualStyleBackColor = true;
             this.btnStreetOutlineColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
@@ -1585,9 +1662,9 @@
             this.gbHotkeys.Controls.Add(this.label54);
             this.gbHotkeys.Controls.Add(this.label55);
             this.gbHotkeys.Controls.Add(this.label56);
-            this.gbHotkeys.Location = new System.Drawing.Point(596, 361);
+            this.gbHotkeys.Location = new System.Drawing.Point(596, 346);
             this.gbHotkeys.Name = "gbHotkeys";
-            this.gbHotkeys.Size = new System.Drawing.Size(285, 320);
+            this.gbHotkeys.Size = new System.Drawing.Size(285, 335);
             this.gbHotkeys.TabIndex = 14;
             this.gbHotkeys.TabStop = false;
             this.gbHotkeys.Text = "Hot Keys";
@@ -1595,39 +1672,48 @@
             // cbHotkeyPropertyPage
             // 
             this.cbHotkeyPropertyPage.FormattingEnabled = true;
-            this.cbHotkeyPropertyPage.Location = new System.Drawing.Point(178, 289);
+            this.cbHotkeyPropertyPage.Location = new System.Drawing.Point(178, 277);
             this.cbHotkeyPropertyPage.Name = "cbHotkeyPropertyPage";
             this.cbHotkeyPropertyPage.Size = new System.Drawing.Size(81, 21);
             this.cbHotkeyPropertyPage.TabIndex = 33;
+            this.toolTip1.SetToolTip(this.cbHotkeyPropertyPage, "Hotkey definition to open the property page for the highlighted street element.");
             // 
             // cbHotkeyBlockAutoRotate
             // 
             this.cbHotkeyBlockAutoRotate.FormattingEnabled = true;
-            this.cbHotkeyBlockAutoRotate.Location = new System.Drawing.Point(178, 260);
+            this.cbHotkeyBlockAutoRotate.Location = new System.Drawing.Point(178, 251);
             this.cbHotkeyBlockAutoRotate.Name = "cbHotkeyBlockAutoRotate";
             this.cbHotkeyBlockAutoRotate.Size = new System.Drawing.Size(81, 21);
             this.cbHotkeyBlockAutoRotate.TabIndex = 32;
+            this.toolTip1.SetToolTip(this.cbHotkeyBlockAutoRotate, "Hotkey definition block the auto rotation function when moving a street element o" +
+        "ver the map.");
             // 
             // cbHotkeySizeModeExt
             // 
             this.cbHotkeySizeModeExt.FormattingEnabled = true;
-            this.cbHotkeySizeModeExt.Location = new System.Drawing.Point(178, 234);
+            this.cbHotkeySizeModeExt.Location = new System.Drawing.Point(178, 226);
             this.cbHotkeySizeModeExt.Name = "cbHotkeySizeModeExt";
             this.cbHotkeySizeModeExt.Size = new System.Drawing.Size(81, 21);
             this.cbHotkeySizeModeExt.TabIndex = 31;
+            this.toolTip1.SetToolTip(this.cbHotkeySizeModeExt, "Hotkey definition to enable extended sizing mode for dragging one connector with " +
+        "the mouse. Extended size mode changes 2 parameter at a time where possible, for " +
+        "instance radius and angle.");
             // 
             // cbHotkeySizeModeBase
             // 
             this.cbHotkeySizeModeBase.FormattingEnabled = true;
-            this.cbHotkeySizeModeBase.Location = new System.Drawing.Point(178, 206);
+            this.cbHotkeySizeModeBase.Location = new System.Drawing.Point(178, 200);
             this.cbHotkeySizeModeBase.Name = "cbHotkeySizeModeBase";
             this.cbHotkeySizeModeBase.Size = new System.Drawing.Size(81, 21);
             this.cbHotkeySizeModeBase.TabIndex = 30;
+            this.toolTip1.SetToolTip(this.cbHotkeySizeModeBase, "Hotkey definition to enable basic sizing mode for dragging one connector with the" +
+        " mouse. Basic size mode only changes one parameter at a time like length and ang" +
+        "le.");
             // 
             // label57
             // 
             this.label57.AutoSize = true;
-            this.label57.Location = new System.Drawing.Point(11, 292);
+            this.label57.Location = new System.Drawing.Point(11, 281);
             this.label57.Name = "label57";
             this.label57.Size = new System.Drawing.Size(114, 13);
             this.label57.TabIndex = 29;
@@ -1636,7 +1722,7 @@
             // label58
             // 
             this.label58.AutoSize = true;
-            this.label58.Location = new System.Drawing.Point(11, 263);
+            this.label58.Location = new System.Drawing.Point(11, 255);
             this.label58.Name = "label58";
             this.label58.Size = new System.Drawing.Size(134, 13);
             this.label58.TabIndex = 28;
@@ -1645,7 +1731,7 @@
             // label59
             // 
             this.label59.AutoSize = true;
-            this.label59.Location = new System.Drawing.Point(11, 237);
+            this.label59.Location = new System.Drawing.Point(11, 229);
             this.label59.Name = "label59";
             this.label59.Size = new System.Drawing.Size(115, 13);
             this.label59.TabIndex = 27;
@@ -1654,7 +1740,7 @@
             // label60
             // 
             this.label60.AutoSize = true;
-            this.label60.Location = new System.Drawing.Point(11, 209);
+            this.label60.Location = new System.Drawing.Point(11, 202);
             this.label60.Name = "label60";
             this.label60.Size = new System.Drawing.Size(124, 13);
             this.label60.TabIndex = 26;
@@ -1663,63 +1749,71 @@
             // cbHotkeySizeDecrease
             // 
             this.cbHotkeySizeDecrease.FormattingEnabled = true;
-            this.cbHotkeySizeDecrease.Location = new System.Drawing.Point(178, 179);
+            this.cbHotkeySizeDecrease.Location = new System.Drawing.Point(178, 173);
             this.cbHotkeySizeDecrease.Name = "cbHotkeySizeDecrease";
             this.cbHotkeySizeDecrease.Size = new System.Drawing.Size(81, 21);
             this.cbHotkeySizeDecrease.TabIndex = 25;
+            this.toolTip1.SetToolTip(this.cbHotkeySizeDecrease, "Hotkey definition to decrease the size of a street element by one step.");
             // 
             // cbHotkeySizeIncrease
             // 
             this.cbHotkeySizeIncrease.FormattingEnabled = true;
-            this.cbHotkeySizeIncrease.Location = new System.Drawing.Point(178, 150);
+            this.cbHotkeySizeIncrease.Location = new System.Drawing.Point(178, 147);
             this.cbHotkeySizeIncrease.Name = "cbHotkeySizeIncrease";
             this.cbHotkeySizeIncrease.Size = new System.Drawing.Size(81, 21);
             this.cbHotkeySizeIncrease.TabIndex = 24;
+            this.toolTip1.SetToolTip(this.cbHotkeySizeIncrease, "Hotkey definition to increase the size of a street element by one step.");
             // 
             // cbHotkeyRotateRight
             // 
             this.cbHotkeyRotateRight.FormattingEnabled = true;
-            this.cbHotkeyRotateRight.Location = new System.Drawing.Point(178, 124);
+            this.cbHotkeyRotateRight.Location = new System.Drawing.Point(178, 121);
             this.cbHotkeyRotateRight.Name = "cbHotkeyRotateRight";
             this.cbHotkeyRotateRight.Size = new System.Drawing.Size(81, 21);
             this.cbHotkeyRotateRight.TabIndex = 23;
+            this.toolTip1.SetToolTip(this.cbHotkeyRotateRight, "Hotkey definition to rotate right a street element or overlay by AngleStep.");
             // 
             // cbHotkeyRotateLeft
             // 
             this.cbHotkeyRotateLeft.FormattingEnabled = true;
-            this.cbHotkeyRotateLeft.Location = new System.Drawing.Point(178, 96);
+            this.cbHotkeyRotateLeft.Location = new System.Drawing.Point(178, 95);
             this.cbHotkeyRotateLeft.Name = "cbHotkeyRotateLeft";
             this.cbHotkeyRotateLeft.Size = new System.Drawing.Size(81, 21);
             this.cbHotkeyRotateLeft.TabIndex = 22;
+            this.toolTip1.SetToolTip(this.cbHotkeyRotateLeft, "Hotkey definition to rotate left a street element or overlay by AngleStep.");
             // 
             // cbHotkeyDisconnect
             // 
             this.cbHotkeyDisconnect.FormattingEnabled = true;
-            this.cbHotkeyDisconnect.Location = new System.Drawing.Point(178, 70);
+            this.cbHotkeyDisconnect.Location = new System.Drawing.Point(178, 69);
             this.cbHotkeyDisconnect.Name = "cbHotkeyDisconnect";
             this.cbHotkeyDisconnect.Size = new System.Drawing.Size(81, 21);
             this.cbHotkeyDisconnect.TabIndex = 21;
+            this.toolTip1.SetToolTip(this.cbHotkeyDisconnect, "Hotkey definition to disconnect a street element from all others to move it aroun" +
+        "d.");
             // 
             // cbHotkeyAbort
             // 
             this.cbHotkeyAbort.FormattingEnabled = true;
-            this.cbHotkeyAbort.Location = new System.Drawing.Point(178, 44);
+            this.cbHotkeyAbort.Location = new System.Drawing.Point(178, 43);
             this.cbHotkeyAbort.Name = "cbHotkeyAbort";
             this.cbHotkeyAbort.Size = new System.Drawing.Size(81, 21);
             this.cbHotkeyAbort.TabIndex = 20;
+            this.toolTip1.SetToolTip(this.cbHotkeyAbort, "Hotkey definition to abort adding a new street element or overlay.");
             // 
             // cbHotkeyDelete
             // 
             this.cbHotkeyDelete.FormattingEnabled = true;
-            this.cbHotkeyDelete.Location = new System.Drawing.Point(178, 18);
+            this.cbHotkeyDelete.Location = new System.Drawing.Point(178, 17);
             this.cbHotkeyDelete.Name = "cbHotkeyDelete";
             this.cbHotkeyDelete.Size = new System.Drawing.Size(81, 21);
             this.cbHotkeyDelete.TabIndex = 19;
+            this.toolTip1.SetToolTip(this.cbHotkeyDelete, "Hotkey definition to delete a street element or overlay.");
             // 
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(11, 182);
+            this.label39.Location = new System.Drawing.Point(11, 176);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(116, 13);
             this.label39.TabIndex = 17;
@@ -1728,7 +1822,7 @@
             // label40
             // 
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(11, 153);
+            this.label40.Location = new System.Drawing.Point(11, 151);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(111, 13);
             this.label40.TabIndex = 15;
@@ -1737,7 +1831,7 @@
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(11, 127);
+            this.label41.Location = new System.Drawing.Point(11, 124);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(107, 13);
             this.label41.TabIndex = 13;
@@ -1755,7 +1849,7 @@
             // label54
             // 
             this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(11, 73);
+            this.label54.Location = new System.Drawing.Point(11, 72);
             this.label54.Name = "label54";
             this.label54.Size = new System.Drawing.Size(101, 13);
             this.label54.TabIndex = 9;
@@ -1764,7 +1858,7 @@
             // label55
             // 
             this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(11, 47);
+            this.label55.Location = new System.Drawing.Point(11, 46);
             this.label55.Name = "label55";
             this.label55.Size = new System.Drawing.Size(72, 13);
             this.label55.TabIndex = 7;
@@ -1817,7 +1911,7 @@
             this.pnControl.Controls.Add(this.btnOK);
             this.pnControl.Controls.Add(this.btnCancel);
             this.pnControl.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnControl.Location = new System.Drawing.Point(0, 765);
+            this.pnControl.Location = new System.Drawing.Point(0, 801);
             this.pnControl.Name = "pnControl";
             this.pnControl.Size = new System.Drawing.Size(935, 48);
             this.pnControl.TabIndex = 18;
@@ -1830,12 +1924,14 @@
             this.tcMain.Location = new System.Drawing.Point(0, 0);
             this.tcMain.Name = "tcMain";
             this.tcMain.SelectedIndex = 0;
-            this.tcMain.Size = new System.Drawing.Size(935, 765);
+            this.tcMain.Size = new System.Drawing.Size(935, 801);
             this.tcMain.TabIndex = 19;
             // 
             // tpDrawingSettings
             // 
             this.tpDrawingSettings.BackColor = System.Drawing.SystemColors.Control;
+            this.tpDrawingSettings.Controls.Add(this.tbSubDirStreetmaps);
+            this.tpDrawingSettings.Controls.Add(this.label100);
             this.tpDrawingSettings.Controls.Add(this.btnBrowseDataPath);
             this.tpDrawingSettings.Controls.Add(this.tbPathToDataStorage);
             this.tpDrawingSettings.Controls.Add(this.label68);
@@ -1850,13 +1946,30 @@
             this.tpDrawingSettings.Location = new System.Drawing.Point(4, 22);
             this.tpDrawingSettings.Name = "tpDrawingSettings";
             this.tpDrawingSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tpDrawingSettings.Size = new System.Drawing.Size(927, 739);
+            this.tpDrawingSettings.Size = new System.Drawing.Size(927, 775);
             this.tpDrawingSettings.TabIndex = 1;
             this.tpDrawingSettings.Text = "Drawing Settings";
             // 
+            // tbSubDirStreetmaps
+            // 
+            this.tbSubDirStreetmaps.Location = new System.Drawing.Point(194, 707);
+            this.tbSubDirStreetmaps.Name = "tbSubDirStreetmaps";
+            this.tbSubDirStreetmaps.Size = new System.Drawing.Size(133, 20);
+            this.tbSubDirStreetmaps.TabIndex = 18;
+            this.toolTip1.SetToolTip(this.tbSubDirStreetmaps, "Sub directory to store all street maps.");
+            // 
+            // label100
+            // 
+            this.label100.AutoSize = true;
+            this.label100.Location = new System.Drawing.Point(26, 710);
+            this.label100.Name = "label100";
+            this.label100.Size = new System.Drawing.Size(105, 13);
+            this.label100.TabIndex = 19;
+            this.label100.Text = "Sub Dir Street Maps:";
+            // 
             // btnBrowseDataPath
             // 
-            this.btnBrowseDataPath.Location = new System.Drawing.Point(774, 702);
+            this.btnBrowseDataPath.Location = new System.Drawing.Point(774, 731);
             this.btnBrowseDataPath.Name = "btnBrowseDataPath";
             this.btnBrowseDataPath.Size = new System.Drawing.Size(81, 23);
             this.btnBrowseDataPath.TabIndex = 17;
@@ -1865,15 +1978,16 @@
             // 
             // tbPathToDataStorage
             // 
-            this.tbPathToDataStorage.Location = new System.Drawing.Point(194, 704);
+            this.tbPathToDataStorage.Location = new System.Drawing.Point(194, 733);
             this.tbPathToDataStorage.Name = "tbPathToDataStorage";
             this.tbPathToDataStorage.Size = new System.Drawing.Size(568, 20);
             this.tbPathToDataStorage.TabIndex = 16;
+            this.toolTip1.SetToolTip(this.tbPathToDataStorage, "Full path to the base directory for storing street maps and datasets.");
             // 
             // label68
             // 
             this.label68.AutoSize = true;
-            this.label68.Location = new System.Drawing.Point(27, 707);
+            this.label68.Location = new System.Drawing.Point(27, 736);
             this.label68.Name = "label68";
             this.label68.Size = new System.Drawing.Size(119, 13);
             this.label68.TabIndex = 15;
@@ -1893,7 +2007,7 @@
             this.tpDataGeneration.Location = new System.Drawing.Point(4, 22);
             this.tpDataGeneration.Name = "tpDataGeneration";
             this.tpDataGeneration.Padding = new System.Windows.Forms.Padding(3);
-            this.tpDataGeneration.Size = new System.Drawing.Size(927, 739);
+            this.tpDataGeneration.Size = new System.Drawing.Size(927, 775);
             this.tpDataGeneration.TabIndex = 2;
             this.tpDataGeneration.Text = "Data Generation";
             // 
@@ -1916,6 +2030,7 @@
             this.tbColorMapFileName.Name = "tbColorMapFileName";
             this.tbColorMapFileName.Size = new System.Drawing.Size(268, 20);
             this.tbColorMapFileName.TabIndex = 11;
+            this.toolTip1.SetToolTip(this.tbColorMapFileName, "Name of the file to store the current active class color map.");
             // 
             // label93
             // 
@@ -1932,6 +2047,7 @@
             this.tbClassTextFileName.Name = "tbClassTextFileName";
             this.tbClassTextFileName.Size = new System.Drawing.Size(268, 20);
             this.tbClassTextFileName.TabIndex = 9;
+            this.toolTip1.SetToolTip(this.tbClassTextFileName, "Name of the file to store the current active class definitions for python.");
             // 
             // label92
             // 
@@ -1944,6 +2060,12 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.label99);
+            this.groupBox7.Controls.Add(this.nudColorCorrBlue);
+            this.groupBox7.Controls.Add(this.nudColorCorrGreen);
+            this.groupBox7.Controls.Add(this.label97);
+            this.groupBox7.Controls.Add(this.label98);
+            this.groupBox7.Controls.Add(this.nudColorCorrRed);
             this.groupBox7.Controls.Add(this.ckbDrawWrongDirItems);
             this.groupBox7.Controls.Add(this.label96);
             this.groupBox7.Controls.Add(this.nudMarkMaxDetailDistance);
@@ -1971,25 +2093,127 @@
             this.groupBox7.Controls.Add(this.nudCameraHFOV);
             this.groupBox7.Location = new System.Drawing.Point(4, 291);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(430, 210);
+            this.groupBox7.Size = new System.Drawing.Size(430, 237);
             this.groupBox7.TabIndex = 16;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Virtual Camera";
             // 
+            // label99
+            // 
+            this.label99.AutoSize = true;
+            this.label99.Location = new System.Drawing.Point(18, 100);
+            this.label99.Name = "label99";
+            this.label99.Size = new System.Drawing.Size(80, 13);
+            this.label99.TabIndex = 48;
+            this.label99.Text = "Color Corr Blue:";
+            // 
+            // nudColorCorrBlue
+            // 
+            this.nudColorCorrBlue.DecimalPlaces = 3;
+            this.nudColorCorrBlue.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudColorCorrBlue.Location = new System.Drawing.Point(135, 97);
+            this.nudColorCorrBlue.Maximum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.nudColorCorrBlue.Name = "nudColorCorrBlue";
+            this.nudColorCorrBlue.Size = new System.Drawing.Size(62, 20);
+            this.nudColorCorrBlue.TabIndex = 49;
+            this.nudColorCorrBlue.Tag = "";
+            this.toolTip1.SetToolTip(this.nudColorCorrBlue, "Color correction factor of the camera for the blue channel.");
+            this.nudColorCorrBlue.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            65536});
+            // 
+            // nudColorCorrGreen
+            // 
+            this.nudColorCorrGreen.DecimalPlaces = 3;
+            this.nudColorCorrGreen.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudColorCorrGreen.Location = new System.Drawing.Point(344, 71);
+            this.nudColorCorrGreen.Maximum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.nudColorCorrGreen.Name = "nudColorCorrGreen";
+            this.nudColorCorrGreen.Size = new System.Drawing.Size(62, 20);
+            this.nudColorCorrGreen.TabIndex = 47;
+            this.toolTip1.SetToolTip(this.nudColorCorrGreen, "Color correction factor of the camera for the green channel.");
+            this.nudColorCorrGreen.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            65536});
+            // 
+            // label97
+            // 
+            this.label97.AutoSize = true;
+            this.label97.Location = new System.Drawing.Point(18, 74);
+            this.label97.Name = "label97";
+            this.label97.Size = new System.Drawing.Size(79, 13);
+            this.label97.TabIndex = 44;
+            this.label97.Text = "Color Corr Red:";
+            // 
+            // label98
+            // 
+            this.label98.AutoSize = true;
+            this.label98.Location = new System.Drawing.Point(227, 73);
+            this.label98.Name = "label98";
+            this.label98.Size = new System.Drawing.Size(88, 13);
+            this.label98.TabIndex = 45;
+            this.label98.Text = "Color Corr Green:";
+            // 
+            // nudColorCorrRed
+            // 
+            this.nudColorCorrRed.DecimalPlaces = 3;
+            this.nudColorCorrRed.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudColorCorrRed.Location = new System.Drawing.Point(135, 71);
+            this.nudColorCorrRed.Maximum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.nudColorCorrRed.Name = "nudColorCorrRed";
+            this.nudColorCorrRed.Size = new System.Drawing.Size(62, 20);
+            this.nudColorCorrRed.TabIndex = 46;
+            this.nudColorCorrRed.Tag = "";
+            this.toolTip1.SetToolTip(this.nudColorCorrRed, "Color correction factor of the camera for the red channel.");
+            this.nudColorCorrRed.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            65536});
+            // 
             // ckbDrawWrongDirItems
             // 
             this.ckbDrawWrongDirItems.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckbDrawWrongDirItems.Location = new System.Drawing.Point(225, 172);
+            this.ckbDrawWrongDirItems.Location = new System.Drawing.Point(225, 199);
             this.ckbDrawWrongDirItems.Name = "ckbDrawWrongDirItems";
-            this.ckbDrawWrongDirItems.Size = new System.Drawing.Size(133, 24);
+            this.ckbDrawWrongDirItems.Size = new System.Drawing.Size(153, 24);
             this.ckbDrawWrongDirItems.TabIndex = 43;
             this.ckbDrawWrongDirItems.Text = "Draw Wrong Dir Items:";
+            this.toolTip1.SetToolTip(this.ckbDrawWrongDirItems, "If true, overlays and intersection items are drawn in wrong direction.");
             this.ckbDrawWrongDirItems.UseVisualStyleBackColor = true;
             // 
             // label96
             // 
             this.label96.AutoSize = true;
-            this.label96.Location = new System.Drawing.Point(18, 178);
+            this.label96.Location = new System.Drawing.Point(18, 205);
             this.label96.Name = "label96";
             this.label96.Size = new System.Drawing.Size(108, 13);
             this.label96.TabIndex = 41;
@@ -1997,7 +2221,7 @@
             // 
             // nudMarkMaxDetailDistance
             // 
-            this.nudMarkMaxDetailDistance.Location = new System.Drawing.Point(135, 175);
+            this.nudMarkMaxDetailDistance.Location = new System.Drawing.Point(135, 202);
             this.nudMarkMaxDetailDistance.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2007,6 +2231,7 @@
             this.nudMarkMaxDetailDistance.Size = new System.Drawing.Size(62, 20);
             this.nudMarkMaxDetailDistance.TabIndex = 42;
             this.nudMarkMaxDetailDistance.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudMarkMaxDetailDistance, "Maximum distance from camera view point to mark all details.");
             this.nudMarkMaxDetailDistance.Value = new decimal(new int[] {
             64,
             0,
@@ -2016,7 +2241,7 @@
             // 
             // nudMarkLaneMaxDistSide
             // 
-            this.nudMarkLaneMaxDistSide.Location = new System.Drawing.Point(344, 149);
+            this.nudMarkLaneMaxDistSide.Location = new System.Drawing.Point(344, 176);
             this.nudMarkLaneMaxDistSide.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2026,6 +2251,8 @@
             this.nudMarkLaneMaxDistSide.Size = new System.Drawing.Size(62, 20);
             this.nudMarkLaneMaxDistSide.TabIndex = 40;
             this.nudMarkLaneMaxDistSide.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudMarkLaneMaxDistSide, "Range to the side of a view to include street elements to mark lanes with class c" +
+        "odes or colors.");
             this.nudMarkLaneMaxDistSide.Value = new decimal(new int[] {
             64,
             0,
@@ -2036,7 +2263,7 @@
             // label90
             // 
             this.label90.AutoSize = true;
-            this.label90.Location = new System.Drawing.Point(18, 152);
+            this.label90.Location = new System.Drawing.Point(18, 179);
             this.label90.Name = "label90";
             this.label90.Size = new System.Drawing.Size(111, 13);
             this.label90.TabIndex = 37;
@@ -2045,7 +2272,7 @@
             // label91
             // 
             this.label91.AutoSize = true;
-            this.label91.Location = new System.Drawing.Point(227, 151);
+            this.label91.Location = new System.Drawing.Point(227, 178);
             this.label91.Name = "label91";
             this.label91.Size = new System.Drawing.Size(108, 13);
             this.label91.TabIndex = 38;
@@ -2053,7 +2280,7 @@
             // 
             // nudMarkLaneMaxDistFront
             // 
-            this.nudMarkLaneMaxDistFront.Location = new System.Drawing.Point(135, 149);
+            this.nudMarkLaneMaxDistFront.Location = new System.Drawing.Point(135, 176);
             this.nudMarkLaneMaxDistFront.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2063,6 +2290,8 @@
             this.nudMarkLaneMaxDistFront.Size = new System.Drawing.Size(62, 20);
             this.nudMarkLaneMaxDistFront.TabIndex = 39;
             this.nudMarkLaneMaxDistFront.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudMarkLaneMaxDistFront, "Range in front of a view to include street elements to mark lanes with class code" +
+        "s or colors.");
             this.nudMarkLaneMaxDistFront.Value = new decimal(new int[] {
             64,
             0,
@@ -2073,7 +2302,7 @@
             // label67
             // 
             this.label67.AutoSize = true;
-            this.label67.Location = new System.Drawing.Point(18, 126);
+            this.label67.Location = new System.Drawing.Point(227, 99);
             this.label67.Name = "label67";
             this.label67.Size = new System.Drawing.Size(113, 13);
             this.label67.TabIndex = 33;
@@ -2081,7 +2310,7 @@
             // 
             // nudCameraOversampling
             // 
-            this.nudCameraOversampling.Location = new System.Drawing.Point(135, 123);
+            this.nudCameraOversampling.Location = new System.Drawing.Point(344, 97);
             this.nudCameraOversampling.Maximum = new decimal(new int[] {
             8,
             0,
@@ -2095,6 +2324,8 @@
             this.nudCameraOversampling.Name = "nudCameraOversampling";
             this.nudCameraOversampling.Size = new System.Drawing.Size(62, 20);
             this.nudCameraOversampling.TabIndex = 35;
+            this.toolTip1.SetToolTip(this.nudCameraOversampling, "Oversampling of the virtual camera of the original image before downsampling to o" +
+        "utput width");
             this.nudCameraOversampling.Value = new decimal(new int[] {
             3,
             0,
@@ -2104,7 +2335,7 @@
             // 
             // nudCameraOutputHeight
             // 
-            this.nudCameraOutputHeight.Location = new System.Drawing.Point(344, 97);
+            this.nudCameraOutputHeight.Location = new System.Drawing.Point(344, 124);
             this.nudCameraOutputHeight.Maximum = new decimal(new int[] {
             1024,
             0,
@@ -2118,6 +2349,7 @@
             this.nudCameraOutputHeight.Name = "nudCameraOutputHeight";
             this.nudCameraOutputHeight.Size = new System.Drawing.Size(62, 20);
             this.nudCameraOutputHeight.TabIndex = 32;
+            this.toolTip1.SetToolTip(this.nudCameraOutputHeight, "Height of the output image of the virtual camera.");
             this.nudCameraOutputHeight.Value = new decimal(new int[] {
             64,
             0,
@@ -2128,7 +2360,7 @@
             // label65
             // 
             this.label65.AutoSize = true;
-            this.label65.Location = new System.Drawing.Point(18, 100);
+            this.label65.Location = new System.Drawing.Point(18, 127);
             this.label65.Name = "label65";
             this.label65.Size = new System.Drawing.Size(112, 13);
             this.label65.TabIndex = 29;
@@ -2137,7 +2369,7 @@
             // label66
             // 
             this.label66.AutoSize = true;
-            this.label66.Location = new System.Drawing.Point(227, 99);
+            this.label66.Location = new System.Drawing.Point(227, 126);
             this.label66.Name = "label66";
             this.label66.Size = new System.Drawing.Size(115, 13);
             this.label66.TabIndex = 30;
@@ -2145,7 +2377,7 @@
             // 
             // nudCameraOutputWidth
             // 
-            this.nudCameraOutputWidth.Location = new System.Drawing.Point(135, 97);
+            this.nudCameraOutputWidth.Location = new System.Drawing.Point(135, 124);
             this.nudCameraOutputWidth.Maximum = new decimal(new int[] {
             1024,
             0,
@@ -2159,6 +2391,7 @@
             this.nudCameraOutputWidth.Name = "nudCameraOutputWidth";
             this.nudCameraOutputWidth.Size = new System.Drawing.Size(62, 20);
             this.nudCameraOutputWidth.TabIndex = 31;
+            this.toolTip1.SetToolTip(this.nudCameraOutputWidth, "Width of the output image of the virtual camera.");
             this.nudCameraOutputWidth.Value = new decimal(new int[] {
             64,
             0,
@@ -2169,7 +2402,7 @@
             // nudCameraAxisAngle
             // 
             this.nudCameraAxisAngle.DecimalPlaces = 3;
-            this.nudCameraAxisAngle.Location = new System.Drawing.Point(344, 71);
+            this.nudCameraAxisAngle.Location = new System.Drawing.Point(344, 150);
             this.nudCameraAxisAngle.Maximum = new decimal(new int[] {
             90,
             0,
@@ -2178,6 +2411,7 @@
             this.nudCameraAxisAngle.Name = "nudCameraAxisAngle";
             this.nudCameraAxisAngle.Size = new System.Drawing.Size(62, 20);
             this.nudCameraAxisAngle.TabIndex = 28;
+            this.toolTip1.SetToolTip(this.nudCameraAxisAngle, "Angle of the optical axis of the camera.");
             this.nudCameraAxisAngle.Value = new decimal(new int[] {
             64,
             0,
@@ -2188,7 +2422,7 @@
             // label63
             // 
             this.label63.AutoSize = true;
-            this.label63.Location = new System.Drawing.Point(18, 74);
+            this.label63.Location = new System.Drawing.Point(18, 153);
             this.label63.Name = "label63";
             this.label63.Size = new System.Drawing.Size(80, 13);
             this.label63.TabIndex = 25;
@@ -2197,7 +2431,7 @@
             // label64
             // 
             this.label64.AutoSize = true;
-            this.label64.Location = new System.Drawing.Point(227, 73);
+            this.label64.Location = new System.Drawing.Point(227, 152);
             this.label64.Name = "label64";
             this.label64.Size = new System.Drawing.Size(98, 13);
             this.label64.TabIndex = 26;
@@ -2205,7 +2439,7 @@
             // 
             // nudCameraHeight
             // 
-            this.nudCameraHeight.Location = new System.Drawing.Point(135, 71);
+            this.nudCameraHeight.Location = new System.Drawing.Point(135, 150);
             this.nudCameraHeight.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2215,6 +2449,7 @@
             this.nudCameraHeight.Size = new System.Drawing.Size(62, 20);
             this.nudCameraHeight.TabIndex = 27;
             this.nudCameraHeight.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudCameraHeight, "Height of the camera above ground.");
             this.nudCameraHeight.Value = new decimal(new int[] {
             64,
             0,
@@ -2244,6 +2479,7 @@
             this.nudCameraLensDist2.Name = "nudCameraLensDist2";
             this.nudCameraLensDist2.Size = new System.Drawing.Size(62, 20);
             this.nudCameraLensDist2.TabIndex = 24;
+            this.toolTip1.SetToolTip(this.nudCameraLensDist2, "Optical distortion coefficient 2 of the camera lens.");
             this.nudCameraLensDist2.Value = new decimal(new int[] {
             1,
             0,
@@ -2291,6 +2527,7 @@
             this.nudCameraLensDist1.Name = "nudCameraLensDist1";
             this.nudCameraLensDist1.Size = new System.Drawing.Size(62, 20);
             this.nudCameraLensDist1.TabIndex = 23;
+            this.toolTip1.SetToolTip(this.nudCameraLensDist1, "Optical distortion coefficient 1 of the camera lens.");
             this.nudCameraLensDist1.Value = new decimal(new int[] {
             1,
             0,
@@ -2320,6 +2557,7 @@
             this.nudCameraImageRatio.Name = "nudCameraImageRatio";
             this.nudCameraImageRatio.Size = new System.Drawing.Size(62, 20);
             this.nudCameraImageRatio.TabIndex = 20;
+            this.toolTip1.SetToolTip(this.nudCameraImageRatio, "Horizontal to vertical ratio of the camera image after distortion.");
             this.nudCameraImageRatio.Value = new decimal(new int[] {
             2,
             0,
@@ -2361,6 +2599,8 @@
             this.nudCameraHFOV.Name = "nudCameraHFOV";
             this.nudCameraHFOV.Size = new System.Drawing.Size(62, 20);
             this.nudCameraHFOV.TabIndex = 19;
+            this.toolTip1.SetToolTip(this.nudCameraHFOV, "Theoretical Horizontal Field of View of the camera lens in Degrees without lens d" +
+        "istortion.");
             this.nudCameraHFOV.Value = new decimal(new int[] {
             120,
             0,
@@ -2370,6 +2610,9 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.ckbCenterBrightnessResults);
+            this.groupBox6.Controls.Add(this.ckbTestCenterViewsOnly);
+            this.groupBox6.Controls.Add(this.ckbValidateCenterViewsOnly);
             this.groupBox6.Controls.Add(this.nudImageStepSize);
             this.groupBox6.Controls.Add(this.label89);
             this.groupBox6.Controls.Add(this.nudTestOutRatio);
@@ -2387,16 +2630,50 @@
             this.groupBox6.Controls.Add(this.label74);
             this.groupBox6.Controls.Add(this.label75);
             this.groupBox6.Controls.Add(this.label76);
-            this.groupBox6.Location = new System.Drawing.Point(4, 507);
+            this.groupBox6.Location = new System.Drawing.Point(4, 534);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(430, 226);
+            this.groupBox6.Size = new System.Drawing.Size(430, 235);
             this.groupBox6.TabIndex = 15;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Augmentation";
             // 
+            // ckbCenterBrightnessResults
+            // 
+            this.ckbCenterBrightnessResults.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ckbCenterBrightnessResults.Location = new System.Drawing.Point(225, 68);
+            this.ckbCenterBrightnessResults.Name = "ckbCenterBrightnessResults";
+            this.ckbCenterBrightnessResults.Size = new System.Drawing.Size(153, 24);
+            this.ckbCenterBrightnessResults.TabIndex = 46;
+            this.ckbCenterBrightnessResults.Text = "Center Brightness Results:";
+            this.toolTip1.SetToolTip(this.ckbCenterBrightnessResults, "If true, brightness calculation results will be offset to center the min/max rang" +
+        "e.");
+            this.ckbCenterBrightnessResults.UseVisualStyleBackColor = true;
+            // 
+            // ckbTestCenterViewsOnly
+            // 
+            this.ckbTestCenterViewsOnly.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ckbTestCenterViewsOnly.Location = new System.Drawing.Point(225, 42);
+            this.ckbTestCenterViewsOnly.Name = "ckbTestCenterViewsOnly";
+            this.ckbTestCenterViewsOnly.Size = new System.Drawing.Size(153, 24);
+            this.ckbTestCenterViewsOnly.TabIndex = 45;
+            this.ckbTestCenterViewsOnly.Text = "Test Center Views Only:";
+            this.toolTip1.SetToolTip(this.ckbTestCenterViewsOnly, "If true, only center view sets will be placed into test folders.");
+            this.ckbTestCenterViewsOnly.UseVisualStyleBackColor = true;
+            // 
+            // ckbValidateCenterViewsOnly
+            // 
+            this.ckbValidateCenterViewsOnly.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ckbValidateCenterViewsOnly.Location = new System.Drawing.Point(225, 16);
+            this.ckbValidateCenterViewsOnly.Name = "ckbValidateCenterViewsOnly";
+            this.ckbValidateCenterViewsOnly.Size = new System.Drawing.Size(153, 24);
+            this.ckbValidateCenterViewsOnly.TabIndex = 44;
+            this.ckbValidateCenterViewsOnly.Text = "Val. Center Views Only:";
+            this.toolTip1.SetToolTip(this.ckbValidateCenterViewsOnly, "If true, only center view sets will be placed into validation folders.");
+            this.ckbValidateCenterViewsOnly.UseVisualStyleBackColor = true;
+            // 
             // nudImageStepSize
             // 
-            this.nudImageStepSize.Location = new System.Drawing.Point(135, 44);
+            this.nudImageStepSize.Location = new System.Drawing.Point(135, 70);
             this.nudImageStepSize.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2406,6 +2683,7 @@
             this.nudImageStepSize.Size = new System.Drawing.Size(62, 20);
             this.nudImageStepSize.TabIndex = 26;
             this.nudImageStepSize.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudImageStepSize, "Step size for new images to be created along each lane.");
             this.nudImageStepSize.Value = new decimal(new int[] {
             1,
             0,
@@ -2416,7 +2694,7 @@
             // label89
             // 
             this.label89.AutoSize = true;
-            this.label89.Location = new System.Drawing.Point(18, 47);
+            this.label89.Location = new System.Drawing.Point(18, 73);
             this.label89.Name = "label89";
             this.label89.Size = new System.Drawing.Size(87, 13);
             this.label89.TabIndex = 25;
@@ -2424,7 +2702,7 @@
             // 
             // nudTestOutRatio
             // 
-            this.nudTestOutRatio.Location = new System.Drawing.Point(344, 19);
+            this.nudTestOutRatio.Location = new System.Drawing.Point(135, 44);
             this.nudTestOutRatio.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -2438,6 +2716,8 @@
             this.nudTestOutRatio.Name = "nudTestOutRatio";
             this.nudTestOutRatio.Size = new System.Drawing.Size(62, 20);
             this.nudTestOutRatio.TabIndex = 24;
+            this.toolTip1.SetToolTip(this.nudTestOutRatio, "Ratio between Train/Val and Test output. 100 for instance means that about every " +
+        "100th image,mask and info set will be copied into the test folder.");
             this.nudTestOutRatio.Value = new decimal(new int[] {
             1,
             0,
@@ -2448,7 +2728,7 @@
             // label88
             // 
             this.label88.AutoSize = true;
-            this.label88.Location = new System.Drawing.Point(227, 22);
+            this.label88.Location = new System.Drawing.Point(18, 47);
             this.label88.Name = "label88";
             this.label88.Size = new System.Drawing.Size(79, 13);
             this.label88.TabIndex = 23;
@@ -2456,16 +2736,17 @@
             // 
             // tbColorFactors
             // 
-            this.tbColorFactors.Location = new System.Drawing.Point(135, 164);
+            this.tbColorFactors.Location = new System.Drawing.Point(135, 174);
             this.tbColorFactors.Name = "tbColorFactors";
             this.tbColorFactors.Size = new System.Drawing.Size(271, 20);
             this.tbColorFactors.TabIndex = 22;
+            this.toolTip1.SetToolTip(this.tbColorFactors, "Color variations to apply to each of the three basic colors RGB sequentially.");
             this.tbColorFactors.Validating += new System.ComponentModel.CancelEventHandler(this.tbColorFactors_Validating);
             // 
             // label70
             // 
             this.label70.AutoSize = true;
-            this.label70.Location = new System.Drawing.Point(18, 167);
+            this.label70.Location = new System.Drawing.Point(18, 177);
             this.label70.Name = "label70";
             this.label70.Size = new System.Drawing.Size(72, 13);
             this.label70.TabIndex = 21;
@@ -2487,6 +2768,9 @@
             this.nudTrainValRatio.Name = "nudTrainValRatio";
             this.nudTrainValRatio.Size = new System.Drawing.Size(62, 20);
             this.nudTrainValRatio.TabIndex = 18;
+            this.toolTip1.SetToolTip(this.nudTrainValRatio, "Ratio between training and validation output. 50 for instance means that about ev" +
+        "ery 50th image,mask and info set will be placed into the validation folders inst" +
+        "ead of training folders.");
             this.nudTrainValRatio.Value = new decimal(new int[] {
             1,
             0,
@@ -2496,16 +2780,17 @@
             // 
             // tbNoiseLevels
             // 
-            this.tbNoiseLevels.Location = new System.Drawing.Point(135, 190);
+            this.tbNoiseLevels.Location = new System.Drawing.Point(135, 200);
             this.tbNoiseLevels.Name = "tbNoiseLevels";
             this.tbNoiseLevels.Size = new System.Drawing.Size(271, 20);
             this.tbNoiseLevels.TabIndex = 14;
+            this.toolTip1.SetToolTip(this.tbNoiseLevels, "Adding noise in different levels at the end.");
             this.tbNoiseLevels.Validating += new System.ComponentModel.CancelEventHandler(this.tbNoiseLevels_Validating);
             // 
             // label71
             // 
             this.label71.AutoSize = true;
-            this.label71.Location = new System.Drawing.Point(18, 193);
+            this.label71.Location = new System.Drawing.Point(18, 203);
             this.label71.Name = "label71";
             this.label71.Size = new System.Drawing.Size(73, 13);
             this.label71.TabIndex = 13;
@@ -2513,16 +2798,17 @@
             // 
             // tbBrightnessFactors
             // 
-            this.tbBrightnessFactors.Location = new System.Drawing.Point(135, 138);
+            this.tbBrightnessFactors.Location = new System.Drawing.Point(135, 148);
             this.tbBrightnessFactors.Name = "tbBrightnessFactors";
             this.tbBrightnessFactors.Size = new System.Drawing.Size(271, 20);
             this.tbBrightnessFactors.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.tbBrightnessFactors, "Different brightness variations for more augmentation.");
             this.tbBrightnessFactors.Validating += new System.ComponentModel.CancelEventHandler(this.tbBrightnessFactors_Validating);
             // 
             // label72
             // 
             this.label72.AutoSize = true;
-            this.label72.Location = new System.Drawing.Point(18, 141);
+            this.label72.Location = new System.Drawing.Point(18, 151);
             this.label72.Name = "label72";
             this.label72.Size = new System.Drawing.Size(97, 13);
             this.label72.TabIndex = 11;
@@ -2530,16 +2816,18 @@
             // 
             // tbAngleSteps
             // 
-            this.tbAngleSteps.Location = new System.Drawing.Point(135, 112);
+            this.tbAngleSteps.Location = new System.Drawing.Point(135, 122);
             this.tbAngleSteps.Name = "tbAngleSteps";
             this.tbAngleSteps.Size = new System.Drawing.Size(271, 20);
             this.tbAngleSteps.TabIndex = 10;
+            this.toolTip1.SetToolTip(this.tbAngleSteps, "Angle variations turning left and right from lane center view to create additiona" +
+        "l views.");
             this.tbAngleSteps.Validating += new System.ComponentModel.CancelEventHandler(this.tbAngleSteps_Validating);
             // 
             // label73
             // 
             this.label73.AutoSize = true;
-            this.label73.Location = new System.Drawing.Point(18, 115);
+            this.label73.Location = new System.Drawing.Point(18, 125);
             this.label73.Name = "label73";
             this.label73.Size = new System.Drawing.Size(72, 13);
             this.label73.TabIndex = 9;
@@ -2547,16 +2835,17 @@
             // 
             // tbSideSteps
             // 
-            this.tbSideSteps.Location = new System.Drawing.Point(135, 86);
+            this.tbSideSteps.Location = new System.Drawing.Point(135, 96);
             this.tbSideSteps.Name = "tbSideSteps";
             this.tbSideSteps.Size = new System.Drawing.Size(271, 20);
             this.tbSideSteps.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.tbSideSteps, "Steps left and right from the lane center to create additional views off center.");
             this.tbSideSteps.Validating += new System.ComponentModel.CancelEventHandler(this.tbSideSteps_Validating);
             // 
             // label74
             // 
             this.label74.AutoSize = true;
-            this.label74.Location = new System.Drawing.Point(18, 89);
+            this.label74.Location = new System.Drawing.Point(18, 99);
             this.label74.Name = "label74";
             this.label74.Size = new System.Drawing.Size(61, 13);
             this.label74.TabIndex = 7;
@@ -2584,7 +2873,7 @@
             this.groupBox5.Controls.Add(this.dgvSegmClassDefs);
             this.groupBox5.Location = new System.Drawing.Point(439, 207);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(483, 526);
+            this.groupBox5.Size = new System.Drawing.Size(483, 562);
             this.groupBox5.TabIndex = 14;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "SegmClass Definition";
@@ -2606,6 +2895,8 @@
             this.dgvSegmClassDefs.RowHeadersVisible = false;
             this.dgvSegmClassDefs.Size = new System.Drawing.Size(440, 533);
             this.dgvSegmClassDefs.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.dgvSegmClassDefs, "List of all object classes and their drawing color. ClassCode and UseCount will b" +
+        "e updated after creating the dataset.");
             this.dgvSegmClassDefs.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSegmClassDefs_CellClick);
             this.dgvSegmClassDefs.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvSegmClassDefs_CellFormatting);
             this.dgvSegmClassDefs.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvSegmClassDefs_CellPainting);
@@ -2701,6 +2992,7 @@
             this.tbPrefixPred.Name = "tbPrefixPred";
             this.tbPrefixPred.Size = new System.Drawing.Size(133, 20);
             this.tbPrefixPred.TabIndex = 9;
+            this.toolTip1.SetToolTip(this.tbPrefixPred, "File name prefix for prediction image files.");
             // 
             // label95
             // 
@@ -2717,6 +3009,7 @@
             this.tbPrefixClassImg.Name = "tbPrefixClassImg";
             this.tbPrefixClassImg.Size = new System.Drawing.Size(133, 20);
             this.tbPrefixClassImg.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.tbPrefixClassImg, "File name prefix for class image files.");
             // 
             // label79
             // 
@@ -2733,6 +3026,7 @@
             this.tbPrefixMask.Name = "tbPrefixMask";
             this.tbPrefixMask.Size = new System.Drawing.Size(133, 20);
             this.tbPrefixMask.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.tbPrefixMask, "File name prefix for PNG mask files.");
             // 
             // label80
             // 
@@ -2749,6 +3043,7 @@
             this.tbPrefixImg.Name = "tbPrefixImg";
             this.tbPrefixImg.Size = new System.Drawing.Size(133, 20);
             this.tbPrefixImg.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.tbPrefixImg, "File name prefix for JPG image files.");
             // 
             // label81
             // 
@@ -2780,6 +3075,8 @@
             this.tbSubDirTest.Name = "tbSubDirTest";
             this.tbSubDirTest.Size = new System.Drawing.Size(133, 20);
             this.tbSubDirTest.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.tbSubDirTest, "Sub directory name under SubDirDataSet\\XXX\\ for augmented files for test outputs." +
+        "");
             // 
             // label69
             // 
@@ -2796,6 +3093,7 @@
             this.tbSubDirVal.Name = "tbSubDirVal";
             this.tbSubDirVal.Size = new System.Drawing.Size(133, 20);
             this.tbSubDirVal.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.tbSubDirVal, "Sub directory name under SubDirDataSet\\XXX\\ for augmented files for validation.");
             // 
             // label82
             // 
@@ -2812,6 +3110,7 @@
             this.tbSubDirTrain.Name = "tbSubDirTrain";
             this.tbSubDirTrain.Size = new System.Drawing.Size(133, 20);
             this.tbSubDirTrain.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.tbSubDirTrain, "Sub directory name under SubDirDataSet\\XXX\\ for augmented files for training.");
             // 
             // label83
             // 
@@ -2845,6 +3144,7 @@
             this.tbSubDirPred.Name = "tbSubDirPred";
             this.tbSubDirPred.Size = new System.Drawing.Size(133, 20);
             this.tbSubDirPred.TabIndex = 9;
+            this.toolTip1.SetToolTip(this.tbSubDirPred, "Sub directory name under SubDirDataSet\\ for prediction results from the model.");
             // 
             // label94
             // 
@@ -2861,6 +3161,7 @@
             this.tbSubDirClassImg.Name = "tbSubDirClassImg";
             this.tbSubDirClassImg.Size = new System.Drawing.Size(133, 20);
             this.tbSubDirClassImg.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.tbSubDirClassImg, "Sub directory name under SubDirDataSet\\ for augmented class image files.");
             // 
             // label84
             // 
@@ -2877,6 +3178,7 @@
             this.tbSubDirMask.Name = "tbSubDirMask";
             this.tbSubDirMask.Size = new System.Drawing.Size(133, 20);
             this.tbSubDirMask.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.tbSubDirMask, "Sub directory name under SubDirDataSet\\ for augmented PNG masks.");
             // 
             // label85
             // 
@@ -2893,6 +3195,7 @@
             this.tbSubDirImg.Name = "tbSubDirImg";
             this.tbSubDirImg.Size = new System.Drawing.Size(133, 20);
             this.tbSubDirImg.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.tbSubDirImg, "Sub directory name under SubDirDataSet\\ for augmented JPG images.");
             // 
             // label86
             // 
@@ -2920,6 +3223,8 @@
             this.tbDataSetSubDir.Name = "tbDataSetSubDir";
             this.tbDataSetSubDir.Size = new System.Drawing.Size(133, 20);
             this.tbDataSetSubDir.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.tbDataSetSubDir, "Sub directory to the folder to store all output dataset files, like images, mask " +
+        "and xml files.");
             // 
             // label87
             // 
@@ -2946,7 +3251,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(935, 813);
+            this.ClientSize = new System.Drawing.Size(935, 849);
             this.ControlBox = false;
             this.Controls.Add(this.tcMain);
             this.Controls.Add(this.pnControl);
@@ -3011,6 +3316,9 @@
             this.groupBox12.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrBlue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrGreen)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrRed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMarkMaxDetailDistance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMarkLaneMaxDistSide)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMarkLaneMaxDistFront)).EndInit();
@@ -3274,5 +3582,17 @@
         private System.Windows.Forms.CheckBox ckbDrawWrongDirItems;
         private System.Windows.Forms.Label label96;
         private System.Windows.Forms.NumericUpDown nudMarkMaxDetailDistance;
+        private System.Windows.Forms.CheckBox ckbTestCenterViewsOnly;
+        private System.Windows.Forms.CheckBox ckbValidateCenterViewsOnly;
+        private System.Windows.Forms.CheckBox ckbCenterBrightnessResults;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.TextBox tbSubDirStreetmaps;
+        private System.Windows.Forms.Label label100;
+        private System.Windows.Forms.Label label99;
+        private System.Windows.Forms.NumericUpDown nudColorCorrBlue;
+        private System.Windows.Forms.NumericUpDown nudColorCorrGreen;
+        private System.Windows.Forms.Label label97;
+        private System.Windows.Forms.Label label98;
+        private System.Windows.Forms.NumericUpDown nudColorCorrRed;
     }
 }

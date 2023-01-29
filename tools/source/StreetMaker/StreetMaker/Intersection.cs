@@ -610,7 +610,7 @@ namespace StreetMaker
                         poly[3] = Utils.Scale(innerArea[1], ScaleFactor);
                         poly[4] = poly[0];
                         grfx.FillPolygon(new SolidBrush(StreetDescriptors[1].Lanes[0].GetDrawColor()), poly);
-                        
+
                         if (StreetDescriptors[1].LaneCountLeft > 0)
                         {
                             poly[2] = Utils.Scale(Utils.GetPoint(innerArea[0], lane0Angle + Utils.RIGHT_ANGLE_RADIAN, lineWidth + BaseElement.DRAW_OFFS_WIDTH+1), ScaleFactor);
@@ -950,7 +950,7 @@ namespace StreetMaker
                             // draw driving dir over it from starting point of driving direction lanes
                             PointF[] poly = GetInnerPolygon(new SizeF(1, 1));
 
-                            double dist = -StreetDescriptors[0].Lanes[0].LeftLine.Connectors[0].Width;
+                            double dist = -(StreetDescriptors[0].Lanes[0].LeftLine.Connectors[0].Width+1); // bigger to avoid rounding gaps
                             double dirAngle = StreetDescriptors[0].Lanes[0].LeftLine.Connectors[0].Angle;
                             poly[2] = Utils.GetPoint(poly[1], dirAngle, dist);
                             poly[3] = Utils.GetPoint(poly[0], dirAngle, dist);

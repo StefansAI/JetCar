@@ -515,7 +515,6 @@ namespace StreetMaker
                 }
 
                 grfx.FillPolygon(new SolidBrush(lanes[LaneCount - 1].GetDrawColor()), Utils.Scale(poly, ScaleFactor));
-                //grfx.FillPolygon(new SolidBrush(Color.FromArgb(128,0,0,255)), Utils.Scale(poly, ScaleFactor));
 
                 if (RampType == RampType.Entrance)
                 {
@@ -546,6 +545,7 @@ namespace StreetMaker
                     {
                         if (lanes[LaneCount - 1].SegmClassDef == SegmClassDefs.ScdDrivingDir)
                         {
+#if RECTANGULAR_DRIVING_DIR_BLOCK       // Tried this first, but training got confused and offered a left turn in inference
                             PointF[] pp = new PointF[5];
                             pp[0] = poly[3];
                             pp[2] = lanes[LaneCountRight - 1].LeftLine == null ? lanes[LaneCountRight - 1].Connectors[1].EndP0 : lanes[LaneCountRight - 1].LeftLine.Connectors[1].EndP1;
@@ -553,7 +553,10 @@ namespace StreetMaker
                             pp[1] = Utils.GetPoint(poly[3], angle - Utils.RIGHT_ANGLE_RADIAN, -Utils.GetDistance(pp[2], pp[3]));
                             pp[4] = pp[0];
                             grfx.FillPolygon(new SolidBrush(lanes[LaneCount - 1].GetDrawColor()), Utils.Scale(pp, ScaleFactor));
-
+#else
+                            // Just draw curved entrance in driving dir color to force only this direction
+                            lanes[LaneCount - 1].Draw(grfx, ScaleFactor, DrawMode.BaseLayer);
+#endif
                             for (int i = 0; i < LaneCountRight; i++)
                             {
                                 if ((i > 0) && (lanes[i].RightLine != null))

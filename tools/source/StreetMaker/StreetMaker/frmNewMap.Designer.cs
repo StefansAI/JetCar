@@ -28,15 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNewMap));
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cbUnit = new System.Windows.Forms.ComboBox();
+            this.lbWidth = new System.Windows.Forms.Label();
+            this.cbMeasurementUnit = new System.Windows.Forms.ComboBox();
             this.nudWidth = new System.Windows.Forms.NumericUpDown();
             this.nudHeight = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lbHeight = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.nudWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHeight)).BeginInit();
             this.SuspendLayout();
@@ -61,23 +63,25 @@
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // lbWidth
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(31, 54);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Width:";
+            this.lbWidth.AutoSize = true;
+            this.lbWidth.Location = new System.Drawing.Point(31, 54);
+            this.lbWidth.Name = "lbWidth";
+            this.lbWidth.Size = new System.Drawing.Size(38, 13);
+            this.lbWidth.TabIndex = 2;
+            this.lbWidth.Text = "Width:";
+            this.toolTip1.SetToolTip(this.lbWidth, "Total width of the map area.");
             // 
-            // cbUnit
+            // cbMeasurementUnit
             // 
-            this.cbUnit.FormattingEnabled = true;
-            this.cbUnit.Location = new System.Drawing.Point(80, 12);
-            this.cbUnit.Name = "cbUnit";
-            this.cbUnit.Size = new System.Drawing.Size(110, 21);
-            this.cbUnit.TabIndex = 3;
-            this.cbUnit.SelectedIndexChanged += new System.EventHandler(this.cbUnit_SelectedIndexChanged);
+            this.cbMeasurementUnit.FormattingEnabled = true;
+            this.cbMeasurementUnit.Location = new System.Drawing.Point(80, 12);
+            this.cbMeasurementUnit.Name = "cbMeasurementUnit";
+            this.cbMeasurementUnit.Size = new System.Drawing.Size(110, 21);
+            this.cbMeasurementUnit.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.cbMeasurementUnit, "Measurement unit selection for the map area dimensions.");
+            this.cbMeasurementUnit.SelectedIndexChanged += new System.EventHandler(this.cbUnit_SelectedIndexChanged);
             // 
             // nudWidth
             // 
@@ -91,6 +95,8 @@
             this.nudWidth.Name = "nudWidth";
             this.nudWidth.Size = new System.Drawing.Size(110, 20);
             this.nudWidth.TabIndex = 4;
+            this.nudWidth.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudWidth, "Total width of the map area.");
             this.nudWidth.ValueChanged += new System.EventHandler(this.nudWidth_ValueChanged);
             // 
             // nudHeight
@@ -105,16 +111,19 @@
             this.nudHeight.Name = "nudHeight";
             this.nudHeight.Size = new System.Drawing.Size(110, 20);
             this.nudHeight.TabIndex = 6;
+            this.nudHeight.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudHeight, "Total height of the map area.");
             this.nudHeight.ValueChanged += new System.EventHandler(this.nudHeight_ValueChanged);
             // 
-            // label2
+            // lbHeight
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(31, 85);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 13);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Height:";
+            this.lbHeight.AutoSize = true;
+            this.lbHeight.Location = new System.Drawing.Point(31, 85);
+            this.lbHeight.Name = "lbHeight";
+            this.lbHeight.Size = new System.Drawing.Size(41, 13);
+            this.lbHeight.TabIndex = 5;
+            this.lbHeight.Text = "Height:";
+            this.toolTip1.SetToolTip(this.lbHeight, "Total height of the map area.");
             // 
             // label3
             // 
@@ -135,10 +144,10 @@
             this.ControlBox = false;
             this.Controls.Add(this.label3);
             this.Controls.Add(this.nudHeight);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lbHeight);
             this.Controls.Add(this.nudWidth);
-            this.Controls.Add(this.cbUnit);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.cbMeasurementUnit);
+            this.Controls.Add(this.lbWidth);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -159,11 +168,12 @@
 
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox cbUnit;
+        private System.Windows.Forms.Label lbWidth;
+        private System.Windows.Forms.ComboBox cbMeasurementUnit;
         private System.Windows.Forms.NumericUpDown nudWidth;
         private System.Windows.Forms.NumericUpDown nudHeight;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lbHeight;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

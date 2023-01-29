@@ -117,6 +117,37 @@ namespace StreetMaker
         }
 
         /// <summary>
+        /// Determines the minimum size for the current map that can be applied without cutting off parts.
+        /// </summary>
+        /// <returns>Minimum size of the current map</returns>
+        public SizeF GetMapMinimumSize()
+        {
+            float xmax = 2*(float)AppSettings.LaneWidth;
+            float ymax = 2*(float)AppSettings.LaneWidth;
+            foreach (StreetElement se in Items)
+                foreach (LaneElement lane in se.Lanes)
+                    foreach (Connector con in lane.Connectors)
+                    {
+                        xmax = Math.Max(xmax, con.EndP0.X);
+                        ymax = Math.Max(ymax, con.EndP0.Y);
+                        xmax = Math.Max(xmax, con.EndP1.X);
+                        ymax = Math.Max(ymax, con.EndP1.Y);
+                    }
+            return new SizeF((float)Math.Round(xmax + AppSettings.LaneWidth/2), (float)Math.Round(ymax + AppSettings.LaneWidth/2));
+        }
+
+        /// <summary>
+        /// Apply new size to the current map. Any new size smaller than the current occupied space will be restricted to that size.
+        /// </summary>
+        /// <param name="NewDrawingSize">New size to set to.</param>
+        public void ResizeMap(SizeF NewDrawingSize)
+        {
+            SizeF minSize = GetMapMinimumSize();
+            drawingSize = new SizeF((float)Math.Round(Math.Max(minSize.Width, NewDrawingSize.Width)), (float)Math.Round( Math.Max(minSize.Height, NewDrawingSize.Height)));
+        }
+
+
+        /// <summary>
         /// Add the new street element to the items list of the map.
         /// </summary>
         /// <param name="NewStreetElement">Reference to the new StreetMap to be added.</param>
@@ -780,15 +811,41 @@ namespace StreetMaker
             int n = GetUsedClassCount();
             StreamWriter sw = new StreamWriter(FileName);
 
+            sw.WriteLine("Copy the lines below between the ---- lines into 'jetcar_definitions.py' to update the class definitions");
+            sw.WriteLine("---------------------------------------------------------------------------------");
+            sw.WriteLine("# Scene Parsing has N classes including nothing=0");
+            sw.WriteLine("N_CLASSES = " + n);
+            sw.WriteLine();
+            sw.WriteLine("# Definition of all segmentation class names and values");
+            sw.WriteLine("class SegmClass(enum.Enum):");
             foreach (SegmClassDef scd in SegmClassDefs.Defs)
                 if (scd.UseCount > 0)
-                    sw.WriteLine(scd.Name.ToUpper() + " = " + scd.ClassCode);
-            
+                    sw.WriteLine("\t"+scd.Name.ToLower() + " = " + scd.ClassCode);
+
+            sw.WriteLine("\t#Unused:");
+
+            int i = 100;
+            foreach (SegmClassDef scd in SegmClassDefs.Defs)
+                if (scd.UseCount <= 0)
+                    sw.WriteLine("\t" + scd.Name.ToLower() + " = " + (i++));
+            /*
             sw.WriteLine();
+            sw.WriteLine();
+            sw.WriteLine("Names only:");
 
             foreach (SegmClassDef scd in SegmClassDefs.Defs)
                 if (scd.UseCount > 0)
                     sw.WriteLine("'"+scd.Name.ToLower()+"', \\");
+            */
+            sw.WriteLine();
+            sw.WriteLine("---------------------------------------------------------------------------------");
+            sw.WriteLine();
+            sw.WriteLine("Copy the lines below into AppSettings.xml for ImageSegmenter to update the class definitions if needed");
+            sw.WriteLine("  <segm_class_defs>");
+            foreach (SegmClassDef scd in SegmClassDefs.Defs)
+                if (scd.UseCount > 0)
+                    sw.WriteLine("    <item id=\"" + scd.ClassCode.ToString() + "\" draw_order=\"" +scd.DrawOrder.ToString() + "\" draw_color=\"" + scd.DrawColor.ToArgb().ToString("X8") + "\">"+scd.Name+"</item>");
+            sw.WriteLine("  </segm_class_defs>");
 
             sw.Close();
             return n;
@@ -862,21 +919,11 @@ namespace StreetMaker
 #endif
 
         /// <summary>
-        /// Generates a dataset of virtual images of a camera like view and related class images from the current street map.
-        /// This method iterates through all lanes of all street elements in the possible driving directions to create virtual 
-        /// images similar to the camera view of a car driving through the map. Simultanously classification maps are generated for each view.
+        /// Deletes all files in the datset or creates the folder structure if not exists.
         /// </summary>
         /// <param name="DatasetPath">Full path to the dataset root.</param>
-        /// <param name="ImgFolder">Full path to the virtual camera view images of the resulting dataset.</param>
-        /// <param name="ClassImgPath">Full path to the virtual camera view class colored images of the resulting dataset.</param>
-        /// <param name="ClassCodePath">Full path to the virtual camera view class code images of the resulting dataset.</param>
-        /// <param name="StreetBitmap">Bitmap of the street map.</param>
-        public void GenerateDataset(ref bool CreatingDataSet, string DatasetPath, Bitmap StreetBitmap)
+        public void ClearDataset(string DatasetPath)
         {
-            // return when nothing to do
-            if (Items.Count == 0)
-                return;
-
             if (!Directory.Exists(DatasetPath))
                 Directory.CreateDirectory(DatasetPath);
 
@@ -903,13 +950,59 @@ namespace StreetMaker
 #endif
 
             if ((AppSettings.IncludeClassImages == false) && (Directory.Exists(ClassImgPath)))
-                 Directory.Delete(ClassImgPath, true);
+                Directory.Delete(ClassImgPath, true);
 
+        }
+
+        /// <summary>
+        /// Write the 2 output files containing the used class definitions and the color map.
+        /// </summary>
+        /// <param name="DatasetPath"></param>
+        public void WriteClassFileAndColorMap(string DatasetPath)
+        {
             WriteClassText(DatasetPath + AppSettings.ClassTextFileName);
             SaveColorMapCsv(DatasetPath + AppSettings.ColorMapFileName);
+        }
+
+        /// <summary>
+        /// Generates a dataset of virtual images of a camera like view and related class images from the current street map.
+        /// This method iterates through all lanes of all street elements in the possible driving directions to create virtual 
+        /// images similar to the camera view of a car driving through the map. Simultanously classification maps are generated for each view.
+        /// </summary>
+        /// <param name="DatasetPath">Full path to the dataset root.</param>
+        /// <param name="ImgFolder">Full path to the virtual camera view images of the resulting dataset.</param>
+        /// <param name="ClassImgPath">Full path to the virtual camera view class colored images of the resulting dataset.</param>
+        /// <param name="ClassCodePath">Full path to the virtual camera view class code images of the resulting dataset.</param>
+        /// <param name="StreetBitmap">Bitmap of the street map.</param>
+        public void GenerateDataset(ref bool CreatingDataSet, string DatasetPath, Bitmap StreetBitmap)
+        {
+            // return when nothing to do
+            if (Items.Count == 0)
+                return;
+
+            ClearDataset(DatasetPath);
+
+            string ImgPath = DatasetPath + AppSettings.SubDirDataSet + AppSettings.SubDirImg;
+            string ClassCodePath = DatasetPath + AppSettings.SubDirDataSet + AppSettings.SubDirMask;
+            string ClassImgPath = DatasetPath + AppSettings.SubDirDataSet + AppSettings.SubDirClassImg;
+
+
+#if DEBUG_CLASS_STREET_IMAGES
+            string ClassStreetImgPath = DatasetPath + "\\StreetClassImgs\\";
+#endif
+#if ERODE_AND_DILATE_MASK
+            string ErodedMaskPath = DatasetPath + "\\Eroded\\";
+            string DilatedMaskPath = DatasetPath + "\\Dilated\\";
+            string DiffMaskPath = DatasetPath + "\\Diff\\";
+#endif
+
+            WriteClassFileAndColorMap(DatasetPath);
             
             Random rnd = new Random(DateTime.Now.Millisecond);
             CreatingDataSet = true;
+
+            int trainValCount = 0;
+            int testOutCount = 0;
 
             // go through each item in the street element item list
             for (int itemIdx = 0; itemIdx < Items.Count; itemIdx++)
@@ -955,7 +1048,7 @@ namespace StreetMaker
                             string baseName = "i" + itemIdx.ToString().PadLeft(3, '0') + "_l" + laneIdx.ToString().PadLeft(3, '0') + "_s" + stepIdx.ToString().PadLeft(3, '0') + "_d" + dirIdx.ToString();
 
                             //Use this to debug a specific view
-                            //if ((itemIdx == 13) && (laneIdx == 0) && (stepIdx == 2) && (dirIdx == 0))
+                            //if ((itemIdx == 0) && (laneIdx == 0) && (stepIdx == 10) && (dirIdx == 0)) //!!!!!!!!!!!!!!!!!
                             {
                                 // Create a bitmap with class code colors around that point with the viewing direction.
                                 Bitmap bmClassCode = DrawClassColorBitmap(StreetBitmap, pLaneCenter, directionAngle);
@@ -998,19 +1091,30 @@ namespace StreetMaker
                                                 // apply the color factors to each color individually
                                                 for (int rgbIdx = 0; rgbIdx < rgbN; rgbIdx++)
                                                 {
-                                                    float[] brightnessFactors = new float[] { brightness, brightness, brightness };
-                                                    brightnessFactors[rgbIdx] = brightness * colorFactor;
+                                                    float[] brightnessFactors = new float[] { brightness * (float)AppSettings.CameraColorCorrRed, 
+                                                                                              brightness * (float)AppSettings.CameraColorCorrGreen, 
+                                                                                              brightness * (float)AppSettings.CameraColorCorrBlue };
+                                                    brightnessFactors[rgbIdx] *= colorFactor;
 
-                                                    Bitmap bmBrightOut = Process.ImageBrightness(CameraImgs.StreetView, brightnessFactors);
+                                                    Bitmap bmBrightOut = Process.ImageBrightness(CameraImgs.StreetView, brightnessFactors, AppSettings.CenterBrightnessResults);
+
                                                     // go through the different noise level applications
                                                     for (int noiseIdx = 0; noiseIdx < AppSettings.NoiseLevels.Length; noiseIdx++)
                                                     {
                                                         Bitmap bmNoised = Process.ImageNoise(bmBrightOut, AppSettings.NoiseLevels[noiseIdx]);
-
+                                                    
                                                         // choose target directory randomly with the train/val-ration as target
                                                         string trainVal = AppSettings.SubDirTrain;
-                                                        if (rnd.Next(AppSettings.TrainValRatio) == 0)
+                                                        trainValCount++;
+                                                        bool valOut = AppSettings.ValidateCenterViewsOnly == true ?
+                                                            (trainValCount >= AppSettings.TrainValRatio) && (AppSettings.SideSteps[sideIdx] == 0) && (AppSettings.AngleSteps[angleIdx] == 0) :
+                                                            (rnd.Next(AppSettings.TrainValRatio) == 0) || (trainValCount > 2*AppSettings.TrainValRatio);
+
+                                                        if (valOut == true)
+                                                        {
                                                             trainVal = AppSettings.SubDirVal;
+                                                            trainValCount = 0;
+                                                        }
 
                                                         // build filename with all indices included for identification
                                                         string extBaseName = baseName + "_s" + sideIdx.ToString() + "_a" + angleIdx.ToString() + "_b" + brightIdx.ToString() + "_c" + colorIdx.ToString() + "_r" + rgbIdx.ToString() + "_n" + noiseIdx.ToString();
@@ -1036,17 +1140,24 @@ namespace StreetMaker
                                                         bmDiff.Save(DiffMaskPath + "Diff_" + extBaseName + ".png");
 #endif
                                                         // create additional test images in the requested ratio
-                                                        if (rnd.Next(AppSettings.TestOutRatio) == 0)
+                                                        testOutCount++;
+                                                        bool testOut = AppSettings.TestCenterViewsOnly == true ?
+                                                            (testOutCount >= AppSettings.TestOutRatio) && (AppSettings.SideSteps[sideIdx] == 0) && (AppSettings.AngleSteps[angleIdx] == 0) :
+                                                            (rnd.Next(AppSettings.TestOutRatio) == 0) || (testOutCount > 2*AppSettings.TestOutRatio);
+
+                                                        if (testOut == true)
                                                         {
                                                             bmNoised.Save(ImgPath + AppSettings.SubDirTest + imgFileName);
                                                             CameraImgs.ClassMask.Save(ClassCodePath + AppSettings.SubDirTest + AppSettings.PrefixMask + extBaseName + ".png");
 
                                                             if (AppSettings.IncludeClassImages == true)
                                                                 CameraImgs.ClassImg.Save(ClassImgPath + AppSettings.SubDirTest + AppSettings.PrefixClassImg + extBaseName + ".jpg");
+
+                                                            testOutCount = 0;
                                                         }
                                                         // dispose unused bitmaps to free memory for next loops
                                                         bmNoised.Dispose();
-
+                                           
                                                         if (CreatingDataSet == false)
                                                             return;
                                                     }
@@ -1060,12 +1171,12 @@ namespace StreetMaker
                                         CameraImgs.ClassMask.Dispose();
                                         CameraImgs.ClassImg.Dispose();
                                         bmMask.Dispose();
-#if ERODE_AND_DILATE_MASK
+                                        #if ERODE_AND_DILATE_MASK
                                         bmEroded.Dispose();
                                         bmDilated.Dispose();
                                         bmMasked.Dispose();
                                         bmDiff.Dispose();
-#endif
+                                        #endif
                                     }
                                 }
                                 // dispose unused bitmaps to free memory for next loops
@@ -1295,7 +1406,7 @@ namespace StreetMaker
             bool startPointInsideSource = (SourceSE.IsInside(StartPoint, false) != null);
 
             // Exit if it is behind or outside of region of interest
-            if (outOfLimits || (behind && !startPointInsideCurrent && !startPointInsideSource))
+            if ((outOfLimits && !startPointInsideCurrent) || (behind && !startPointInsideCurrent && !startPointInsideSource))
                 return leNext;
 
             // determine the direction of this lane, starting with the connector modes
@@ -1365,7 +1476,8 @@ namespace StreetMaker
                         addNext = false;
                     }
 
-                    // handle an entrance, when entering, the other lanes in the same direction should be wrong in to the left and driving dir to the right   
+                    // handle an entrance, when entering, the other lanes in the same direction should be wrong in to the left and driving dir to the right
+                    // this is a bit inconsistent, since it is a right turn, but on the other side, the curvature just continues in the driving dir and there is no left turn allowed here
                     if ((mls.RampType == RampType.Entrance) && (leCurrent == mls.Lanes[mls.LaneCount - 1]) && (LaneSegmClassDef == SegmClassDefs.ScdDrivingDir))
                     {
                         // list both connected ends differently
@@ -1720,10 +1832,10 @@ namespace StreetMaker
 
             return SegmClassDefs.OptClassCodes();
         }
-#endregion Dataset Generation
-#endregion Public Methods
+        #endregion Dataset Generation
+        #endregion Public Methods
 
-#region Public Properties
+        #region Public Properties
         /// <summary>
         /// Gets the item at the given index.
         /// </summary>
@@ -1776,7 +1888,7 @@ namespace StreetMaker
                     se.CameraPoint = value;
             }
         }
-#endregion Public Properties
+        #endregion Public Properties
 
     }
 }

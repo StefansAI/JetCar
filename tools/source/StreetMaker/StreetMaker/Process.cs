@@ -99,10 +99,11 @@ namespace StreetMaker
         /// </summary>
         /// <param name="SourceBitmap">Source Bitmap to be processed.</param>
         /// <param name="BrightnessFactor">Factor to apply to RGB values.</param>
+        /// <param name="CenterRange">If true, the min/max range will be centered to 127.</param>
         /// <returns>New Bitmap object reference with applied changes.</returns>
-        public static Bitmap ImageBrightness(Bitmap SourceBitmap, float BrightnessFactor)
+        public static Bitmap ImageBrightness(Bitmap SourceBitmap, float BrightnessFactor, bool CenterRange)
         {
-            return ImageBrightness(SourceBitmap, new float[] { BrightnessFactor, BrightnessFactor, BrightnessFactor });
+            return ImageBrightness(SourceBitmap, new float[] { BrightnessFactor, BrightnessFactor, BrightnessFactor }, CenterRange);
         }
 
         /// <summary>
@@ -110,12 +111,21 @@ namespace StreetMaker
         /// </summary>
         /// <param name="SourceBitmap">Source Bitmap to be processed.</param>
         /// <param name="BrightnessFactorsRGB">Factors to apply to RGB values.</param>
+        /// <param name="CenterRange">If true, the min/max range will be centered to 127.</param>
         /// <returns>New Bitmap object reference with applied changes.</returns>
-        public static Bitmap ImageBrightness(Bitmap SourceBitmap, float[] BrightnessFactorsRGB)
+        public static Bitmap ImageBrightness(Bitmap SourceBitmap, float[] BrightnessFactorsRGB, bool CenterRange)
         {
             // if brightness is 1, just return a copy of the original bitmap
             if ((BrightnessFactorsRGB[0] == 1) && (BrightnessFactorsRGB[1] == 1) && (BrightnessFactorsRGB[2] == 1))
                 return new Bitmap(SourceBitmap);
+
+            int offs = 0;
+            if (CenterRange == true )
+            {
+                float factAvg = (BrightnessFactorsRGB[0] + BrightnessFactorsRGB[1] + BrightnessFactorsRGB[2]) / 3;
+//                if (factAvg < 1)
+                    offs = (int)(127 * (1 - factAvg));
+            }
 
             Bitmap bmResult = new Bitmap(SourceBitmap.Width, SourceBitmap.Height);
             Graphics.FromImage(bmResult).Clear(Color.Black);
@@ -137,9 +147,9 @@ namespace StreetMaker
                     byte* currentLineResult = ptrBaseResult + (y * bmdResult.Stride);
                     for (int x = 0; x < bmdSource.Width; x++)
                     {
-                        currentLineResult[x * bppResult] = (byte)Math.Min(Math.Max((int)(currentLineSource[x * bppSource] * BrightnessFactorsRGB[2]), 0), 255);            // B
-                        currentLineResult[x * bppResult + 1] = (byte)Math.Min(Math.Max((int)(currentLineSource[x * bppSource + 1] * BrightnessFactorsRGB[1]), 0), 255);    // G
-                        currentLineResult[x * bppResult + 2] = (byte)Math.Min(Math.Max((int)(currentLineSource[x * bppSource + 2] * BrightnessFactorsRGB[0]), 0), 255);    // R
+                        currentLineResult[x * bppResult    ] = (byte)Math.Min(Math.Max((int)(currentLineSource[x * bppSource    ] * BrightnessFactorsRGB[2]) + offs, 0), 255);    // B
+                        currentLineResult[x * bppResult + 1] = (byte)Math.Min(Math.Max((int)(currentLineSource[x * bppSource + 1] * BrightnessFactorsRGB[1]) + offs, 0), 255);    // G
+                        currentLineResult[x * bppResult + 2] = (byte)Math.Min(Math.Max((int)(currentLineSource[x * bppSource + 2] * BrightnessFactorsRGB[0]) + offs, 0), 255);    // R
                     }
                 };
                 SourceBitmap.UnlockBits(bmdSource);
@@ -243,7 +253,6 @@ namespace StreetMaker
 
             return bmResult;
         }
-
 
         /// <summary>
         /// Creates an eroded binary bitmap from the source bitmap. The erosion is controlled by the WindowSize. The output pixel is 0, if the majority of pixel in the window is zero.
@@ -719,6 +728,47 @@ namespace StreetMaker
             for (int i = 0; i < 256; i++)
                 pal.Entries[i] = Color.FromArgb(i, i, i);
             SourceBitmap.Palette = pal;
+        }
+
+
+        /// <summary>
+        /// Creates a copy with the transparency changed to the requested one.
+        /// </summary>
+        /// <param name="SourceBitmap">Source Bitmap to be processed.</param>
+        /// <param name="Transparency">Transparency to set to.</param>
+        /// <returns>New Bitmap object with set transparency.</returns>
+        public static Bitmap SetTransparency(Bitmap SourceBitmap, byte Transparency)
+        {
+
+            Bitmap bmResult = new Bitmap(SourceBitmap.Width, SourceBitmap.Height);
+
+            unsafe
+            {
+                BitmapData bmdSource = SourceBitmap.LockBits(new Rectangle(0, 0, SourceBitmap.Width, SourceBitmap.Height), ImageLockMode.ReadWrite, SourceBitmap.PixelFormat);
+                BitmapData bmdResult = bmResult.LockBits(new Rectangle(0, 0, bmResult.Width, bmResult.Height), ImageLockMode.ReadWrite, bmResult.PixelFormat);
+
+                int bppSource = System.Drawing.Bitmap.GetPixelFormatSize(SourceBitmap.PixelFormat) / 8;
+                int bppResult = System.Drawing.Bitmap.GetPixelFormatSize(bmResult.PixelFormat) / 8;
+                byte* ptrBaseSource = (byte*)bmdSource.Scan0;
+                byte* ptrBaseResult = (byte*)bmdResult.Scan0;
+
+                for (int y = 0; y < SourceBitmap.Height; y++)
+                {
+                    byte* currentLineSource = ptrBaseSource + (y * bmdSource.Stride);
+                    byte* currentLineResult = ptrBaseResult + (y * bmdResult.Stride);
+                    for (int x = 0; x < SourceBitmap.Width; x++)
+                    {
+                        currentLineResult[x * bppResult] = currentLineSource[x * bppSource];              // B
+                        currentLineResult[x * bppResult + 1] = currentLineSource[x * bppSource + 1];      // G
+                        currentLineResult[x * bppResult + 2] = currentLineSource[x * bppSource + 2];      // R
+                        currentLineResult[x * bppResult + 3] = (byte)Transparency;  
+                    }
+                };
+                SourceBitmap.UnlockBits(bmdSource);
+                bmResult.UnlockBits(bmdResult);
+            }
+
+            return bmResult;
         }
 
     }

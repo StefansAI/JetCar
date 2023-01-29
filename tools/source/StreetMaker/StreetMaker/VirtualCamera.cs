@@ -146,9 +146,9 @@ namespace StreetMaker
                         double r = Math.Sqrt(dx_plane * dx_plane + dy_plane2);
 
                         // calculate distortion values
-                        double distortion = k1 * Math.Pow(r, 2) + k2 * Math.Pow(r, 4);
-                        double dx_plane_corr = dx_plane / (1 + Math.Max(distortion, -0.99));
-                        double dy_plane_corr = dy_plane / (1 + Math.Max(distortion, -0.99));
+                        double distortion_term = 1 + k1 * Math.Pow(r, 2) + k2 * Math.Pow(r, 4);
+                        double dx_plane_corr = dx_plane * distortion_term;
+                        double dy_plane_corr = dy_plane * distortion_term;
 
                         // get the angles from camera point to the virtual plane including distortion
                         double dx_angle = Math.Atan(dx_plane_corr / plane_dist);

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmIntersectionSettings));
             this.label1 = new System.Windows.Forms.Label();
             this.cbIntersectionType = new System.Windows.Forms.ComboBox();
@@ -136,6 +137,7 @@
             this.nudAngle = new System.Windows.Forms.NumericUpDown();
             this.label50 = new System.Windows.Forms.Label();
             this.ckbFineSteps = new System.Windows.Forms.CheckBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.gbStreet0.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLength0)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudRightLaneCount0)).BeginInit();
@@ -179,6 +181,7 @@
             this.cbIntersectionType.Name = "cbIntersectionType";
             this.cbIntersectionType.Size = new System.Drawing.Size(102, 21);
             this.cbIntersectionType.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.cbIntersectionType, "Type of the intersection. It can be changed freely between the types.");
             this.cbIntersectionType.SelectedIndexChanged += new System.EventHandler(this.cbIntersectionType_SelectedIndexChanged);
             // 
             // label2
@@ -230,6 +233,7 @@
             this.cbCenterDivider20.Name = "cbCenterDivider20";
             this.cbCenterDivider20.Size = new System.Drawing.Size(121, 21);
             this.cbCenterDivider20.TabIndex = 22;
+            this.toolTip1.SetToolTip(this.cbCenterDivider20, "Divider lane type left side of the Center Lane, when present for street index 0.");
             // 
             // label46
             // 
@@ -247,6 +251,7 @@
             this.nudLength0.Name = "nudLength0";
             this.nudLength0.Size = new System.Drawing.Size(121, 20);
             this.nudLength0.TabIndex = 21;
+            this.toolTip1.SetToolTip(this.nudLength0, "Length of the street from intersection area to connector for street index 0.");
             this.nudLength0.ValueChanged += new System.EventHandler(this.nud_ValueChanged);
             // 
             // label10
@@ -265,6 +270,8 @@
             this.cbRightBorder0.Name = "cbRightBorder0";
             this.cbRightBorder0.Size = new System.Drawing.Size(121, 21);
             this.cbRightBorder0.TabIndex = 18;
+            this.toolTip1.SetToolTip(this.cbRightBorder0, "Border type on the right side of the right lanes in driving direction for street " +
+        "index 0.");
             // 
             // label9
             // 
@@ -282,6 +289,8 @@
             this.cbLeftBorder0.Name = "cbLeftBorder0";
             this.cbLeftBorder0.Size = new System.Drawing.Size(121, 21);
             this.cbLeftBorder0.TabIndex = 16;
+            this.toolTip1.SetToolTip(this.cbLeftBorder0, "Border type on the left side of the left lanes in driving direction for street in" +
+        "dex 0.");
             // 
             // label8
             // 
@@ -299,6 +308,7 @@
             this.cbYieldStop0.Name = "cbYieldStop0";
             this.cbYieldStop0.Size = new System.Drawing.Size(121, 21);
             this.cbYieldStop0.TabIndex = 14;
+            this.toolTip1.SetToolTip(this.cbYieldStop0, "Yield or Stop lines and text definition for street index 0.");
             // 
             // label27
             // 
@@ -316,6 +326,7 @@
             this.cbCrosswalk0.Name = "cbCrosswalk0";
             this.cbCrosswalk0.Size = new System.Drawing.Size(121, 21);
             this.cbCrosswalk0.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.cbCrosswalk0, "Pedestrian crosswalk type for street index 0.");
             // 
             // label26
             // 
@@ -333,6 +344,8 @@
             this.cbRightLines0.Name = "cbRightLines0";
             this.cbRightLines0.Size = new System.Drawing.Size(121, 21);
             this.cbRightLines0.TabIndex = 10;
+            this.toolTip1.SetToolTip(this.cbRightLines0, "Line type of the lines between multiple right lanes in driving direction for stre" +
+        "et index 0.");
             // 
             // label6
             // 
@@ -350,6 +363,7 @@
             this.nudRightLaneCount0.Size = new System.Drawing.Size(36, 20);
             this.nudRightLaneCount0.TabIndex = 9;
             this.nudRightLaneCount0.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudRightLaneCount0, "Number of lanes on the right side in the driving direction for street index 0.");
             this.nudRightLaneCount0.Value = new decimal(new int[] {
             3,
             0,
@@ -373,6 +387,8 @@
             this.cbCenterDivider0.Name = "cbCenterDivider0";
             this.cbCenterDivider0.Size = new System.Drawing.Size(121, 21);
             this.cbCenterDivider0.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.cbCenterDivider0, "Lane type dividing both directions or to the right side of the Center Lane, when " +
+        "present for street index 0.");
             this.cbCenterDivider0.SelectedIndexChanged += new System.EventHandler(this.cbCenterDivider_SelectedIndexChanged);
             // 
             // label5
@@ -391,6 +407,8 @@
             this.cbLeftLines0.Name = "cbLeftLines0";
             this.cbLeftLines0.Size = new System.Drawing.Size(121, 21);
             this.cbLeftLines0.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.cbLeftLines0, "Line type of the lines between multiple left lanes in driving direction for stree" +
+        "t index 0.");
             // 
             // label4
             // 
@@ -408,6 +426,7 @@
             this.nudCenterLaneCount0.Size = new System.Drawing.Size(36, 20);
             this.nudCenterLaneCount0.TabIndex = 5;
             this.nudCenterLaneCount0.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudCenterLaneCount0, "Number of Center Lanes between left and right lanes for street index 0.");
             this.nudCenterLaneCount0.Value = new decimal(new int[] {
             2,
             0,
@@ -431,6 +450,7 @@
             this.nudLeftLaneCount0.Size = new System.Drawing.Size(36, 20);
             this.nudLeftLaneCount0.TabIndex = 3;
             this.nudLeftLaneCount0.Tag = "0";
+            this.toolTip1.SetToolTip(this.nudLeftLaneCount0, "Number of lanes left from the driving direction for street index 0.");
             this.nudLeftLaneCount0.Value = new decimal(new int[] {
             3,
             0,
@@ -478,6 +498,7 @@
             this.cbCenterDivider21.Name = "cbCenterDivider21";
             this.cbCenterDivider21.Size = new System.Drawing.Size(121, 21);
             this.cbCenterDivider21.TabIndex = 24;
+            this.toolTip1.SetToolTip(this.cbCenterDivider21, "Divider lane type left side of the Center Lane, when present for street index 1.");
             // 
             // label47
             // 
@@ -495,6 +516,7 @@
             this.nudLength1.Name = "nudLength1";
             this.nudLength1.Size = new System.Drawing.Size(121, 20);
             this.nudLength1.TabIndex = 21;
+            this.toolTip1.SetToolTip(this.nudLength1, "Length of the street from intersection area to connector for street index 1.");
             this.nudLength1.ValueChanged += new System.EventHandler(this.nud_ValueChanged);
             // 
             // label11
@@ -513,6 +535,7 @@
             this.cbRightBorder1.Name = "cbRightBorder1";
             this.cbRightBorder1.Size = new System.Drawing.Size(121, 21);
             this.cbRightBorder1.TabIndex = 18;
+            this.toolTip1.SetToolTip(this.cbRightBorder1, ".");
             // 
             // label12
             // 
@@ -530,6 +553,8 @@
             this.cbLeftBorder1.Name = "cbLeftBorder1";
             this.cbLeftBorder1.Size = new System.Drawing.Size(121, 21);
             this.cbLeftBorder1.TabIndex = 16;
+            this.toolTip1.SetToolTip(this.cbLeftBorder1, "Border type on the left side of the left lanes in driving direction for street in" +
+        "dex 1.");
             // 
             // label13
             // 
@@ -547,6 +572,7 @@
             this.cbYieldStop1.Name = "cbYieldStop1";
             this.cbYieldStop1.Size = new System.Drawing.Size(121, 21);
             this.cbYieldStop1.TabIndex = 14;
+            this.toolTip1.SetToolTip(this.cbYieldStop1, "Yield or Stop lines and text definition for street index 1.");
             // 
             // label14
             // 
@@ -564,6 +590,7 @@
             this.cbCrosswalk1.Name = "cbCrosswalk1";
             this.cbCrosswalk1.Size = new System.Drawing.Size(121, 21);
             this.cbCrosswalk1.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.cbCrosswalk1, "Pedestrian crosswalk type for street index 1.");
             // 
             // label15
             // 
@@ -581,6 +608,8 @@
             this.cbRightLines1.Name = "cbRightLines1";
             this.cbRightLines1.Size = new System.Drawing.Size(121, 21);
             this.cbRightLines1.TabIndex = 10;
+            this.toolTip1.SetToolTip(this.cbRightLines1, "Line type of the lines between multiple right lanes in driving direction for stre" +
+        "et index 1.");
             // 
             // label16
             // 
@@ -598,6 +627,7 @@
             this.nudRightLaneCount1.Size = new System.Drawing.Size(36, 20);
             this.nudRightLaneCount1.TabIndex = 9;
             this.nudRightLaneCount1.Tag = "1";
+            this.toolTip1.SetToolTip(this.nudRightLaneCount1, "Number of lanes on the right side in the driving direction for street index 1.");
             this.nudRightLaneCount1.Value = new decimal(new int[] {
             3,
             0,
@@ -621,6 +651,8 @@
             this.cbCenterDivider1.Name = "cbCenterDivider1";
             this.cbCenterDivider1.Size = new System.Drawing.Size(121, 21);
             this.cbCenterDivider1.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.cbCenterDivider1, "Lane type dividing both directions or to the right side of the Center Lane, when " +
+        "present for street index 1.");
             this.cbCenterDivider1.SelectedIndexChanged += new System.EventHandler(this.cbCenterDivider_SelectedIndexChanged);
             // 
             // label18
@@ -639,6 +671,8 @@
             this.cbLeftLines1.Name = "cbLeftLines1";
             this.cbLeftLines1.Size = new System.Drawing.Size(121, 21);
             this.cbLeftLines1.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.cbLeftLines1, "Line type of the lines between multiple left lanes in driving direction for stree" +
+        "t index 1.");
             // 
             // label19
             // 
@@ -656,6 +690,7 @@
             this.nudCenterLaneCount1.Size = new System.Drawing.Size(36, 20);
             this.nudCenterLaneCount1.TabIndex = 5;
             this.nudCenterLaneCount1.Tag = "1";
+            this.toolTip1.SetToolTip(this.nudCenterLaneCount1, "Number of Center Lanes between left and right lanes for street index 1.");
             this.nudCenterLaneCount1.Value = new decimal(new int[] {
             2,
             0,
@@ -679,6 +714,7 @@
             this.nudLeftLaneCount1.Size = new System.Drawing.Size(36, 20);
             this.nudLeftLaneCount1.TabIndex = 3;
             this.nudLeftLaneCount1.Tag = "1";
+            this.toolTip1.SetToolTip(this.nudLeftLaneCount1, "Number of lanes left from the driving direction for street index 1.");
             this.nudLeftLaneCount1.Value = new decimal(new int[] {
             3,
             0,
@@ -735,6 +771,7 @@
             this.cbCenterDivider22.Name = "cbCenterDivider22";
             this.cbCenterDivider22.Size = new System.Drawing.Size(121, 21);
             this.cbCenterDivider22.TabIndex = 24;
+            this.toolTip1.SetToolTip(this.cbCenterDivider22, "Divider lane type left side of the Center Lane, when present for street index 2.");
             // 
             // label48
             // 
@@ -752,6 +789,7 @@
             this.nudLength2.Name = "nudLength2";
             this.nudLength2.Size = new System.Drawing.Size(121, 20);
             this.nudLength2.TabIndex = 21;
+            this.toolTip1.SetToolTip(this.nudLength2, "Length of the street from intersection area to connector for street index 2.");
             this.nudLength2.ValueChanged += new System.EventHandler(this.nud_ValueChanged);
             // 
             // label22
@@ -770,6 +808,8 @@
             this.cbRightBorder2.Name = "cbRightBorder2";
             this.cbRightBorder2.Size = new System.Drawing.Size(121, 21);
             this.cbRightBorder2.TabIndex = 18;
+            this.toolTip1.SetToolTip(this.cbRightBorder2, "Border type on the right side of the right lanes in driving direction for street " +
+        "index 2.");
             // 
             // label23
             // 
@@ -787,6 +827,8 @@
             this.cbLeftBorder2.Name = "cbLeftBorder2";
             this.cbLeftBorder2.Size = new System.Drawing.Size(121, 21);
             this.cbLeftBorder2.TabIndex = 16;
+            this.toolTip1.SetToolTip(this.cbLeftBorder2, "Border type on the left side of the left lanes in driving direction for street in" +
+        "dex 2.");
             // 
             // label24
             // 
@@ -804,6 +846,7 @@
             this.cbYieldStop2.Name = "cbYieldStop2";
             this.cbYieldStop2.Size = new System.Drawing.Size(121, 21);
             this.cbYieldStop2.TabIndex = 14;
+            this.toolTip1.SetToolTip(this.cbYieldStop2, "Yield or Stop lines and text definition for street index 2.");
             // 
             // label25
             // 
@@ -821,6 +864,7 @@
             this.cbCrosswalk2.Name = "cbCrosswalk2";
             this.cbCrosswalk2.Size = new System.Drawing.Size(121, 21);
             this.cbCrosswalk2.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.cbCrosswalk2, "Pedestrian crosswalk type for street index 2.");
             // 
             // label28
             // 
@@ -838,6 +882,8 @@
             this.cbRightLines2.Name = "cbRightLines2";
             this.cbRightLines2.Size = new System.Drawing.Size(121, 21);
             this.cbRightLines2.TabIndex = 10;
+            this.toolTip1.SetToolTip(this.cbRightLines2, "Line type of the lines between multiple right lanes in driving direction for stre" +
+        "et index 2.");
             // 
             // label29
             // 
@@ -855,6 +901,7 @@
             this.nudRightLaneCount2.Size = new System.Drawing.Size(36, 20);
             this.nudRightLaneCount2.TabIndex = 9;
             this.nudRightLaneCount2.Tag = "2";
+            this.toolTip1.SetToolTip(this.nudRightLaneCount2, "Number of lanes on the right side in the driving direction for street index 2.");
             this.nudRightLaneCount2.Value = new decimal(new int[] {
             3,
             0,
@@ -878,6 +925,8 @@
             this.cbCenterDivider2.Name = "cbCenterDivider2";
             this.cbCenterDivider2.Size = new System.Drawing.Size(121, 21);
             this.cbCenterDivider2.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.cbCenterDivider2, "Lane type dividing both directions or to the right side of the Center Lane, when " +
+        "present for street index 2.");
             this.cbCenterDivider2.SelectedIndexChanged += new System.EventHandler(this.cbCenterDivider_SelectedIndexChanged);
             // 
             // label31
@@ -896,6 +945,8 @@
             this.cbLeftLines2.Name = "cbLeftLines2";
             this.cbLeftLines2.Size = new System.Drawing.Size(121, 21);
             this.cbLeftLines2.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.cbLeftLines2, "Line type of the lines between multiple left lanes in driving direction for stree" +
+        "t index 2.");
             // 
             // label32
             // 
@@ -913,6 +964,7 @@
             this.nudCenterLaneCount2.Size = new System.Drawing.Size(36, 20);
             this.nudCenterLaneCount2.TabIndex = 5;
             this.nudCenterLaneCount2.Tag = "2";
+            this.toolTip1.SetToolTip(this.nudCenterLaneCount2, "Number of Center Lanes between left and right lanes for street index 2.");
             this.nudCenterLaneCount2.Value = new decimal(new int[] {
             2,
             0,
@@ -936,6 +988,7 @@
             this.nudLeftLaneCount2.Size = new System.Drawing.Size(36, 20);
             this.nudLeftLaneCount2.TabIndex = 3;
             this.nudLeftLaneCount2.Tag = "2";
+            this.toolTip1.SetToolTip(this.nudLeftLaneCount2, "Number of lanes left from the driving direction for street index 2.");
             this.nudLeftLaneCount2.Value = new decimal(new int[] {
             3,
             0,
@@ -992,6 +1045,7 @@
             this.cbCenterDivider23.Name = "cbCenterDivider23";
             this.cbCenterDivider23.Size = new System.Drawing.Size(121, 21);
             this.cbCenterDivider23.TabIndex = 24;
+            this.toolTip1.SetToolTip(this.cbCenterDivider23, "Divider lane type left side of the Center Lane, when present for street index 3.");
             // 
             // label49
             // 
@@ -1009,6 +1063,7 @@
             this.nudLength3.Name = "nudLength3";
             this.nudLength3.Size = new System.Drawing.Size(121, 20);
             this.nudLength3.TabIndex = 21;
+            this.toolTip1.SetToolTip(this.nudLength3, "Length of the street from intersection area to connector for street index 3.");
             this.nudLength3.ValueChanged += new System.EventHandler(this.nud_ValueChanged);
             // 
             // label35
@@ -1027,6 +1082,8 @@
             this.cbRightBorder3.Name = "cbRightBorder3";
             this.cbRightBorder3.Size = new System.Drawing.Size(121, 21);
             this.cbRightBorder3.TabIndex = 18;
+            this.toolTip1.SetToolTip(this.cbRightBorder3, "Border type on the right side of the right lanes in driving direction for street " +
+        "index 3.");
             // 
             // label36
             // 
@@ -1044,6 +1101,8 @@
             this.cbLeftBorder3.Name = "cbLeftBorder3";
             this.cbLeftBorder3.Size = new System.Drawing.Size(121, 21);
             this.cbLeftBorder3.TabIndex = 16;
+            this.toolTip1.SetToolTip(this.cbLeftBorder3, "Border type on the left side of the left lanes in driving direction for street in" +
+        "dex 3.");
             // 
             // label37
             // 
@@ -1061,6 +1120,7 @@
             this.cbYieldStop3.Name = "cbYieldStop3";
             this.cbYieldStop3.Size = new System.Drawing.Size(121, 21);
             this.cbYieldStop3.TabIndex = 14;
+            this.toolTip1.SetToolTip(this.cbYieldStop3, "Yield or Stop lines and text definition for street index 3.");
             // 
             // label38
             // 
@@ -1078,6 +1138,7 @@
             this.cbCrosswalk3.Name = "cbCrosswalk3";
             this.cbCrosswalk3.Size = new System.Drawing.Size(121, 21);
             this.cbCrosswalk3.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.cbCrosswalk3, "Pedestrian crosswalk type for street index 3.");
             // 
             // label39
             // 
@@ -1095,6 +1156,8 @@
             this.cbRightLines3.Name = "cbRightLines3";
             this.cbRightLines3.Size = new System.Drawing.Size(121, 21);
             this.cbRightLines3.TabIndex = 10;
+            this.toolTip1.SetToolTip(this.cbRightLines3, "Line type of the lines between multiple right lanes in driving direction for stre" +
+        "et index 3.");
             // 
             // label40
             // 
@@ -1112,6 +1175,7 @@
             this.nudRightLaneCount3.Size = new System.Drawing.Size(36, 20);
             this.nudRightLaneCount3.TabIndex = 9;
             this.nudRightLaneCount3.Tag = "3";
+            this.toolTip1.SetToolTip(this.nudRightLaneCount3, "Number of lanes on the right side in the driving direction for street index 3.");
             this.nudRightLaneCount3.Value = new decimal(new int[] {
             3,
             0,
@@ -1135,6 +1199,8 @@
             this.cbCenterDivider3.Name = "cbCenterDivider3";
             this.cbCenterDivider3.Size = new System.Drawing.Size(121, 21);
             this.cbCenterDivider3.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.cbCenterDivider3, "Lane type dividing both directions or to the right side of the Center Lane, when " +
+        "present for street index 3.");
             this.cbCenterDivider3.SelectedIndexChanged += new System.EventHandler(this.cbCenterDivider_SelectedIndexChanged);
             // 
             // label42
@@ -1153,6 +1219,8 @@
             this.cbLeftLines3.Name = "cbLeftLines3";
             this.cbLeftLines3.Size = new System.Drawing.Size(121, 21);
             this.cbLeftLines3.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.cbLeftLines3, "Line type of the lines between multiple left lanes in driving direction for stree" +
+        "t index 3.");
             // 
             // label43
             // 
@@ -1170,6 +1238,7 @@
             this.nudCenterLaneCount3.Size = new System.Drawing.Size(36, 20);
             this.nudCenterLaneCount3.TabIndex = 5;
             this.nudCenterLaneCount3.Tag = "3";
+            this.toolTip1.SetToolTip(this.nudCenterLaneCount3, "Number of Center Lanes between left and right lanes for street index 3.");
             this.nudCenterLaneCount3.Value = new decimal(new int[] {
             2,
             0,
@@ -1193,6 +1262,7 @@
             this.nudLeftLaneCount3.Size = new System.Drawing.Size(36, 20);
             this.nudLeftLaneCount3.TabIndex = 3;
             this.nudLeftLaneCount3.Tag = "3";
+            this.toolTip1.SetToolTip(this.nudLeftLaneCount3, "Number of lanes left from the driving direction for street index 3.");
             this.nudLeftLaneCount3.Value = new decimal(new int[] {
             3,
             0,
@@ -1217,6 +1287,7 @@
             this.btnOk.Size = new System.Drawing.Size(75, 23);
             this.btnOk.TabIndex = 7;
             this.btnOk.Text = "Ok";
+            this.toolTip1.SetToolTip(this.btnOk, "The OK button will save any changes to the selected intersection and exit.");
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
@@ -1228,6 +1299,7 @@
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 8;
             this.btnCancel.Text = "Cancel";
+            this.toolTip1.SetToolTip(this.btnCancel, "The Cancel button will simply close this dialog without applying any changes.");
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -1253,6 +1325,7 @@
             this.nudAngle.Name = "nudAngle";
             this.nudAngle.Size = new System.Drawing.Size(77, 20);
             this.nudAngle.TabIndex = 11;
+            this.toolTip1.SetToolTip(this.nudAngle, "Angle of the complete intersection on the drawing in degrees.");
             this.nudAngle.ValueChanged += new System.EventHandler(this.nud_ValueChanged);
             // 
             // label50
@@ -1272,6 +1345,8 @@
             this.ckbFineSteps.Size = new System.Drawing.Size(76, 17);
             this.ckbFineSteps.TabIndex = 39;
             this.ckbFineSteps.Text = "Fine Steps";
+            this.toolTip1.SetToolTip(this.ckbFineSteps, "When checked, the dialog can stay open and fine changes will be applied immediate" +
+        "ly.");
             this.ckbFineSteps.UseVisualStyleBackColor = true;
             this.ckbFineSteps.CheckedChanged += new System.EventHandler(this.ckbFineSteps_CheckedChanged);
             // 
@@ -1443,5 +1518,6 @@
         private System.Windows.Forms.NumericUpDown nudAngle;
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.CheckBox ckbFineSteps;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

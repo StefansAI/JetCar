@@ -200,6 +200,7 @@ namespace StreetMaker
             SetHotkeyCB(cbHotkeyBlockAutoRotate,editSettings.HotkeyBlockAutoRotate);
             SetHotkeyCB(cbHotkeyPropertyPage,editSettings.HotkeyPropertyPage);
 
+            tbSubDirStreetmaps.Text = editSettings.SubDirStreetmaps;
             tbPathToDataStorage.Text = editSettings.PathToDataStorage;
 
             // second page
@@ -226,16 +227,24 @@ namespace StreetMaker
             nudCameraImageRatio.Value = (decimal)editSettings.CameraImageRatio;
             nudCameraLensDist1.Value = (decimal)editSettings.CameraLensDistortion1;
             nudCameraLensDist2.Value = (decimal)editSettings.CameraLensDistortion2;
-            nudCameraAxisAngle.Value = (decimal)editSettings.CameraAxisAngle;
 
+            nudColorCorrRed.Value = (decimal)editSettings.CameraColorCorrRed;
+            nudColorCorrGreen.Value = (decimal)editSettings.CameraColorCorrGreen;
+            nudColorCorrBlue.Value = (decimal)editSettings.CameraColorCorrBlue;
+
+            nudCameraOversampling.Value = (decimal)editSettings.CameraOversampling;
             nudCameraOutputWidth.Value = (decimal)editSettings.CameraOutputWidth;
             nudCameraOutputHeight.Value = (decimal)editSettings.CameraOutputHeight;
-            nudCameraOversampling.Value = (decimal)editSettings.CameraOversampling;
+
+            nudCameraAxisAngle.Value = (decimal)editSettings.CameraAxisAngle;
 
             ckbDrawWrongDirItems.Checked = editSettings.DrawWrongDirItems;
 
             nudTrainValRatio.Value = (decimal)editSettings.TrainValRatio;
+            ckbValidateCenterViewsOnly.Checked = editSettings.ValidateCenterViewsOnly;
             nudTestOutRatio.Value = (decimal)editSettings.TestOutRatio;
+            ckbTestCenterViewsOnly.Checked = editSettings.TestCenterViewsOnly;
+            ckbCenterBrightnessResults.Checked = editSettings.CenterBrightnessResults;
 
             tbSideSteps.Text = FloatVectorToString(editSettings.SideSteps);
             tbAngleSteps.Text = FloatVectorToString(editSettings.AngleSteps);
@@ -262,6 +271,7 @@ namespace StreetMaker
         /// </summary>
         private void SaveForm()
         {
+            editSettings.DisplayMeasurementUnit = (MeasurementUnit)cbMeasurementUnit.SelectedIndex;
             editSettings.MinCurveAngle = (double)nudMinCurveAngle.Value;
             editSettings.MaxCurveAngle = (double)nudMaxCurveAngle.Value;
 
@@ -270,7 +280,7 @@ namespace StreetMaker
             editSettings.MaxLaneCountCenter = (int)nudMaxLaneCountCenter.Value;
 
             editSettings.StreetOutlineLineWidth = (double)nudStreetOutlineLineWidth.Value;
-            editSettings.OverlayOutlineLineWidth = (double)nudOverlayOutlineLineWidth.Value;
+            editSettings.OverlayOutlineLineWidth =(double)nudOverlayOutlineLineWidth.Value;
 
             editSettings.LaneColor = btnLaneColor.BackColor;
             editSettings.LineColorWhite = btnLineColorWhite.BackColor;
@@ -300,6 +310,7 @@ namespace StreetMaker
             editSettings.HotkeyPropertyPage = (Keys)Enum.Parse(typeof(Keys), cbHotkeyPropertyPage.SelectedItem.ToString());
 
 
+            editSettings.SubDirStreetmaps = tbSubDirStreetmaps.Text.TrimEnd(new char[] { '\\' }) + '\\';
             editSettings.PathToDataStorage = tbPathToDataStorage.Text.TrimEnd(new char[] { '\\' }) + '\\';
 
             // second page
@@ -327,14 +338,21 @@ namespace StreetMaker
             editSettings.CameraLensDistortion2 = (double)nudCameraLensDist2.Value;
             editSettings.CameraAxisAngle = (double)nudCameraAxisAngle.Value;
 
+            editSettings.CameraColorCorrRed = (double)nudColorCorrRed.Value;
+            editSettings.CameraColorCorrGreen = (double)nudColorCorrGreen.Value;
+            editSettings.CameraColorCorrBlue = (double)nudColorCorrBlue.Value;
+
+            editSettings.CameraOversampling = (int)nudCameraOversampling.Value;
             editSettings.CameraOutputWidth =  (int)nudCameraOutputWidth.Value;
             editSettings.CameraOutputHeight = (int)nudCameraOutputHeight.Value;
-            editSettings.CameraOversampling = (int)nudCameraOversampling.Value;
 
             editSettings.DrawWrongDirItems = ckbDrawWrongDirItems.Checked;
 
             editSettings.TrainValRatio = (int)nudTrainValRatio.Value;
+            editSettings.ValidateCenterViewsOnly = ckbValidateCenterViewsOnly.Checked;
             editSettings.TestOutRatio = (int)nudTestOutRatio.Value;
+            editSettings.TestCenterViewsOnly = ckbTestCenterViewsOnly.Checked;
+            editSettings.CenterBrightnessResults = ckbCenterBrightnessResults.Checked;
 
             editSettings.SideSteps = StringToFloatVector(tbSideSteps.Text, (float)editSettings.LaneWidth * AppSettings.SIDE_STEPS_FACTOR_MIN, (float)editSettings.LaneWidth * AppSettings.SIDE_STEPS_FACTOR_MAX);
             editSettings.AngleSteps = StringToFloatVector(tbAngleSteps.Text, AppSettings.ANGLE_STEP_MIN, AppSettings.ANGLE_STEP_MAX);
@@ -367,7 +385,7 @@ namespace StreetMaker
         /// <returns>Double representation in millimeter.</returns>
         private double ToDouble(decimal SizeValue)
         {
-            return AppSettings.FromUnit((double)SizeValue, (MeasurementUnit)cbMeasurementUnit.SelectedIndex);
+            return Math.Round(AppSettings.FromUnit((double)SizeValue, (MeasurementUnit)cbMeasurementUnit.SelectedIndex),3);
         }
 
         /// <summary>
@@ -453,8 +471,6 @@ namespace StreetMaker
 
             nudDefaultStraightLength.Value = ToDecimal(editSettings.DefaultStraightLength);
             nudDefaultJunctionLength.Value = ToDecimal(editSettings.DefaultJunctionLength);
-            nudDefaultCurveAngle.Value = ToDecimal(editSettings.DefaultCurveAngle);
-            nudDefaultRampCurveAngle.Value = ToDecimal(editSettings.DefaultRampCurveAngle);
             nudDefaultRampRadius.Value = ToDecimal(editSettings.DefaultRampRadius);
             nudDefaultRoundaboutRadius.Value = ToDecimal(editSettings.DefaultRoundaboutRadius);
 
@@ -659,7 +675,7 @@ namespace StreetMaker
         /// <param name="e">Event arguments.</param>
         private void nudLengthStep_ValueChanged(object sender, EventArgs e)
         {
-            editSettings.AngleStep = ToDouble(nudAngleStep.Value);
+            editSettings.LengthStep = ToDouble(nudLengthStep.Value);
         }
 
         /// <summary>

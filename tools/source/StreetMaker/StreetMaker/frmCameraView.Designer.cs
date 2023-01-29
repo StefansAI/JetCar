@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCameraView));
             this.pbMaskImage = new System.Windows.Forms.PictureBox();
             this.pbCameraImg = new System.Windows.Forms.PictureBox();
@@ -40,6 +41,7 @@
             this.btnPrevious = new System.Windows.Forms.Button();
             this.pbPredictionImage = new System.Windows.Forms.PictureBox();
             this.lbStatus = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pbMaskImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCameraImg)).BeginInit();
             this.pnControl.SuspendLayout();
@@ -55,6 +57,7 @@
             this.pbMaskImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbMaskImage.TabIndex = 6;
             this.pbMaskImage.TabStop = false;
+            this.toolTip1.SetToolTip(this.pbMaskImage, "Generated object class map for the same scene as displayed in the camera view.");
             // 
             // pbCameraImg
             // 
@@ -64,6 +67,7 @@
             this.pbCameraImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbCameraImg.TabIndex = 5;
             this.pbCameraImg.TabStop = false;
+            this.toolTip1.SetToolTip(this.pbCameraImg, "Artificial image of a camera view of the street scene.");
             // 
             // pnControl
             // 
@@ -94,6 +98,7 @@
             this.lbIdx.TabIndex = 4;
             this.lbIdx.Text = "-";
             this.lbIdx.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip1.SetToolTip(this.lbIdx, "Index of the current camera view and mask in the dataset.");
             // 
             // btnFirst
             // 
@@ -102,6 +107,7 @@
             this.btnFirst.Size = new System.Drawing.Size(75, 23);
             this.btnFirst.TabIndex = 3;
             this.btnFirst.Text = "First";
+            this.toolTip1.SetToolTip(this.btnFirst, "Go to the very first camera view and mask of this dataset.");
             this.btnFirst.UseVisualStyleBackColor = true;
             this.btnFirst.Click += new System.EventHandler(this.btnFirst_Click);
             // 
@@ -112,6 +118,7 @@
             this.btnNext.Size = new System.Drawing.Size(75, 23);
             this.btnNext.TabIndex = 1;
             this.btnNext.Text = "Next";
+            this.toolTip1.SetToolTip(this.btnNext, "Go to the next camera view and mask of this dataset.");
             this.btnNext.UseVisualStyleBackColor = true;
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
             // 
@@ -122,6 +129,7 @@
             this.btnLast.Size = new System.Drawing.Size(75, 23);
             this.btnLast.TabIndex = 2;
             this.btnLast.Text = "Last";
+            this.toolTip1.SetToolTip(this.btnLast, "Go to the very last camera view and mask of this dataset.");
             this.btnLast.UseVisualStyleBackColor = true;
             this.btnLast.Click += new System.EventHandler(this.btnLast_Click);
             // 
@@ -132,6 +140,7 @@
             this.btnPrevious.Size = new System.Drawing.Size(75, 23);
             this.btnPrevious.TabIndex = 0;
             this.btnPrevious.Text = "Previous";
+            this.toolTip1.SetToolTip(this.btnPrevious, "Go to the previous camera view and mask of this dataset.");
             this.btnPrevious.UseVisualStyleBackColor = true;
             this.btnPrevious.Click += new System.EventHandler(this.btnPrevious_Click);
             // 
@@ -143,6 +152,7 @@
             this.pbPredictionImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbPredictionImage.TabIndex = 7;
             this.pbPredictionImage.TabStop = false;
+            this.toolTip1.SetToolTip(this.pbPredictionImage, "Prediction object code mask from the training run. ");
             // 
             // lbStatus
             // 
@@ -152,6 +162,8 @@
             this.lbStatus.Size = new System.Drawing.Size(1368, 20);
             this.lbStatus.TabIndex = 8;
             this.lbStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip1.SetToolTip(this.lbStatus, "File name of the current camera view image. Mask and prediction filenames are ide" +
+        "ntical except the prefix.");
             // 
             // frmCameraView
             // 
@@ -192,5 +204,6 @@
         private System.Windows.Forms.PictureBox pbPredictionImage;
         private System.Windows.Forms.Label lbStatus;
         private System.Windows.Forms.Label lbIdx;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

@@ -77,8 +77,10 @@ namespace StreetMaker
         #endregion Public Constants
 
         #region Public Fields
-
+        /// <summary>Full path to the base directory for storing street maps and datasets.</summary>
         public string PathToDataStorage = Application.StartupPath + @"\Data\";
+        /// <summary>Sub directory to store all street maps..</summary>
+        public string SubDirStreetmaps = @"Maps\";
 
         #region StreetMap
         /// <summary>Default drawing area width in mm. Creating a new drawing area uses this default value.</summary>
@@ -88,7 +90,7 @@ namespace StreetMaker
 
         #region Dimensions
         /// <summary>Standard width of all lanes in mm. Lines are normally drawn inside this lane width, except shared lines between 2 lanes. The effective width between depends on the type of the lines.</summary>
-        public double LaneWidth = 100;
+        public double LaneWidth = 120;
         /// <summary>Standard width of all lane limiting lines left and right in mm.</summary>
         public double LineWidth = 10;
         /// <summary>Space between double lines in mm.</summary>
@@ -108,11 +110,11 @@ namespace StreetMaker
         /// <summary>Standard dash length in mm of dashed lines between lanes.</summary>
         public double DashLength = 40;
         /// <summary>Minimum inner radius of a lane in mm.</summary>
-        public double MinInnerRadius = 100;
+        public double MinInnerRadius = 120;
         /// <summary>Intersection inner radius in mm.</summary>
-        public double CornerRadius = 75;
+        public double CornerRadius = 100;
         /// <summary>Minimum curve angle of a curved street in degrees.</summary>
-        public double MinCurveAngle = 45.0 / 2;
+        public double MinCurveAngle = 45.0 / 4;
         /// <summary>Maximum curve angle of a curved street in degrees.</summary>
         public double MaxCurveAngle = 270;
         /// <summary>Curve angle step in degrees used in each hotkey increase or decrease step.</summary>
@@ -151,7 +153,7 @@ namespace StreetMaker
         /// <summary>Color of the arrow overlays.</summary>
         public Color ArrowOverlayColor = Color.White;
         /// <summary>Color of the background outside of the streets.</summary>
-        public Color BackgroundColor = Color.DarkGreen;
+        public Color BackgroundColor = Color.FromArgb(0xFF,0x79,0x69,0x59);
         #endregion Colors
 
         #endregion StreetMap
@@ -226,7 +228,7 @@ namespace StreetMaker
         public Keys HotkeySizeIncrease = Keys.C;
         /// <summary>Hotkey definition to decrease the size of a street element by one step.</summary>
         public Keys HotkeySizeDecrease = Keys.X;
-        /// <summary>Hotkey definition to enable basic sizing mode for dragging one connector with the mouse. Basic size mode only changes one parameter at a time like length and angle</summary>
+        /// <summary>Hotkey definition to enable basic sizing mode for dragging one connector with the mouse. Basic size mode only changes one parameter at a time like length and angle.</summary>
         public Keys HotkeySizeModeBase = Keys.S;
         /// <summary>Hotkey definition to enable extended sizing mode for dragging one connector with the mouse. Extended size mode changes 2 parameter at a time where possible, for instance radius and angle.</summary>
         public Keys HotkeySizeModeExt = Keys.A;
@@ -239,66 +241,75 @@ namespace StreetMaker
 
         #region Data Generation
         #region Virtual Camera
-        /// <summary>Default values to start with.</summary>
-        private const double DEFAULT_CAMERA_HFOV = 120;
-        /// <summary>Default values to start with.</summary>
-        private const double DEFAULT_CAMERA_IMAGE_RATIO = 4.0 / 3.0;
-
-        /// <summary>Horizontal Field of View of the camera lens in Degrees</summary>
-        public double CameraHFOV = DEFAULT_CAMERA_HFOV;
-        /// <summary>Vertical Field of View of the camera lens in Degrees.</summary>
-        public double CameraImageRatio = DEFAULT_CAMERA_IMAGE_RATIO;
-        /// <summary>Optical distortion of the camera lens.</summary>
-        public double CameraLensDistortion1 = -0.15;
-        /// <summary>Optical distortion of the camera lens.</summary>
-        public double CameraLensDistortion2 = -0.1;
+        /// <summary>Theoretical Horizontal Field of View of the camera lens in Degrees without lens distortion.</summary>
+        public double CameraHFOV = 120;
+        /// <summary>Horizontal to vertical ratio of the camera image after distortion.</summary>
+        public double CameraImageRatio = 1.333;
+        /// <summary>Optical distortion coefficient 1 of the camera lens. Estimated value for 145 degree lens.</summary>
+        public double CameraLensDistortion1 = 0.05;
+        /// <summary>Optical distortion coefficient 2 of the camera lens. Estimated value for 145 degree lens.</summary>
+        public double CameraLensDistortion2 = 0.25;
+        /// <summary>Color correction factor of the camera for the red channel. Estimated value for 145 degree camera.</summary>
+        public double CameraColorCorrRed = 1.18*0.8;
+        /// <summary>Color correction factor of the camera for the green channel. Estimated value for 145 degree camera.</summary>
+        public double CameraColorCorrGreen = 1.0*0.8;
+        /// <summary>Color correction factor of the camera for the blue channel. Estimated value for 145 degree camera.</summary>
+        public double CameraColorCorrBlue = 1.05*0.8;
         /// <summary>Height of the camera above ground.</summary>
         public double CameraHeight = 110;
         /// <summary>Angle of the optical axis of the camera.</summary>
-        public double CameraAxisAngle = ((DEFAULT_CAMERA_HFOV / DEFAULT_CAMERA_IMAGE_RATIO) / 2)+5;
+        public double CameraAxisAngle = 47;
         /// <summary>Width of the output image of the virtual camera.</summary>
         public int CameraOutputWidth = 224;
         /// <summary>Height of the output image of the virtual camera.</summary>
         public int CameraOutputHeight = 224;
-        /// <summary>Oversampling of the virtual camera of the original image before downsampling.</summary>
+        /// <summary>Oversampling of the virtual camera of the original image before downsampling to output width.</summary>
         public int CameraOversampling = 3;
         /// <summary>Range in front of a view to include street elements to mark lanes with class codes or colors.</summary>
-        public double MarkLaneMaxDistFront = 600;
+        public double MarkLaneMaxDistFront = 1500;
         /// <summary>Range to the side of a view to include street elements to mark lanes with class codes or colors.</summary>
-        public double MarkLaneMaxDistSide = 300;
+        public double MarkLaneMaxDistSide = 1000;
         /// <summary>Angle to the side of a view to include street elements to mark lanes with class codes or colors.</summary>
         public double MarkLaneMaxDistSideAngle = 45;
         /// <summary>Maximum distance from camera view point to mark all details.</summary>
-        public double MarkMaxDetailDistance = 400;
+        public double MarkMaxDetailDistance = 1400;
         /// <summary>If true, overlays and intersection items are drawn in wrong direction.</summary>
         public bool DrawWrongDirItems = false;
         /// <summary>If true, class images are generated to show the classes in different colors.</summary>
         public bool IncludeClassImages = false;
+
         #endregion Virtual Camera
 
         #region Augmentation
-        /// <summary>Ratio between traing and validation output. 50 for instance means that about every 50th image,mask and info set will be placed into the validation folders instead of traing folders.</summary>
+        /// <summary>Ratio between training and validation output. 50 for instance means that about every 50th image,mask and info set will be placed into the validation folders instead of training folders.</summary>
         public int TrainValRatio = 50;
-        /// <summary></summary>
-        public int TestOutRatio = 1000;
+        /// <summary>If true, only center view sets will be placed into validation folders.</summary>
+        public bool ValidateCenterViewsOnly = false;
+        /// <summary>Ratio between Train/Val and Test output. 100 for instance means that about every 100th image,mask and info set will be copied into the test folder.</summary>
+        public int TestOutRatio = 100;
+        /// <summary>If true, only center view sets will be placed into test folders.</summary>
+        public bool TestCenterViewsOnly = false;
 
         /// <summary>Step size for new images to be created along each lane.</summary>
         public double ImageStepSize = 100;
+
+        /// <summary>If true, brightness calculation results will be offset to center the min/max range.</summary>
+        public bool CenterBrightnessResults = true;
 
         /// <summary>Steps left and right from the lane center to create additional views off center.</summary>
         public float[] SideSteps = { -25, 0, 25 };
         /// <summary>Angle variations turning left and right from lane center view to create additional views.</summary>
         public float[] AngleSteps = { -5, 0, 5 };
         /// <summary>Different brightness variations for more augmentation</summary>
-        public float[] BrightnessFactors = { 0.4f, 0.6f, 0.9f };
+        public float[] BrightnessFactors = { 0.6f, 1.0f };
         /// <summary>Color variations to apply to each of the three basic colors RGB sequentially.</summary>
-        public float[] ColorFactors = { 0.9f, 1.0f, 1.1f };
+        public float[] ColorFactors = { 0.8f, 1.0f, 1.2f };
         /// <summary>Adding noise in different levels at the end.</summary>
-        public int[] NoiseLevels = { 5, 8 };
+        public int[] NoiseLevels = { 8, 8 };
         #endregion Augmentation
 
         #region Folders and File Prefixes
-        /// <summary>Full path to the folder to store all output dataset files, like images, mask and xml files.</summary>
+        /// <summary>Path to the folder to store all output dataset files, like images, mask and xml files.</summary>
         public string SubDirDataSet = @"DataSet\";
 
         /// <summary>Sub directory name under SubDirDataSet\ for augmented JPG images.</summary>
@@ -491,7 +502,8 @@ namespace StreetMaker
                 if (id != XML_FILE_ID_STR)
                     throw new Exception("XML file identifier error!");
 
-                PathToDataStorage = nodeSettings.SelectSingleNode("path_to_data_storage").InnerText.TrimEnd(new char[] { '\\' }) + '\\'; 
+                PathToDataStorage = nodeSettings.SelectSingleNode("path_to_data_storage").InnerText.TrimEnd(new char[] { '\\' }) + '\\';
+                SubDirStreetmaps = nodeSettings.SelectSingleNode("sub_dir_street_maps").InnerText.TrimEnd(new char[] { '\\' }) + '\\';
 
                 XmlNode nodeStreetMap = nodeSettings.SelectSingleNode("street_map");
                 XmlNode nodeStreetDimensions = nodeStreetMap.SelectSingleNode("dimensions");
@@ -540,10 +552,12 @@ namespace StreetMaker
                 PrintPageSettings.PaperSource.SourceName = nodePrintPaperSource.SelectSingleNode("name").InnerText;
 
                 XmlNode nodePrintPaperSize = nodePrintSettings.SelectSingleNode("paper_size");
-                PrintPageSettings.PaperSize.RawKind = Convert.ToInt32(nodePrintPaperSize.SelectSingleNode("raw_kind").InnerText);
-                //PrintPageSettings.PaperSize.PaperName = nodePrintPaperSize.SelectSingleNode("name").InnerText;
-                //PrintPageSettings.PaperSize.Width = Convert.ToInt32(nodePrintPaperSize.SelectSingleNode("width").InnerText);
-                //PrintPageSettings.PaperSize.Height = Convert.ToInt32(nodePrintPaperSize.SelectSingleNode("height").InnerText);
+                int rawKind = Convert.ToInt32(nodePrintPaperSize.SelectSingleNode("raw_kind").InnerText);
+                string paperName = nodePrintPaperSize.SelectSingleNode("name").InnerText;
+                int paperWidth = Convert.ToInt32(nodePrintPaperSize.SelectSingleNode("width").InnerText);
+                int paperHeight = Convert.ToInt32(nodePrintPaperSize.SelectSingleNode("height").InnerText);
+                PrintPageSettings.PaperSize = new PaperSize(paperName, paperWidth, paperHeight);
+                PrintPageSettings.PaperSize.RawKind = rawKind;
 
                 XmlNode nodePrintMargins = nodePrintSettings.SelectSingleNode("margins");
                 PrintPageSettings.Margins.Left = Convert.ToInt32(nodePrintMargins.SelectSingleNode("left").InnerText);
@@ -599,6 +613,9 @@ namespace StreetMaker
                 CameraImageRatio = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_image_ratio").InnerText);
                 CameraLensDistortion1 = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_lens_distortion1").InnerText);
                 CameraLensDistortion2 = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_lens_distortion2").InnerText);
+                CameraColorCorrRed = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_color_correction_red").InnerText);
+                CameraColorCorrGreen = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_color_correction_green").InnerText);
+                CameraColorCorrBlue = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_color_correction_blue").InnerText);
                 CameraHeight = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_height").InnerText);
                 CameraAxisAngle = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_axis_angle").InnerText);
                 CameraOutputWidth = Convert.ToInt32(nodeVirtualCam.SelectSingleNode("camera_output_width").InnerText);
@@ -615,8 +632,10 @@ namespace StreetMaker
                 XmlNode nodeAugmentation = nodeDataGen.SelectSingleNode("augmentation");
 
                 TrainValRatio = Convert.ToInt32(nodeAugmentation.SelectSingleNode("train_val_ratio").InnerText);
+                ValidateCenterViewsOnly = Convert.ToBoolean(nodeAugmentation.SelectSingleNode("validate_center_views_only").InnerText);
                 TestOutRatio = Convert.ToInt32(nodeAugmentation.SelectSingleNode("test_out_ratio").InnerText);
-                ImageStepSize = Convert.ToDouble(nodeAugmentation.SelectSingleNode("image_step_size").InnerText);
+                TestCenterViewsOnly = Convert.ToBoolean(nodeAugmentation.SelectSingleNode("test_center_views_only").InnerText);
+                CenterBrightnessResults = Convert.ToBoolean(nodeAugmentation.SelectSingleNode("center_brightness_results").InnerText);
 
                 XmlNode nodeSideSteps = nodeAugmentation.SelectSingleNode("side_steps");
                 XmlNodeList sideStepsItems = nodeSideSteps.SelectNodes("item");
@@ -704,6 +723,7 @@ namespace StreetMaker
                 XmlNode nodeSettings = doc.AppendChild(doc.CreateElement("settings"));
                 nodeSettings.AppendChild(doc.CreateElement("identifier")).AppendChild(doc.CreateTextNode(XML_FILE_ID_STR));
                 nodeSettings.AppendChild(doc.CreateElement("path_to_data_storage")).AppendChild(doc.CreateTextNode(PathToDataStorage));
+                nodeSettings.AppendChild(doc.CreateElement("sub_dir_street_maps")).AppendChild(doc.CreateTextNode(SubDirStreetmaps));
 
                 XmlNode nodeStreetMap = nodeSettings.AppendChild(doc.CreateElement("street_map"));
                 XmlNode nodeStreetDimensions = nodeStreetMap.AppendChild(doc.CreateElement("dimensions"));
@@ -813,6 +833,9 @@ namespace StreetMaker
                 nodeVirtualCam.AppendChild(doc.CreateElement("camera_image_ratio")).AppendChild(doc.CreateTextNode(CameraImageRatio.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("camera_lens_distortion1")).AppendChild(doc.CreateTextNode(CameraLensDistortion1.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("camera_lens_distortion2")).AppendChild(doc.CreateTextNode(CameraLensDistortion2.ToString()));
+                nodeVirtualCam.AppendChild(doc.CreateElement("camera_color_correction_red")).AppendChild(doc.CreateTextNode(CameraColorCorrRed.ToString()));
+                nodeVirtualCam.AppendChild(doc.CreateElement("camera_color_correction_green")).AppendChild(doc.CreateTextNode(CameraColorCorrGreen.ToString()));
+                nodeVirtualCam.AppendChild(doc.CreateElement("camera_color_correction_blue")).AppendChild(doc.CreateTextNode(CameraColorCorrBlue.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("camera_height")).AppendChild(doc.CreateTextNode(CameraHeight.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("camera_axis_angle")).AppendChild(doc.CreateTextNode(CameraAxisAngle.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("camera_output_width")).AppendChild(doc.CreateTextNode(CameraOutputWidth.ToString()));
@@ -829,8 +852,11 @@ namespace StreetMaker
                 XmlNode nodeAugmentation = nodeDataGen.AppendChild(doc.CreateElement("augmentation"));
 
                 nodeAugmentation.AppendChild(doc.CreateElement("train_val_ratio")).AppendChild(doc.CreateTextNode(TrainValRatio.ToString()));
+                nodeAugmentation.AppendChild(doc.CreateElement("validate_center_views_only")).AppendChild(doc.CreateTextNode(ValidateCenterViewsOnly.ToString()));
                 nodeAugmentation.AppendChild(doc.CreateElement("test_out_ratio")).AppendChild(doc.CreateTextNode(TestOutRatio.ToString()));
+                nodeAugmentation.AppendChild(doc.CreateElement("test_center_views_only")).AppendChild(doc.CreateTextNode(TestCenterViewsOnly.ToString()));
                 nodeAugmentation.AppendChild(doc.CreateElement("image_step_size")).AppendChild(doc.CreateTextNode(ImageStepSize.ToString()));
+                nodeAugmentation.AppendChild(doc.CreateElement("center_brightness_results")).AppendChild(doc.CreateTextNode(CenterBrightnessResults.ToString()));
 
                 XmlNode nodeSideSteps = nodeAugmentation.AppendChild(doc.CreateElement("side_steps"));
                 foreach (float sideStep in SideSteps)

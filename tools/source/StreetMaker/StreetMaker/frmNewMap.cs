@@ -29,6 +29,10 @@ namespace StreetMaker
         private double drawingWidth;
         /// <summary>Drawing height in mm.</summary>
         private double drawingHeight;
+        /// <summary>Minimum width in mm.</summary>
+        private double minimumWidth;
+        /// <summary>Minimum height in mm.</summary>
+        private double minimumHeight;
         /// <summary>Flag to block the update at re-entrance of the event handler.</summary>
         private bool blockUpdate;
         #endregion Private Fields
@@ -40,20 +44,38 @@ namespace StreetMaker
         /// </summary>
         /// <param name="DrawingSize">Default drawing size to start with.</param>
         /// <param name="MeasurementUnit">Meter or Feet conversion.</param>
-        public frmNewMap(SizeF DrawingSize, MeasurementUnit MeasurementUnit)
+        public frmNewMap(string Text, SizeF DrawingSize, SizeF MinimumSize, MeasurementUnit MeasurementUnit)
         {
             InitializeComponent();
+            this.Text = Text;
             blockUpdate = true;
             drawingWidth = DrawingSize.Width;
             drawingHeight = DrawingSize.Height;
-            cbUnit.Items.Clear();
+            minimumWidth = MinimumSize.Width;
+            minimumHeight = MinimumSize.Height;
+            cbMeasurementUnit.Items.Clear();
             foreach (string name in Enum.GetNames(typeof(MeasurementUnit)))
-                cbUnit.Items.Add(name);
-            cbUnit.SelectedIndex = (int)MeasurementUnit;
+                cbMeasurementUnit.Items.Add(name);
+            cbMeasurementUnit.SelectedIndex = (int)MeasurementUnit;
         }
         #endregion Constructor
 
         #region Private Methods
+        /// <summary>
+        /// Goes through all Controls owned by this form and all next levels of owned controls to find all 
+        /// NumericUpDown objects that have the integer of 0 assigned to the Tag property to set the DecimalPlaces to a value that retains the millimeter resolution.
+        /// </summary>
+        private void ChangeDecimals()
+        {
+            double mm = AppSettings.ToUnit(1, (MeasurementUnit)cbMeasurementUnit.SelectedIndex);
+            double d = Math.Log10(1 / mm);
+
+            nudWidth.DecimalPlaces = (int)(d + 1);
+            nudHeight.DecimalPlaces = (int)(d + 1);
+        }
+
+
+
         /// <summary>
         /// ComboBox event handler to change the measurement scale. The display values will be converted from mm into the target scale.
         /// </summary>
@@ -61,9 +83,14 @@ namespace StreetMaker
         /// <param name="e">Event arguments.</param>
         private void cbUnit_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ChangeDecimals();
             blockUpdate = true;
+            nudWidth.Minimum = 0;
+            nudHeight.Minimum = 0;
             nudWidth.Value = ToDecimal(drawingWidth);
             nudHeight.Value = ToDecimal(drawingHeight);
+            nudWidth.Minimum = ToDecimal(minimumWidth);
+            nudHeight.Minimum = ToDecimal(minimumHeight);
             blockUpdate = false;
         }
 
@@ -107,7 +134,7 @@ namespace StreetMaker
         /// <returns>Decimal conversion result.</returns>
         private decimal ToDecimal(double SizeValue)
         {
-            return (decimal)AppSettings.ToUnit(SizeValue, (MeasurementUnit)cbUnit.SelectedIndex);
+            return (decimal)AppSettings.ToUnit(SizeValue, (MeasurementUnit)cbMeasurementUnit.SelectedIndex);
         }
 
         /// <summary>
@@ -117,7 +144,7 @@ namespace StreetMaker
         /// <returns>Double representation in millimeter.</returns>
         private double ToDouble(decimal SizeValue)
         {
-            return AppSettings.FromUnit((double)SizeValue, (MeasurementUnit)cbUnit.SelectedIndex);
+            return Math.Round(AppSettings.FromUnit((double)SizeValue, (MeasurementUnit)cbMeasurementUnit.SelectedIndex),3);
         }
         #endregion Private Methods
 

@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmConnectionIssues));
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // listBox1
@@ -38,8 +40,10 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(0, 0);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(424, 196);
+            this.listBox1.Size = new System.Drawing.Size(742, 140);
             this.listBox1.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.listBox1, "Shows information about connectors not close enough to apear without a gap. Click" +
+        " on a line to show the location.");
             this.listBox1.UseWaitCursor = true;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
@@ -47,7 +51,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(424, 196);
+            this.ClientSize = new System.Drawing.Size(742, 140);
             this.Controls.Add(this.listBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmConnectionIssues";
@@ -62,5 +66,6 @@
         #endregion
 
         private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
