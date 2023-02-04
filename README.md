@@ -15,7 +15,7 @@ The goal is not speed or road following alone, but navigating on a street map au
 The project is organized into following folders:<br><br>
 
 1. firmware
-    - jetcar: Jupyter notebooks and python files to be uploaded
+    - jetcar: Jupyter notebooks and python files to run in the JetCar
     - offline_debug: python files for offline debugging of firmware recordings
     - jetpack install script <br><br>
 
@@ -32,5 +32,5 @@ The project is organized into following folders:<br><br>
 More documentation:
 - [BOM](docs/BOM.md)
 - [Assembly](docs/Assembly.md)
-- [Firmware Setp](docs/Firmware%20Setup.md)
+- [Firmware Setup](docs/Firmware%20Setup.md)
 
