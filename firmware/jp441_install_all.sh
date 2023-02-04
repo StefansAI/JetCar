@@ -45,7 +45,7 @@ echo $password | sudo -S apt-get install -y python3-pip libopenblas-base libopen
 echo $password | sudo -H pip3 install Cython==0.29.21
 echo $password | sudo -H pip3 install numpy==1.16.1 torch-1.7.0-cp36-cp36m-linux_aarch64.whl
 # install torchvision
-echo $password y| sudo -S apt-get install libjpeg-dev zlib1g-dev libpython3-dev libavcodec-dev libavformat-dev libswscale-dev
+echo $password | sudo -S apt-get -y install libjpeg-dev zlib1g-dev libpython3-dev libavcodec-dev libavformat-dev libswscale-dev
 echo "============================= torchvision ==============================================="
 git clone --branch v0.8.1 https://github.com/pytorch/vision torchvision./
 cd torchvision
