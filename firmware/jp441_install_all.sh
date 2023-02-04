@@ -24,43 +24,37 @@ echo "============================= apt & pip ==================================
 echo $password | sudo -S apt-get update
 echo $password | sudo -S apt install -y python3-pip python3-pil python3-smbus python3-matplotlib cmake curl
 echo $password | sudo -H pip3 install -U pip
-echo $password | sudo -H pip3 install -U pip testresources setuptools==49.6.0
-echo $password | sudo -H pip3 install flask
+echo $password | sudo -H pip3 install -U pip testresources==2.0.1 setuptools==49.6.0
+echo $password | sudo -H pip3 install flask==1.1.2
 echo $password | sudo -H pip3 install -U --upgrade numpy
 
 # install tensorflow
 echo "============================= tensorflow ==================================================="
 echo $password | sudo -S apt-get install -y libhdf5-serial-dev hdf5-tools libhdf5-dev zlib1g-dev zip libjpeg8-dev liblapack-dev libblas-dev gfortran
-echo $password | sudo -H pip3 install -U numpy==1.16.1 future==0.18.2 mock==3.0.5 h5py==2.10.0 keras_preprocessing==1.1.1 keras_applications==1.0.8 gast==0.2.2 futures protobuf pybind11
-#echo $password | sudo -H pip3 install -U numpy grpcio absl-py py-cpuinfo psutil portpicker six mock requests gast 
-echo $password | sudo -H pip3 install -U grpcio absl-py py-cpuinfo psutil portpicker six requests
-echo $password | sudo -H pip3 install Cython
+echo $password | sudo -H pip3 install -U numpy==1.16.1 future==0.18.2 mock==3.0.5 h5py==2.10.0 keras_preprocessing==1.1.1 keras_applications==1.0.8 gast==0.2.2 futures==3.1.1 protobuf==3.14.0 pybind11==2.6.1
+echo $password | sudo -H pip3 install -U grpcio==1.34.0 absl-py==0.10.0 py-cpuinfo==7.0.0 psutil==5.7.3 portpicker==1.3.1 six==1.15.0 requests==2.25.0
+echo $password | sudo -H pip3 install Cython==0.29.21
 echo $password | sudo -H pip3 install h5py==2.10.0
-#echo $password | sudo -H pip3 install -U astor termcolor protobuf keras-applications keras-preprocessing wrapt google-pasta
-echo $password | sudo -H pip3 install -U astor termcolor keras-applications keras-preprocessing wrapt google-pasta
-echo $password | sudo -H pip3 install --pre --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v44 tensorflow
+echo $password | sudo -H pip3 install -U astor==0.8.1 termcolor==1.1.0 keras-applications==1.0.8 keras-preprocessing==1.1.2 wrapt==1.12.1 google-pasta==0.2.0
+echo $password | sudo -H pip3 install --pre --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v44 tensorflow==2.3.1+nv20.11
 
 # install pytorch
 echo "============================= pytorch ==================================================="
-#wget https://nvidia.box.com/shared/static/veo87trfaawj5pfwuqvhl6mzc5b55fbj.whl -O torch-1.1.0a0+b457266-cp36-cp36m-linux_aarch64.whl
 wget https://nvidia.box.com/shared/static/wa34qwrwtk9njtyarwt5nvo6imenfy26.whl -O torch-1.7.0-cp36-cp36m-linux_aarch64.whl
 echo $password | sudo -S apt-get install -y python3-pip libopenblas-base libopenmpi-dev
-echo $password | sudo -H pip3 install Cython
-echo $password | sudo -H pip3 install numpy torch-1.7.0-cp36-cp36m-linux_aarch64.whl
-#echo $password | sudo -H pip3 install -U numpy torch-1.1.0a0+b457266-cp36-cp36m-linux_aarch64.whl
+echo $password | sudo -H pip3 install Cython==0.29.21
+echo $password | sudo -H pip3 install numpy==1.16.1 torch-1.7.0-cp36-cp36m-linux_aarch64.whl
 # install torchvision
-echo $password | sudo -S apt-get install libjpeg-dev zlib1g-dev libpython3-dev libavcodec-dev libavformat-dev libswscale-dev
+echo $password y| sudo -S apt-get install libjpeg-dev zlib1g-dev libpython3-dev libavcodec-dev libavformat-dev libswscale-dev
 echo "============================= torchvision ==============================================="
-git clone --branch v0.8.1 https://github.com/pytorch/vision torchvision
+git clone --branch v0.8.1 https://github.com/pytorch/vision torchvision./
 cd torchvision
 export BUILD_VERSION=0.8.1
 echo $password | sudo -H python3 setup.py install
 cd ../
-#echo $password | sudo -H pip3 install -U torchvision
 
 # install traitlets (master)
 echo "============================= traitlets master ============================================"
-#echo $password | sudo -H python3 -m pip install git+https://github.com/ipython/traitlets@master
 echo $password | sudo -H pip3 install traitlets
 
 # install updated nodejs
@@ -74,8 +68,7 @@ npm -v
 
 # install jupyter lab
 echo "============================= jupyter lab ================================================="
-#echo $password | sudo -S apt install -y nodejs npm
-echo $password | sudo -H pip3 install -U jupyter jupyterlab
+echo $password | sudo -H pip3 install -U jupyter==1.0.0 jupyterlab==2.2.9
 echo $password | sudo -S jupyter labextension install @jupyter-widgets/jupyterlab-manager
 echo $password | sudo -S jupyter labextension install @jupyterlab/statusbar
 jupyter lab --generate-config -y
@@ -115,7 +108,6 @@ git clone https://github.com/tensorflow/models
 cd models/research
 git checkout 5f4d34fc
 wget -O protobuf.zip https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-linux-aarch_64.zip
-# wget -O protobuf.zip https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-linux-x86_64.zip
 unzip protobuf.zip
 ./bin/protoc object_detection/protos/*.proto --python_out=.
 echo $password | sudo -H python3 setup.py install

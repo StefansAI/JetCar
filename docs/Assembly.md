@@ -115,13 +115,25 @@ Now comes the trickiest part of the whole assembly. The LED wires won't have so 
 <br><img src="assets/images/assembly/37-the%20tricky%20part.JPG"/><br>
 Place the body on top, but doen't screw it on so it can be moved. Now use tweezers to grab one by one through the top openings and place them on the correct header. Lift or move the body a bit to the sides for better access. It takes a moment to get them all in. Good luck.
 <br>
-<br><img src="assets/images/assembly/38-LED test.JPG"/><br>
+<br><img src="assets/images/assembly/38-LED%20test.JPG"/><br>
 Now another test exactly the same way as above with the JetCar_Basic_Motion notebook. This time turn on one by one all LED check boxes to verify them.
 <br>
-<br><img src="assets/images/assembly/"/><br>
+<br><img src="assets/images/assembly/39-upper%20body.JPG"/><br>
+Mount the upper body on top and fix with screws.
 <br>
-<br><img src="assets/images/assembly/"/><br>
+<br><img src="assets/images/assembly/40-battery.JPG"/><br>
+Plug in USB connectors and place battery in compartment after placing the switch piece into the opening. Sand it down if necessary. In the end it should easily turn on the battery pack with one click and turn off with a double click. The cables ar running on the side to the front.
 <br>
-<br><img src="assets/images/assembly/"/><br>
+<br><img src="assets/images/assembly/41-flatbed.JPG"/><br>
+Now place the flatbed with the Jetson Nano on top. It slides under in the front and can be fixed with 2 screws in the back. Connect the power cable and the I2C wires with tweezers.
+<br>
+<br><img src="assets/images/assembly/42-camera.JPG"/><br>
+Screw the camera mount to the cabin and screw in the camera board.
+<br>
+<br><img src="assets/images/assembly/43-camera%20connected.JPG"/><br>
+Pluig in the flex cable of the camera into the Jetson Nano connector. Lift the plastic part, place the flex board in and press the tiny plastic part back in. Make sure, it is held in and doesn't come out.
+<br>
+<br><img src="assets/images/assembly/44-Done.JPG"/><br>
+Congratulation. It's done and ready to go.
 <br>
 </p>
