@@ -47,7 +47,7 @@ echo $password | sudo -H pip3 install numpy==1.16.1 torch-1.7.0-cp36-cp36m-linux
 # install torchvision
 echo $password | sudo -S apt-get -y install libjpeg-dev zlib1g-dev libpython3-dev libavcodec-dev libavformat-dev libswscale-dev
 echo "============================= torchvision ==============================================="
-git clone --branch v0.8.1 https://github.com/pytorch/vision torchvision./
+git clone --branch v0.8.1 https://github.com/pytorch/vision torchvision
 cd torchvision
 export BUILD_VERSION=0.8.1
 echo $password | sudo -H python3 setup.py install
@@ -68,9 +68,9 @@ npm -v
 
 # install jupyter lab
 echo "============================= jupyter lab ================================================="
-echo $password | sudo -H pip3 install -U jupyter==1.0.0 jupyterlab==2.2.9
+echo $password | sudo -H pip3 install -U jupyter jupyterlab
 echo $password | sudo -S jupyter labextension install @jupyter-widgets/jupyterlab-manager
-echo $password | sudo -S jupyter labextension install @jupyterlab/statusbar
+#echo $password | sudo -S jupyter labextension install @jupyterlab/statusbar
 jupyter lab --generate-config -y
 
 # set jupyter password
