@@ -162,12 +162,6 @@ echo $password | sudo -H pip3 install segmentation-models-pytorch==0.1.2
 cd $HOME
 echo $password | sudo -S nvpmodel -m0
 
-echo "============================= jetcar ===================================================="
-cd $HOME
-mkdir JetCar/notebooks
-cd JetCar/notebooks
-git clone https://github.com/StefansAI/JetCar/tree/main/firmware/jetcar/notebooks
-
 echo "======================== Installation finished! ==========================================="
 
 
