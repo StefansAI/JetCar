@@ -129,7 +129,6 @@ echo $password | sudo -S jupyter labextension install js
 
 jupyter labextension list
 echo "============================= end jetcard ==============================================="
-echo $password | sudo -S jupyter lab build
 
 echo "============================= jetcam ===================================================="
 cd $HOME
@@ -162,6 +161,7 @@ echo $password | sudo -H pip3 install segmentation-models-pytorch==0.1.2
 cd $HOME
 echo $password | sudo -S nvpmodel -m0
 
+echo $password | sudo -S jupyter lab build
 echo "======================== Installation finished! ==========================================="
 
 
