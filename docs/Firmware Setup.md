@@ -49,3 +49,5 @@ It will be best to use separate (maybe older) Wi-Fi router only connected to the
 <br><br>
 Since from now on, all communications with the JetCar can go through Jupyter, the graphic user interface can be removed to save resources:
 <a href="https://lunar.computer/posts/nvidia-jetson-nano-headless/">Jetson Nano Headless</a><br>
+<br>
+In the end it might be also good to apply "sudo apt-get autoremove" and "sudo apt-get clean" from the Jupyter terminal for instance.
