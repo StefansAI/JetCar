@@ -1,21 +1,9 @@
 from jetcar_definitions import *
 
-
-#RECORDING_DIR = "DebugData/LaneChangeLeft/"
-#RECORDING_DIR = "DebugData/InMiddleLane/"
-#RECORDING_DIR = "DebugData/StraightStop/"
-#RECORDING_DIR = "DebugData/StraightAhead/"
-#RECORDING_DIR = "DebugData/StraightYield/"
-#RECORDING_DIR = "DebugData/OffLaneRight/"
-#RECORDING_DIR = "DebugData/LeftTurn/"
-#RECORDING_DIR = "DebugData/RightCurve/"
-RECORDING_DIR = "DebugData/TestDrive/"
-RECORDING_MIN = 0 #48
+RECORDING_DIR = "DebugData/"
+RECORDING_MIN = 0 
 RECORDING_MAX = 1000
 START_DIRECTION = Direction.Straight.value
-NEXT_DIRECTION = Direction.Left.value
-NEXT_DIR_IDX = 17
-
 
 import cv2
 import PIL.Image

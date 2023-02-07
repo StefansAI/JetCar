@@ -1,7 +1,4 @@
-import ipywidgets
-
 import cv2
-from IPython.display import display
 import numpy as np
 import os
 import time
@@ -69,7 +66,7 @@ for img_count in range(RECORDING_MIN,RECORDING_MAX):
             jetcar_lane.DEBUG_PRINT_FIND_LIMITS_LANE = True
             jetcar_lane.DEBUG_PRINT_FIND_LIMITS_POINTS = True
             jetcar_center.DEBUG_PRINT_GET_CENTER_CLASSES = True
-        elif img_count == 2300:
+        elif img_count == 23:
             break
       
 

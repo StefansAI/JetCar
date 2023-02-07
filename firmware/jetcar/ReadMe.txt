@@ -1,0 +1,1 @@
+Copy the contents of notebooks into the $HOME/JetCar/notebooks folder of the Jetson Nano via Jupyter.
