@@ -67,7 +67,7 @@
 <td align="right">1</td>
 <td align="right">$15.99</td>
 <td><a href="https://amzn.to/2WRcIUe">Amazon</a></td>
-<td>2x 5V/3A output, 10,000mAh, 130x68x15mm</td>
+<td>2x 5V/3A output, 10,000mAh, 130x68x15mm (5.1x2.6x0.59")</td>
 </tr>
 <tr>
 <td><em>PiOLED</em> display</td>
@@ -180,17 +180,17 @@
 <td align="right">4</td>
 <td align="right">$0.10</td>
 <td><a href="https://www.digikey.com/en/products/detail/stackpole-electronics-inc/CF18JT91R0/1741788">Digikey</a></td>
-<td>90..100Ohm serial resistors for headlights.</td>
+<td>90..120Ohm serial resistors for headlights.</td>
 </tr>
 
 <td>LED red</td>
-<td align="right">1</td>
-<td align="right">$5.45</td>
+<td align="right">4</td>
+<td align="right">$0.42</td>
 <td><a href="https://www.digikey.com/en/products/detail/lumex-opto-components-inc/SSL-LX2573ID/270845?s=N4IgTCBcDaIGwHYC0BGADAFmQOQCIgF0BfIA">Digikey</a></td>
 <td>2x5mm rectangular for tail light and brake lights</td>
 </tr>
 <td>LED amber</td>
-<td align="right">2</td>
+<td align="right">4</td>
 <td align="right">$0.42</td>
 <td><a href="https://www.digikey.com/en/products/detail/lumex-opto-components-inc/SSL-LX2573AD/270843?s=N4IgTCBcDaIGwHYC0BGADAFgKxIHIBEQBdAXyA">Digikey</a></td>
 <td>2x5mm rectangular for turn signals</td>
@@ -199,7 +199,7 @@
 <td align="right">1</td>
 <td align="right">$5.45</td>
 <td><a href="https://www.amazon.com/gp/product/B077NH83CJ/ref=ppx_yo_dt_b_asin_title_o03_s00?ie=UTF8&psc=1">Amazon</a></td>
-<td></td>
+<td>Or other similar wires.</td>
 </tr>
 </tbody>
 </table>
