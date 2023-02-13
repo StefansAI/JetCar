@@ -27,7 +27,7 @@ namespace ImageSegmenter
         /// <summary>Application name to be shown in the form text.</summary>
         private const string APP_NAME = "Image Segmenter";
         /// <summary>File name for the application settings.</summary>
-        private const string APP_SETTINGS_FILE_NAME = "AppSettings.xml";
+        private const string APP_SETTINGS_FILE_NAME = "ImageSegmenter.Cfg";
         /// <summary>When true, the original images, normally never changed, will be saved after blurring is applied.</summary>
         private const bool SAVE_BLURED_ORGINAL_IMAGE = false;
         #endregion Private Constants
@@ -653,7 +653,7 @@ namespace ImageSegmenter
                         {
                             int code = bmCodeMask.GetPixel(x, y).R;
                             *ptr++ = (byte)code;
-                            if (code != 0)
+                            //if (code != 0)
                                 bmImageMask.SetPixel(x, y, Color.FromArgb(AppSettings.DrawMaskTransparency, AppSettings.SegmClassDefs[code].DrawColor));
                         }
 
@@ -787,7 +787,7 @@ namespace ImageSegmenter
         /// <param name="e">Standard event arguments.</param>
         private void tsmiProcessAllImageAugmentation_Click(object sender, EventArgs e)
         {
-            frmProcessConfirmation processConfirmation = new frmProcessConfirmation(Session.ProcessedCount);
+            frmProcessConfirmation processConfirmation = new frmProcessConfirmation(Session.ProcessedCount-1);
             if (processConfirmation.ShowDialog() == DialogResult.Cancel)
                 return;
 
@@ -796,7 +796,7 @@ namespace ImageSegmenter
             if (processConfirmation.CLearAllOutputDirs == true)
                 ClearOutputDirs();
 
-            ProcessAllImageAugmentations(processConfirmation.StartImageNumber);
+            ProcessAllImageAugmentations(processConfirmation.StartImageNumber, processConfirmation.EndImageNumber);
 
             SetEnabled(true);
         }
@@ -1736,7 +1736,6 @@ namespace ImageSegmenter
                     File.Delete(fileName);
             }
             else Directory.CreateDirectory(Dir);
-
         }
 
         /// <summary>
@@ -1746,10 +1745,17 @@ namespace ImageSegmenter
         {
             ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirImg + AppSettings.SubDirTrain);
             ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirImg + AppSettings.SubDirVal);
+            ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirImg + AppSettings.SubDirPredTest);
             ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirMask + AppSettings.SubDirTrain);
             ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirMask + AppSettings.SubDirVal);
             ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirInfo + AppSettings.SubDirTrain);
             ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirInfo + AppSettings.SubDirVal);
+            if (AppSettings.InfoOutput == false)
+            {
+                Directory.Delete(AppSettings.PathToOutputDataset + AppSettings.SubDirInfo + AppSettings.SubDirTrain);
+                Directory.Delete(AppSettings.PathToOutputDataset + AppSettings.SubDirInfo + AppSettings.SubDirVal);
+                Directory.Delete(AppSettings.PathToOutputDataset + AppSettings.SubDirInfo);
+            }
         }
 
         /// <summary>
@@ -1864,7 +1870,8 @@ namespace ImageSegmenter
 
             bmTargetSizeImg.Save(AppSettings.PathToOutputDataset + AppSettings.SubDirImg + trainVal + AppSettings.PrefixImg + baseName + ".jpg");
             bm8bitMask.Save(AppSettings.PathToOutputDataset + AppSettings.SubDirMask + trainVal + AppSettings.PrefixMask + baseName + ".png");
-            SaveSegmClassesToXml(AppSettings.PathToOutputDataset + AppSettings.SubDirInfo + trainVal + AppSettings.PrefixInfo + baseName + ".xml", Session.CurrentImageFileName, AppSettings.PrefixImg + baseName + ".jpg", bmTargetSizeImg, WorkingSegmClasses,  WorkingSteeringDirs);
+            if (AppSettings.InfoOutput == true)
+                SaveSegmClassesToXml(AppSettings.PathToOutputDataset + AppSettings.SubDirInfo + trainVal + AppSettings.PrefixInfo + baseName + ".xml", Session.CurrentImageFileName, AppSettings.PrefixImg + baseName + ".jpg", bmTargetSizeImg, WorkingSegmClasses,  WorkingSteeringDirs);
 
             Text = APP_NAME;
         }
@@ -1872,12 +1879,13 @@ namespace ImageSegmenter
         /// <summary>
         /// Process all image augmentations and create all JPG,PNG and XML files in the output dataset folders fro traing and validation.
         /// </summary>
-        /// <param name="StartImgIdx"></param>
-        private void ProcessAllImageAugmentations(int StartImgIdx)
+        /// <param name="StartImgIdx">Index of the first image to start processing</param>
+        /// <param name="EndImgIdx">Index of the last image to finish processing</param>
+        private void ProcessAllImageAugmentations(int StartImgIdx, int EndImgIdx)
         { 
             Random rnd = new Random(DateTime.Now.Millisecond);
 
-            for (int idxImg = StartImgIdx; idxImg < Session.ProcessedCount; idxImg++) 
+            for (int idxImg = StartImgIdx; idxImg <= EndImgIdx; idxImg++) 
             {
                 bmOriginalImg = Session.GetProcessedImage(idxImg);
                 if (bmOriginalImg == null)
@@ -1899,6 +1907,9 @@ namespace ImageSegmenter
 
                 SetWorkingImage(bmOriginalImg);
                 LoadSegmClasses();
+                Bitmap bmTest = Process.DownSample(bmOriginalImg, AppSettings.ImageOutputSize.Width, AppSettings.ImageOutputSize.Height);
+                bmTest.Save(AppSettings.PathToOutputDataset + AppSettings.SubDirImg + AppSettings.SubDirPredTest + Session.CurrentImageFileName+".jpg");
+                bmTest.Dispose();
 
                 for (int idxZoom = 0; idxZoom < AppSettings.ZoomFactors.Length; idxZoom++)
                 {
@@ -1926,6 +1937,7 @@ namespace ImageSegmenter
                                     ProcessAugmentationAndSave(idxImg, zoomFactor, tiltAngle, 1, contrastEnhancement, noiseAdder, idxNoise, rnd);
                                 }
                             }
+                            Application.DoEvents();
                         }
                     }
                 }

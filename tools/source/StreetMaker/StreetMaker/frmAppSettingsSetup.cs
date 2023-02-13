@@ -170,6 +170,9 @@ namespace StreetMaker
             nudMaxLaneCountLeftRight.Value = (decimal)editSettings.MaxLaneCountLeftRight;
             nudMaxLaneCountCenter.Value = (decimal)editSettings.MaxLaneCountCenter;
 
+            nudDefaultCurveAngle.Value = (decimal)editSettings.DefaultCurveAngle;
+            nudDefaultRampCurveAngle.Value = (decimal)editSettings.DefaultRampCurveAngle;
+
             nudStreetOutlineLineWidth.Value = (decimal)editSettings.StreetOutlineLineWidth;
             nudOverlayOutlineLineWidth.Value = (decimal)editSettings.OverlayOutlineLineWidth;
 
@@ -278,6 +281,9 @@ namespace StreetMaker
             editSettings.AngleStep = (double)nudAngleStep.Value;
             editSettings.MaxLaneCountLeftRight = (int)nudMaxLaneCountLeftRight.Value;
             editSettings.MaxLaneCountCenter = (int)nudMaxLaneCountCenter.Value;
+
+            editSettings.DefaultCurveAngle = (double)nudDefaultCurveAngle.Value;
+            editSettings.DefaultRampCurveAngle = (double)nudDefaultRampCurveAngle.Value;
 
             editSettings.StreetOutlineLineWidth = (double)nudStreetOutlineLineWidth.Value;
             editSettings.OverlayOutlineLineWidth =(double)nudOverlayOutlineLineWidth.Value;

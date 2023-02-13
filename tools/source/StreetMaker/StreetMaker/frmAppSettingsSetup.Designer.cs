@@ -1200,7 +1200,7 @@
             // 
             // nudOverlayOutlineLineWidth
             // 
-            this.nudOverlayOutlineLineWidth.DecimalPlaces = 6;
+            this.nudOverlayOutlineLineWidth.DecimalPlaces = 3;
             this.nudOverlayOutlineLineWidth.Location = new System.Drawing.Point(178, 279);
             this.nudOverlayOutlineLineWidth.Maximum = new decimal(new int[] {
             1000000,
@@ -1225,7 +1225,7 @@
             // 
             // nudStreetOutlineLineWidth
             // 
-            this.nudStreetOutlineLineWidth.DecimalPlaces = 6;
+            this.nudStreetOutlineLineWidth.DecimalPlaces = 3;
             this.nudStreetOutlineLineWidth.Location = new System.Drawing.Point(178, 253);
             this.nudStreetOutlineLineWidth.Maximum = new decimal(new int[] {
             1000000,
@@ -1380,7 +1380,7 @@
             // 
             // nudDefaultRampCurveAngle
             // 
-            this.nudDefaultRampCurveAngle.DecimalPlaces = 6;
+            this.nudDefaultRampCurveAngle.DecimalPlaces = 3;
             this.nudDefaultRampCurveAngle.Location = new System.Drawing.Point(178, 97);
             this.nudDefaultRampCurveAngle.Maximum = new decimal(new int[] {
             1000000,
@@ -1406,7 +1406,7 @@
             // 
             // nudDefaultCurveAngle
             // 
-            this.nudDefaultCurveAngle.DecimalPlaces = 6;
+            this.nudDefaultCurveAngle.DecimalPlaces = 3;
             this.nudDefaultCurveAngle.Location = new System.Drawing.Point(178, 71);
             this.nudDefaultCurveAngle.Maximum = new decimal(new int[] {
             1000000,
@@ -1913,7 +1913,7 @@
             this.pnControl.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnControl.Location = new System.Drawing.Point(0, 801);
             this.pnControl.Name = "pnControl";
-            this.pnControl.Size = new System.Drawing.Size(935, 48);
+            this.pnControl.Size = new System.Drawing.Size(940, 48);
             this.pnControl.TabIndex = 18;
             // 
             // tcMain
@@ -1924,7 +1924,7 @@
             this.tcMain.Location = new System.Drawing.Point(0, 0);
             this.tcMain.Name = "tcMain";
             this.tcMain.SelectedIndex = 0;
-            this.tcMain.Size = new System.Drawing.Size(935, 801);
+            this.tcMain.Size = new System.Drawing.Size(940, 801);
             this.tcMain.TabIndex = 19;
             // 
             // tpDrawingSettings
@@ -1946,7 +1946,7 @@
             this.tpDrawingSettings.Location = new System.Drawing.Point(4, 22);
             this.tpDrawingSettings.Name = "tpDrawingSettings";
             this.tpDrawingSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tpDrawingSettings.Size = new System.Drawing.Size(927, 775);
+            this.tpDrawingSettings.Size = new System.Drawing.Size(932, 775);
             this.tpDrawingSettings.TabIndex = 1;
             this.tpDrawingSettings.Text = "Drawing Settings";
             // 
@@ -2007,7 +2007,7 @@
             this.tpDataGeneration.Location = new System.Drawing.Point(4, 22);
             this.tpDataGeneration.Name = "tpDataGeneration";
             this.tpDataGeneration.Padding = new System.Windows.Forms.Padding(3);
-            this.tpDataGeneration.Size = new System.Drawing.Size(927, 775);
+            this.tpDataGeneration.Size = new System.Drawing.Size(932, 775);
             this.tpDataGeneration.TabIndex = 2;
             this.tpDataGeneration.Text = "Data Generation";
             // 
@@ -3251,7 +3251,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(935, 849);
+            this.ClientSize = new System.Drawing.Size(940, 849);
             this.ControlBox = false;
             this.Controls.Add(this.tcMain);
             this.Controls.Add(this.pnControl);

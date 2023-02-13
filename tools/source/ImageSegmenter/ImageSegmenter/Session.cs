@@ -61,12 +61,19 @@ namespace ImageSegmenter
             else
                 SaveSessionInfo();
 
-            string[] fnames = Directory.GetFiles(pathToSourceImages,"*.jpg");
-            for (int i = 0; i < fnames.Length; i++)
+            try
             {
-                string fnameWithoutExtension = Path.GetFileNameWithoutExtension(fnames[i]);
-                if (AlreadyProcessed(fnameWithoutExtension) == false)
-                    remainingFiles.Add(fnameWithoutExtension);
+                string[] fnames = Directory.GetFiles(pathToSourceImages, "*.jpg");
+                for (int i = 0; i < fnames.Length; i++)
+                {
+                    string fnameWithoutExtension = Path.GetFileNameWithoutExtension(fnames[i]);
+                    if (AlreadyProcessed(fnameWithoutExtension) == false)
+                        remainingFiles.Add(fnameWithoutExtension);
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error loading images");
             }
         }
         #endregion Constructor

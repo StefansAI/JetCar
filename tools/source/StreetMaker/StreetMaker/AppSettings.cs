@@ -291,7 +291,7 @@ namespace StreetMaker
         public bool TestCenterViewsOnly = false;
 
         /// <summary>Step size for new images to be created along each lane.</summary>
-        public double ImageStepSize = 100;
+        public double ImageStepSize = 120;
 
         /// <summary>If true, brightness calculation results will be offset to center the min/max range.</summary>
         public bool CenterBrightnessResults = true;

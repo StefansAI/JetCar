@@ -35,6 +35,8 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnBrowsePathToPredictedMasks = new System.Windows.Forms.Button();
@@ -76,13 +78,16 @@
             this.dataColumn1 = new System.Data.DataColumn();
             this.dataColumn3 = new System.Data.DataColumn();
             this.dataColumn2 = new System.Data.DataColumn();
-            this.dataColumn4 = new System.Data.DataColumn();
             this.dgvSegmClasses = new System.Windows.Forms.DataGridView();
+            this.iDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.drawOrderDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.ckbInfoOutput = new System.Windows.Forms.CheckBox();
             this.ckbBrightnessContrastExclusive = new System.Windows.Forms.CheckBox();
             this.ckbTiltWithZoomOnly = new System.Windows.Forms.CheckBox();
             this.nudMaskDrawOrderMax = new System.Windows.Forms.NumericUpDown();
@@ -125,10 +130,12 @@
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.iDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.drawOrderDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.drawColorDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataColumn4 = new System.Data.DataColumn();
+            this.tbSubDirPredTest = new System.Windows.Forms.TextBox();
+            this.label31 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -361,6 +368,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.tbSubDirPredTest);
+            this.groupBox3.Controls.Add(this.label31);
             this.groupBox3.Controls.Add(this.tbSubDirVal);
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.tbSubDirTrain);
@@ -496,11 +505,6 @@
             this.dataColumn2.ColumnName = "DrawOrder";
             this.dataColumn2.DataType = typeof(uint);
             // 
-            // dataColumn4
-            // 
-            this.dataColumn4.ColumnName = "DrawColor";
-            this.dataColumn4.DataType = typeof(object);
-            // 
             // dgvSegmClasses
             // 
             this.dgvSegmClasses.AutoGenerateColumns = false;
@@ -522,6 +526,28 @@
             this.dgvSegmClasses.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvSegmClasses_CellFormatting);
             this.dgvSegmClasses.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvSegmClasses_CellPainting);
             this.dgvSegmClasses.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvSegmClasses_DataError);
+            // 
+            // iDDataGridViewTextBoxColumn
+            // 
+            this.iDDataGridViewTextBoxColumn.DataPropertyName = "ID";
+            this.iDDataGridViewTextBoxColumn.HeaderText = "ID";
+            this.iDDataGridViewTextBoxColumn.Name = "iDDataGridViewTextBoxColumn";
+            this.iDDataGridViewTextBoxColumn.ReadOnly = true;
+            this.iDDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            this.nameDataGridViewTextBoxColumn.Width = 200;
+            // 
+            // drawOrderDataGridViewTextBoxColumn
+            // 
+            this.drawOrderDataGridViewTextBoxColumn.DataPropertyName = "DrawOrder";
+            this.drawOrderDataGridViewTextBoxColumn.HeaderText = "DrawOrder";
+            this.drawOrderDataGridViewTextBoxColumn.Name = "drawOrderDataGridViewTextBoxColumn";
+            this.drawOrderDataGridViewTextBoxColumn.Width = 80;
             // 
             // colorDialog
             // 
@@ -564,6 +590,7 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.ckbInfoOutput);
             this.groupBox6.Controls.Add(this.ckbBrightnessContrastExclusive);
             this.groupBox6.Controls.Add(this.ckbTiltWithZoomOnly);
             this.groupBox6.Controls.Add(this.nudMaskDrawOrderMax);
@@ -593,6 +620,17 @@
             this.groupBox6.TabIndex = 8;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Output Parameter";
+            // 
+            // ckbInfoOutput
+            // 
+            this.ckbInfoOutput.AutoSize = true;
+            this.ckbInfoOutput.Location = new System.Drawing.Point(220, 47);
+            this.ckbInfoOutput.Name = "ckbInfoOutput";
+            this.ckbInfoOutput.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.ckbInfoOutput.Size = new System.Drawing.Size(139, 17);
+            this.ckbInfoOutput.TabIndex = 29;
+            this.ckbInfoOutput.Text = "Create Info Output Data";
+            this.ckbInfoOutput.UseVisualStyleBackColor = true;
             // 
             // ckbBrightnessContrastExclusive
             // 
@@ -820,7 +858,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(228, 21);
+            this.label13.Location = new System.Drawing.Point(223, 21);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(73, 13);
             this.label13.TabIndex = 2;
@@ -1081,27 +1119,27 @@
             this.dataGridViewTextBoxColumn5.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewTextBoxColumn5.Width = 80;
             // 
-            // iDDataGridViewTextBoxColumn
+            // dataGridViewTextBoxColumn6
             // 
-            this.iDDataGridViewTextBoxColumn.DataPropertyName = "ID";
-            this.iDDataGridViewTextBoxColumn.HeaderText = "ID";
-            this.iDDataGridViewTextBoxColumn.Name = "iDDataGridViewTextBoxColumn";
-            this.iDDataGridViewTextBoxColumn.ReadOnly = true;
-            this.iDDataGridViewTextBoxColumn.Width = 50;
+            this.dataGridViewTextBoxColumn6.DataPropertyName = "DrawColor";
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.White;
+            this.dataGridViewTextBoxColumn6.DefaultCellStyle = dataGridViewCellStyle8;
+            this.dataGridViewTextBoxColumn6.HeaderText = "DrawColor";
+            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            this.dataGridViewTextBoxColumn6.ReadOnly = true;
+            this.dataGridViewTextBoxColumn6.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewTextBoxColumn6.Width = 80;
             // 
-            // nameDataGridViewTextBoxColumn
+            // dataGridViewTextBoxColumn7
             // 
-            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
-            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
-            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            this.nameDataGridViewTextBoxColumn.Width = 200;
-            // 
-            // drawOrderDataGridViewTextBoxColumn
-            // 
-            this.drawOrderDataGridViewTextBoxColumn.DataPropertyName = "DrawOrder";
-            this.drawOrderDataGridViewTextBoxColumn.HeaderText = "DrawOrder";
-            this.drawOrderDataGridViewTextBoxColumn.Name = "drawOrderDataGridViewTextBoxColumn";
-            this.drawOrderDataGridViewTextBoxColumn.Width = 80;
+            this.dataGridViewTextBoxColumn7.DataPropertyName = "DrawColor";
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.White;
+            this.dataGridViewTextBoxColumn7.DefaultCellStyle = dataGridViewCellStyle9;
+            this.dataGridViewTextBoxColumn7.HeaderText = "DrawColor";
+            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            this.dataGridViewTextBoxColumn7.ReadOnly = true;
+            this.dataGridViewTextBoxColumn7.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewTextBoxColumn7.Width = 80;
             // 
             // drawColorDataGridViewTextBoxColumn
             // 
@@ -1113,6 +1151,27 @@
             this.drawColorDataGridViewTextBoxColumn.ReadOnly = true;
             this.drawColorDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.drawColorDataGridViewTextBoxColumn.Width = 80;
+            // 
+            // dataColumn4
+            // 
+            this.dataColumn4.ColumnName = "DrawColor";
+            this.dataColumn4.DataType = typeof(object);
+            // 
+            // tbSubDirPredTest
+            // 
+            this.tbSubDirPredTest.Location = new System.Drawing.Point(138, 71);
+            this.tbSubDirPredTest.Name = "tbSubDirPredTest";
+            this.tbSubDirPredTest.Size = new System.Drawing.Size(133, 20);
+            this.tbSubDirPredTest.TabIndex = 7;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(19, 74);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(94, 13);
+            this.label31.TabIndex = 8;
+            this.label31.Text = "Sub Dir Pred Test:";
             // 
             // frmAppSettings
             // 
@@ -1260,5 +1319,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn drawOrderDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn drawColorDataGridViewTextBoxColumn;
+        private System.Windows.Forms.CheckBox ckbInfoOutput;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private System.Windows.Forms.TextBox tbSubDirPredTest;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
     }
 }

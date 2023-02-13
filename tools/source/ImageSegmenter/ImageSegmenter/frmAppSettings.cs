@@ -57,6 +57,7 @@ namespace ImageSegmenter
 
             tbSubDirTrain.Text = AppSettings.SubDirTrain;
             tbSubDirVal.Text = AppSettings.SubDirVal;
+            tbSubDirPredTest.Text = AppSettings.SubDirPredTest;
 
             tbPrefixImg.Text = AppSettings.PrefixImg;
             tbPrefixMask.Text = AppSettings.PrefixMask;
@@ -77,6 +78,7 @@ namespace ImageSegmenter
             nudImageOutputSizeWidth.Value = (decimal)AppSettings.ImageOutputSize.Width;
             nudImageOutputSizeHeight.Value = (decimal)AppSettings.ImageOutputSize.Height;
             nudTrainValRatio.Value = (decimal)AppSettings.TrainValRatio;
+            ckbInfoOutput.Checked = AppSettings.InfoOutput;
             nudMaskDrawOrderMin.Value = (decimal)AppSettings.MaskDrawOrderMin;
             nudMaskDrawOrderMax.Value = (decimal)AppSettings.MaskDrawOrderMax;
 
@@ -115,6 +117,7 @@ namespace ImageSegmenter
 
             AppSettings.SubDirTrain = tbSubDirTrain.Text.TrimEnd(new char[] { '\\' }) + '\\';
             AppSettings.SubDirVal = tbSubDirVal.Text.TrimEnd(new char[] { '\\' }) + '\\';
+            AppSettings.SubDirPredTest = tbSubDirPredTest.Text.TrimEnd(new char[] { '\\' }) + '\\';
 
             AppSettings.PrefixImg = tbPrefixImg.Text;
             AppSettings.PrefixMask = tbPrefixMask.Text;
@@ -137,6 +140,7 @@ namespace ImageSegmenter
             AppSettings.ImageOutputSize.Width = (int)nudImageOutputSizeWidth.Value;
             AppSettings.ImageOutputSize.Height = (int)nudImageOutputSizeHeight.Value;
             AppSettings.TrainValRatio = (int)nudTrainValRatio.Value;
+            AppSettings.InfoOutput = ckbInfoOutput.Checked;
             AppSettings.MaskDrawOrderMin = (int)nudMaskDrawOrderMin.Value;
             AppSettings.MaskDrawOrderMax = (int)nudMaskDrawOrderMax.Value;
 

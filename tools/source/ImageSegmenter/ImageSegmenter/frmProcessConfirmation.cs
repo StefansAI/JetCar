@@ -30,7 +30,28 @@ namespace ImageSegmenter
         public frmProcessConfirmation(int MaxNumber)
         {
             InitializeComponent();
-            nudStartImageNumber.Maximum = (decimal)MaxNumber;
+            nudEndImageNumber.Value = (decimal)MaxNumber;
+            nudEndImageNumber.Maximum = (decimal)MaxNumber;
+        }
+
+        /// <summary>
+        /// Start number change handler to adjust end minimum.
+        /// </summary>
+        /// <param name="sender">Sender of the notification</param>
+        /// <param name="e">Standard event arguments.</param>
+        private void nudStartImageNumber_ValueChanged(object sender, EventArgs e)
+        {
+            nudEndImageNumber.Minimum = nudStartImageNumber.Value;
+        }
+
+        /// <summary>
+        /// End number change handler to adjust end minimum.
+        /// </summary>
+        /// <param name="sender">Sender of the notification</param>
+        /// <param name="e">Standard event arguments.</param>
+        private void nudEndImageNumber_ValueChanged(object sender, EventArgs e)
+        {
+            nudStartImageNumber.Maximum = nudEndImageNumber.Value;
         }
 
         /// <summary>
@@ -39,6 +60,14 @@ namespace ImageSegmenter
         public int StartImageNumber
         {
             get { return (int)nudStartImageNumber.Value;  }
+        }
+
+        /// <summary>
+        /// Gets the image index to end with.
+        /// </summary>
+        public int EndImageNumber
+        {
+            get { return (int)nudEndImageNumber.Value; }
         }
 
         /// <summary>
@@ -59,5 +88,6 @@ namespace ImageSegmenter
             DialogResult = DialogResult.OK;
             Close();
         }
-    }
+
+     }
 }

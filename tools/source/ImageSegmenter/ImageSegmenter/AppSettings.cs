@@ -78,6 +78,8 @@ namespace ImageSegmenter
         public string SubDirTrain = @"Train\";
         /// <summary>Sub directory name under PathToOutputDataset\XXX\ for augmented files for validation.</summary>
         public string SubDirVal = @"Val\";
+        /// <summary>Sub directory name under PathToOutputDataset\XXX\ for prediction source images.</summary>
+        public string SubDirPredTest = @"Test\";
 
         /// <summary>File name prefix for JPG image files.</summary>
         public string PrefixImg = "Img_";
@@ -133,7 +135,9 @@ namespace ImageSegmenter
         /// <summary>Image and mask output size for traing and validation.</summary>
         public Size ImageOutputSize = new Size(224, 224);
         /// <summary>Ratio between traing and validation output. 50 for instance means that about every 50th image,mask and info set will be placed into the validation folders instead of traing folders.</summary>
-        public int TrainValRatio = 50;
+        public int TrainValRatio = 25;
+        /// <summary>If true, the Info output data will be generated.</summary>
+        public bool InfoOutput = false;
         /// <summary>MaskDrawOrderMin and MaskDrawOrderMax allow creating a dataset excluding draw order levels outside of these limits.</summary>
         public int MaskDrawOrderMin = 0;
         /// <summary>MaskDrawOrderMin and MaskDrawOrderMax allow creating a dataset excluding draw order levels outside of these limits.</summary>
@@ -144,15 +148,15 @@ namespace ImageSegmenter
         public bool BrightnessContrastExclusive = true;
 
         /// <summary>Zoom factor values to go through in an augmentation run.</summary>
-        public float[] ZoomFactors = { 1.0f, 1.2f, 0.8f };
+        public float[] ZoomFactors = { 1.0f, 1.2f};
         /// <summary>Tilt angle values to go through in an augmentation run.</summary>
-        public int[] TiltAngles = { 0, 5, 10, 15, -5, -10, -15 };
+        public int[] TiltAngles = { 0, 15, -15 };
         /// <summary>Brightness factor values to go through in an augmentation run.</summary>
-        public float[] BrightnessFactors = { 1f, 0.8f, 1.2f };
+        public float[] BrightnessFactors = { 1f, 0.8f};
         /// <summary>Contrast enhancement values to go through in an augmentation run.</summary>
-        public float[] ContrastEnhancements = { 0, 0.5f };
+        public float[] ContrastEnhancements = { 0, 0.3f };
         /// <summary>Noise adder values to go through in an augmentation run.</summary>
-        public int[] NoiseAdders = { 0, 2, 4 };
+        public int[] NoiseAdders = { 4, 8 };
         #endregion DataSet output
 
         #region GUI parameter
@@ -203,12 +207,13 @@ namespace ImageSegmenter
         /// All directories and subdirectories will be created if they don't exist.
         /// If the XML file does not exists, it will be created by writing all defaults to that file.
         /// </summary>
-        /// <param name="FileName">Full path and file name of the AppSettings XML file.</param>
+        /// <param name="FileName">Full path and file name of the configuration file.</param>
         public AppSettings(string FileName)
         {
             FileNameAppSettings = FileName;
 
-            string rootFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Python\tf-gpu\JetCar\Data\";
+            //string rootFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\JetCar\Data\";
+            string rootFolder = Application.StartupPath + @"\JetCar\Data\";
             PathToSourceImages = rootFolder + PathToSourceImages;
             PathToSessionData = rootFolder + PathToSessionData;
             PathToOutputDataset = rootFolder + PathToOutputDataset;
@@ -226,9 +231,9 @@ namespace ImageSegmenter
         }
 
         /// <summary>
-        /// 
+        /// Creates an instance of the AppSettings class as a copy of the passed reference.
         /// </summary>
-        /// <param name="SourceSettings"></param>
+        /// <param name="SourceSettings">Reference to an AppSettings object to copy from.</param>
         public AppSettings(AppSettings SourceSettings)
         {
             SourceSettings.CopyTo(this);
@@ -253,6 +258,12 @@ namespace ImageSegmenter
 
             if (Directory.Exists(PathToOutputDataset + SubDir + SubDirVal) == false)
                 Directory.CreateDirectory(PathToOutputDataset + SubDir + SubDirVal);
+
+            if (Directory.Exists(PathToOutputDataset + SubDir + SubDirVal) == false)
+                Directory.CreateDirectory(PathToOutputDataset + SubDir + SubDirVal);
+
+            if ((SubDir == SubDirImg) && (Directory.Exists(PathToOutputDataset + SubDir + SubDirPredTest) == false))
+                Directory.CreateDirectory(PathToOutputDataset + SubDir + SubDirPredTest);
         }
         #endregion Private Methods
 
@@ -312,6 +323,7 @@ namespace ImageSegmenter
                 XmlNode nodeTrainVal = nodeSettings.SelectSingleNode("sub_dir_level_2");
                 SubDirTrain = nodeTrainVal.SelectSingleNode("train").InnerText.TrimEnd(new char[] { '\\' }) + '\\';
                 SubDirVal = nodeTrainVal.SelectSingleNode("val").InnerText.TrimEnd(new char[] { '\\' }) + '\\';
+                SubDirPredTest = nodeTrainVal.SelectSingleNode("test").InnerText.TrimEnd(new char[] { '\\' }) + '\\';
 
                 XmlNode nodePrefix = nodeSettings.SelectSingleNode("prefix");
                 PrefixImg = nodePrefix.SelectSingleNode("image").InnerText.TrimEnd(new char[] { '_' }) + '_';
@@ -350,6 +362,7 @@ namespace ImageSegmenter
                 }
 
                 TrainValRatio = Convert.ToInt32(nodeOutputParm.SelectSingleNode("train_val_ratio").InnerText);
+                InfoOutput = Convert.ToBoolean(nodeOutputParm.SelectSingleNode("info_output").InnerText);
                 MaskDrawOrderMin = Convert.ToInt32(nodeOutputParm.SelectSingleNode("mask_draw_order_min").InnerText);
                 MaskDrawOrderMax = Convert.ToInt32(nodeOutputParm.SelectSingleNode("mask_draw_order_max").InnerText);
 
@@ -439,6 +452,7 @@ namespace ImageSegmenter
                 XmlNode nodeTrainVal = nodeSettings.AppendChild(doc.CreateElement("sub_dir_level_2"));
                 nodeTrainVal.AppendChild(doc.CreateElement("train")).AppendChild(doc.CreateTextNode(SubDirTrain));
                 nodeTrainVal.AppendChild(doc.CreateElement("val")).AppendChild(doc.CreateTextNode(SubDirVal));
+                nodeTrainVal.AppendChild(doc.CreateElement("test")).AppendChild(doc.CreateTextNode(SubDirPredTest));
 
                 XmlNode nodePrefix = nodeSettings.AppendChild(doc.CreateElement("prefix"));
                 nodePrefix.AppendChild(doc.CreateElement("image")).AppendChild(doc.CreateTextNode(PrefixImg));
@@ -459,6 +473,7 @@ namespace ImageSegmenter
                 nodeOutputParm.AppendChild(doc.CreateElement("image_width")).AppendChild(doc.CreateTextNode(ImageOutputSize.Width.ToString()));
                 nodeOutputParm.AppendChild(doc.CreateElement("image_height")).AppendChild(doc.CreateTextNode(ImageOutputSize.Height.ToString()));
                 nodeOutputParm.AppendChild(doc.CreateElement("train_val_ratio")).AppendChild(doc.CreateTextNode(TrainValRatio.ToString()));
+                nodeOutputParm.AppendChild(doc.CreateElement("info_output")).AppendChild(doc.CreateTextNode(InfoOutput.ToString()));
                 nodeOutputParm.AppendChild(doc.CreateElement("mask_draw_order_min")).AppendChild(doc.CreateTextNode(MaskDrawOrderMin.ToString()));
                 nodeOutputParm.AppendChild(doc.CreateElement("mask_draw_order_max")).AppendChild(doc.CreateTextNode(MaskDrawOrderMax.ToString()));
 
