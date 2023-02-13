@@ -10,16 +10,16 @@ Something new was needed to create a street map in a much simpler way and could 
 This application is part of this repository. You can find the Windows executable and the full source code in the tools folder. <br>
 In the middle of the screen is the map area. On the left side is a tool bar with different street segments and on the right with intersections and overlays.
 <br>
-<br><img src="assets/images/streetmaker/03-outline.JPG"/><br>
+<br><img src="assets/images/streetmaker/03-outline.jpg"/><br>
 To start creating a new map, simply click on one of the tool buttons and then move the mouse over to the map. The outline appears with red and green connector boxes indicating in and out of the lanes.
 <br>
-<br><img src="assets/images/streetmaker/04-drop.JPG"/><br>
+<br><img src="assets/images/streetmaker/04-drop.jpg"/><br>
 Click on the map to drop it there.
 <br>
-<br><img src="assets/images/streetmaker/05-connectors.JPG"/><br>
+<br><img src="assets/images/streetmaker/05-connectors.jpg"/><br>
 Grab a curve piece and when moving over, lines appear to show where it can click together.
 <br>
-<br><img src="assets/images/streetmaker/06-autorot.JPG"/><br>
+<br><img src="assets/images/streetmaker/06-autorot.jpg"/><br>
 When getting the possible connectors even closer together, the curved segment auto rotates and can be moved into position. It can be also manually rotated with the hotkeys "R" to the right and "E" to the left.
 <br>
 <br><img src="assets/images/streetmaker/07-snap.JPG"/><br>
