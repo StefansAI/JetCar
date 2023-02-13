@@ -34,6 +34,7 @@ More documentation:
 - [Assembly](docs/Assembly.md)
 - [Firmware Setup](docs/Firmware%20Setup.md)
 - [Data Preparation with ImageSegmenter](docs/Data%20Preparation.md)
-- [Model Training](tools/jetcar_pytorch_unet_mobilenetv2_catalyst.ipynb)
+- [Model Training](docs/Model%20Training.md)
+- [Street Maker](docs/StreetMaker.md)
 
 
