@@ -21,13 +21,6 @@ echo $password | sudo -S ./install.sh
 echo $password | sudo -S service automagic-fan restart
 
 echo $password | sudo -SH pip3 install adafruit-circuitpython-servokit==1.3.0
-#echo $password | sudo -SH pip3 install segmentation-models-pytorch==0.1.2
-
-#cd $HOME
-#echo $password | sudo -S nvpmodel -m0
-
-#cd $HOME/jetcard
-#echo $password | sudo -S jupyter lab build
 
 cd $HOME
 mkdir JetCar
