@@ -26,8 +26,8 @@ echo $password | sudo -SH pip3 install adafruit-circuitpython-servokit==1.3.0
 #cd $HOME
 #echo $password | sudo -S nvpmodel -m0
 
-cd $HOME/jetcard
-echo $password | sudo -S jupyter lab build
+#cd $HOME/jetcard
+#echo $password | sudo -S jupyter lab build
 
 cd $HOME
 mkdir JetCar
@@ -35,7 +35,7 @@ cd JetCar
 mkdir notebooks
 cd notebooks
 
-python <<HEREDOC
+python3 <<HEREDOC
 import segmentation_models_pytorch as smp
 model = smp.Unet(encoder_name="mobilenet_v2", classes=10, activation='argmax2d')
 HEREDOC
