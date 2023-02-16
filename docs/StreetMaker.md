@@ -7,7 +7,7 @@ Making a street map with a lot of different templates, cut out of paper and hour
 Something new was needed to create a street map in a much simpler way and could possibly do much more ...
 <br>
 <br><img src="assets/images/streetmaker/02-sm_intro.JPG"/><br>
-This application is part of this repository. You can find the Windows executable and the full source code in the tools folder. <br>
+This application is part of this repository. You can find the <a href="https://github.com/StefansAI/JetCar/tree/main/tools/bin/StreetMaker">executable</a> and the <a href="https://github.com/StefansAI/JetCar/tree/main/tools/source/StreetMaker">full source code</a> in the tools folder. <br>
 In the middle of the screen is the map area. On the left side is a tool bar with different street segments and on the right with intersections and overlays.
 <br>
 <br><img src="assets/images/streetmaker/03-outline.jpg"/><br>
@@ -106,7 +106,7 @@ Of course, the camera point will always be on the lane it drives, so it should b
 <br>
 <br><img src="assets/images/streetmaker/30-data_generation.JPG"/><br>
 Understanding the dataset creation in StreetMaker will make it clearer to look at the "Data Generation" page of the "Settings" dialog. Besides similar folder and subfolder structure and class definitions as in ImageSegementer, there are a number of parameter around the virtual camera geometry. Unless there is a real need for a complete customization, it will not be necessary to change.<br>
-Even if it says 120 degrees of horizontal field of view for the camera and the actual camera module in the JetCar design states 145 degree, don't try to adjust it. Dealing with optical system for a long time, you'll have to accept that specifically wide angle lenses have their own rules because of the distortion. 120 can be seen as nominal and 145 after distortion.<br>
+Even if it says 120 degrees of horizontal field of view for the camera and the actual camera module in the JetCar design states 145 degree, don't try to adjust it. When dealing with optical system for a long time, you'll have to accept that specifically wide angle lenses have their own rules because of the distortion. 120 can be seen as nominal and 145 after distortion. The optical simulation here was also simplified.<br>
 Besides geometrical distortion, there are fields for color distortion. When the camera looks at a printout of a specific color, it does not see the same as the color printed out. Experimentally the overall brightness factor came out around 80%, but the red color was much higher around 95%. That's why there are 3 color correction values for creating a camera view image. A different camera and different lighting may result in other factors.<br>
 The last parameter "Mark Lane Max Front", "Mark Lane Max Side" and "Mask Max Detail Dist." determine how far out or to the side anything is represented in the mask and how far overlay details are generated. It doesn't make too much sense to train on a few pixel arrow or even a street far out. These limits create some kind of horizon for the mask.<br>
 The augmentation area shows similar parameter fields as in the ImageSegmenter and similar multiplication rules apply when adding more values. But there is also an "Image Step Size". This is exactly the step size moving the camera forward or backwards as described in the previous images above. Increasing this number will reduce the number of images in the dataset and decreasing the step size will result in more.<br>
@@ -123,4 +123,5 @@ The second file generated with each new dataset is the "JetCar_ColorMap.csv". Th
 <br>
 <br><img src="assets/images/streetmaker/33-large_map.JPG"/><br>
 With all discussed above, you can knock yourself out and create a nice large map like this one and buy some packages of paper. This one will consume 13x14=182 sheets of A3 paper or 17x11 and is about 4.9x3.2 meter or 16x10.4 feet big. But it doesn't even contain center lanes or crosswalks. <br>
-The problem at this point is, that the StreetMaker can generate scenes the firmware is not yet able to handle and the JetCar code will have to catch up to that. But it can be imagined that at some point the car should find it's own way for instance from any given point to a specific parking space as a destination point. Something for the next extensions.
+The problem at this point is, that the StreetMaker can generate scenes, which the firmware currently does not yet handle. The JetCar code will have to catch up to that. <br>
+It can be imagined that at some point later the map should be integrated into the code like a phone map and the car should find it's own way for instance from any given point to a specific parking space as a destination point. Something for the next extensions.

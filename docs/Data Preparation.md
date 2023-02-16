@@ -16,7 +16,7 @@ The <a href="https://github.com/NVIDIA-AI-IOT/jetbot">JetBot</a> project contain
 JetBot and JetCar use image sizes of 224x224 for the inference. For better data augmentation however, the recorded images are here 4 times as big in both dimensions. 
 <br>
 <br><img src="assets/images/data%20preparation/05-Data.JPG"/><br>
-Now a tool was needed to create masks for each image. This tool happens to be now part of this repository as compiled executable and as full source code project.<br>
+Now a tool was needed to create masks for each image. This tool happens to be now part of this repository as <a href="https://github.com/StefansAI/JetCar/tree/main/tools/bin/ImageSegmenter">compiled executable </a>and as <a href="https://github.com/StefansAI/JetCar/tree/main/tools/source/ImageSegmenter">full source code project.</a><br>
 The Data folder for the ImageSegementer has to have a subfolder called "Recording", where all captured images need to go. 
 <br>
 <br><img src="assets/images/data%20preparation/06-setup.JPG"/><br>
@@ -32,7 +32,7 @@ Every area to represent any specific class will have to be outlined with a polyg
 Every class polygon already entered will show up in the edit combobox. To identify the correct one out of several same classes, click on one and it will be highlighted as red filled polygon.
 <br>
 <br><img src="assets/images/data%20preparation/10-edit.jpg"/><br>
-Hit the "Edit Polygon" to make changes. The polygon points are marked as circles and can be grabbed with the left mouse button and moved around until the left mouse button is released. <br>Scroll the mouse wheel to zoom in or out from the current position. <br>To add a point, left click on the polygon and drag it in position. <br>To delet a point, right click on it.<br>
+Hit the "Edit Polygon" to make changes. The polygon points are marked as circles and can be grabbed with the left mouse button and moved around until the left mouse button is released. <br>Scroll the mouse wheel to zoom in or out from the current position. <br>To add a point, left click on the polygon line and the drag newly created point in position. <br>To delete a point, just right click on it.<br>
 The class selection box to the left shows the same class, but is accessible to change the assignment.<br>
 Hit the "End Edit" Button to finilize the changes made.
 <br>
