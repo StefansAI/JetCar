@@ -12,23 +12,28 @@ The goal is not speed or road following alone, but navigating on a street map au
   <img src="docs/assets/images/JetCar_Demo.gif" />
 </div>
 <br>
-The project is organized into following folders:<br><br>
+The project is organized into following folders:
+<br><br>
 
 1. firmware
     - jetcar: Jupyter notebooks and python files to run in the JetCar
     - offline_debug: python files for offline debugging of firmware recordings
-    - jetpack install script <br><br>
+    - jetpack install script 
+<br><br>
 
 2. mechanical
     - step_files: all step files of the car design
-    - stl_files: all stl files for 3D printer<br><br>
+    - stl_files: all stl files for 3D printer
+<br><br>
 
 3. tools
     - bin: Windows executables
     - source: Full C# source code projects for the executables 
-    - Jupyter notebook for training<br><br>
+    - Jupyter notebook for training
+<br><br>
 
-
+To download just one sub folder from this repository, <a href="https://www.gitkraken.com/learn/git/github-download#how-to-download-a-folder-from-github">read here</a> or enter the URL directly in <a href="https://download-directory.github.io/"> https://download-directory.github.io/.</a> 
+<br><br>
 More documentation:
 - [BOM](docs/BOM.md)
 - [Assembly](docs/Assembly.md)
@@ -37,4 +42,4 @@ More documentation:
 - [Model Training](docs/Model%20Training.md)
 - [Street Maker](docs/StreetMaker.md)
 
-
+<br><br>
