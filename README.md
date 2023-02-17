@@ -18,7 +18,7 @@ The project is organized into following folders:
 1. firmware
     - jetcar: Jupyter notebooks and python files to run in the JetCar
     - offline_debug: python files for offline debugging of firmware recordings
-    - jetpack install script 
+    - SD card install script 
 <br><br>
 
 2. mechanical
@@ -37,7 +37,7 @@ To download just one sub folder from this repository, <a href="https://www.gitkr
 More documentation:
 - [BOM](docs/BOM.md)
 - [Assembly](docs/Assembly.md)
-- [Firmware Setup](docs/Firmware%20Setup.md)
+- [SD Card Setup](docs/SD%20Card%20Setup.md)
 - [Data Preparation with ImageSegmenter](docs/Data%20Preparation.md)
 - [Model Training](docs/Model%20Training.md)
 - [Street Maker](docs/StreetMaker.md)
