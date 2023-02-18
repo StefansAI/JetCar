@@ -51,4 +51,9 @@ Have a look at the different files in this folder. There are 3 Jupyter notebooks
 Since from now on, all communications with the JetCar can go through Jupyter, the graphic user interface can be removed to save resources:
 <a href="https://lunar.computer/posts/nvidia-jetson-nano-headless/">Jetson Nano Headless</a><br>
 <br>
-In the end it might be also good to apply "sudo apt-get autoremove" and "sudo apt-get clean" from the Jupyter terminal for instance.
+In the end it might be also good to apply "sudo apt-get autoremove" and "sudo apt-get clean" from the Jupyter terminal for instance.<br><br>
+
+- [BOM](BOM.md)
+- [Assembly](Assembly.md)
+- [Data Preparation with ImageSegmenter](Data%20Preparation.md)
+

@@ -124,4 +124,8 @@ The second file generated with each new dataset is the "JetCar_ColorMap.csv". Th
 <br><img src="assets/images/streetmaker/33-large_map.jpg"/><br>
 With all discussed above, you can knock yourself out and create a nice large map like this one and buy some packages of paper. This one will consume 13x14=182 sheets of A3 paper or 17x11 and is about 4.9x3.2 meter or 16x10.4 feet big. But it doesn't even contain center lanes or crosswalks. <br>
 The problem at this point is, that the StreetMaker can generate scenes, which the firmware currently does not yet handle. The JetCar code will have to catch up to that. <br>
-It can be imagined that at some point later the map should be integrated into the code like a phone map and the car should find it's own way for instance from any given point to a specific parking space as a destination point. Something for the next extensions.
+It can be imagined that at some point later the map should be integrated into the code like a phone map and the car should find it's own way for instance from any given point to a specific parking space as a destination point. Something for the next extensions.<br><br>
+
+- [Data Preparation with ImageSegmenter](docs/Data%20Preparation.md)
+- [Operation](Operation.md)
+

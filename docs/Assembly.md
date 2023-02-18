@@ -138,8 +138,8 @@ Pluig in the flex cable of the camera into the Jetson Nano connector. Lift the p
 <br>
 <br><img src="assets/images/assembly/44-Done.jpg"/><br>
 Congratulation. It's done and ready to go.
-<br>
-<br>
+<br><br>
+
 - [BOM](BOM.md)
 - [SD Card Setup](SD%20Card%20Setup.md)
 </p>
