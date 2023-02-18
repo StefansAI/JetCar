@@ -106,13 +106,13 @@ The headlight LEDs have all their serial resistors in shrink tubes with the wire
 <br><img src="assets/images/assembly/33-LED_wiring_back.jpg"/><br>
 The back side is easier. The red wire is +5V connecting all serial pairs on one side. The other side goes directly to the PWM servo board outputs, which already have a serial resistor on board.
 <br>
-<br><img src="assets/images/assembly/34-front LEDs.jpg"/><br>
+<br><img src="assets/images/assembly/34-front_LEDs.jpg"/><br>
 Front view with LEDs.
 <br>
-<br><img src="assets/images/assembly/35-back LEDs.jpg"/><br>
+<br><img src="assets/images/assembly/35-back_LEDs.jpg"/><br>
 Back view with LEDs.
 <br>
-<br><img src="assets/images/assembly/36-connecting LEDs.jpg"/><br>
+<br><img src="assets/images/assembly/36-connecting_LEDs.jpg"/><br>
 Now comes the trickiest part of the whole assembly. The LED wires won't have so much room and need to be short. But this makes it really hard to plug in when putting the lower body part on the undercarriage.
 <br>
 <br><img src="assets/images/assembly/37-the_tricky_part.jpg"/><br>
