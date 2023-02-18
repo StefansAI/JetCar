@@ -41,5 +41,6 @@ More documentation:
 - [Data Preparation with ImageSegmenter](docs/Data%20Preparation.md)
 - [Model Training](docs/Model%20Training.md)
 - [Street Maker](docs/StreetMaker.md)
+- [Operation](docs/Operation.md)
 
 <br><br>
