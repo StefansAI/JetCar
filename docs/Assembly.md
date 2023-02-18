@@ -74,7 +74,7 @@ Mount the fan on top of the heatsink.
 <br><img src="assets/images/assembly/24-pioled.jpg"/><br>
 Solder the right angle header on the top side of the PiOLED display and plug it into the header connector of the Jetson Nano.
 <br>
-<br><img src="assets/images/assembly/25-Jetson Nano Header.jpg"/><br>
+<br><img src="assets/images/assembly/25-Jetson_Nano_Header.jpg"/><br>
 The I2C interface used for this OLED and the servo board is located at thelast pins of this connector. Grab some wires and note the colors used at the pins.
 <br>
 <br><img src="assets/images/assembly/26-oled.jpg"/><br>
@@ -92,7 +92,7 @@ After the Jetson Nano is started up, the OLED display shows the the IP address t
 <br><img src="assets/images/assembly/29-Basic_Motion.jpg"/><br>
 When connected, navigate to the Jupyter notebooks, open and run "JetCar_Basic_Motion". You can now move the sliders for steering and throttle. The sliders on top are only indicators, the ones at the bottom for adjustments. 
 <br>
-<br><img src="assets/images/assembly/30-LED_schematics.PNG"/><br>
+<br><img src="assets/images/assembly/30-LED_schematics.png"/><br>
 Adding LEDs to the setup is not necessary, but gives a nice touch. Here is the schematics for the wiring below.<br>
 In essence, all back and signal lights are wired as serial pairs without resistor, since there is one on the PWM board for each channel. These LEDs have a forward voltage of around 2V and use small currents. <br>
 The white headlights have forward voltages of 3.2V at 20mA and will have to get their own serial resistors. Each pair can now be driven by their individual H-bridge.
