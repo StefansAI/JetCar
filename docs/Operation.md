@@ -11,7 +11,7 @@ But in the end it all comes down to this execute handler, which is called for ea
 <img src="assets/images/operation/03-timing.jpg"/>
 A timing graph created from the SimpleTiming class logging shows, that the execution time occasionally spikes because of longer processing or because the system is busy. Skipping frames is essential to keep it in sync.
 <br><br>
-The core of the processing in the execute() handler to run the car comes down to the following:<br>
+The core of the processing in the execute() handler comes down to the following:<br>
 
 ```Python
 def execute(change):
@@ -50,15 +50,15 @@ The LaneTracker class first calls its get_lane_limits() method, which then calls
 The search can take longer initially for the first frame. But after that the changes between frames are relatively small and the search is faster. 
 <br>
 <img src="assets/images/operation/06-line1.jpg"/><br>
-The LaneLimit class then approximates a line through the found limit points and extrapolates additional point further out. <br>An originally implemented linear regression algorithm was occasionally too much effected by outliers to result in almost horizontal lines that it had to be replaced with the current algorithm averaging the slopes between the points.
+The LaneLimit class then approximates a line through the found limit points and extrapolates additional point further out. <br>An originally implemented linear regression algorithm was occasionally too much effected by outliers. It sometimes resulted in almost horizontal lines. So, it had to be replaced with the current algorithm averaging the slopes between the points, which works better here.
 <br>
 <img src="assets/images/operation/07-corr.jpg"/><br>
-Masks are not always as clean as this one and some outliers can be far out impacting the line approximation, which is used for the steering calculation later. So, the distance of each search point from the line is checked and outliers are adjusted in a second round. Here only one point on the right side above the yield line has been adjusted.
+Masks are not always as clean as this one. Sometimes outliers can be far out impacting the line approximation, which is used for the steering calculation later. So, the distance of each search point from the line is checked and outliers are adjusted in a second round. Here only one point on the right side above the yield line has been adjusted.
 <br>
 <img src="assets/images/operation/08-together.jpg"/><br>
 Back at the LaneTracker class, additional checks try to clean up more if the points are outside the expected lane width. It uses the standard deviations between points and line for each side to decide, if one side is too noisy to be trusted and might need correction. <br>
 The masks above are very clean and there was no need. But it can happen, that there are false classifications or many artefacts in the mask. The whole processing has to be stable enough to figure out the most probable direction.<br>
-The left side above now shows the final result of the left and right limits plus added points for the center of the driving lane and possible centers of the lanes left and right. The point arrays are passed to LaneCenter instances for left, center and right. More points are interpolated in between as seen on the right side. To avoid relying on single point decisions, the dominant class codes around each point is determined. The dominant class is the one code in the pixel neighborhood, that appears most. This gives now a very good sampling interval in each lane center.<br>
+The left side above now shows the final result of the left and right limits plus added points for the center of the driving lane and possible centers of the lanes left and right. The point arrays are passed to LaneCenter instances for left, center and right. More points are interpolated in between as seen on the right side. This gives now a very good sampling interval in each lane center. <br> To avoid relying on single point decisions, the dominant class codes around each point is determined. The dominant class is the one code in the pixel neighborhood, that appears most. A small artefact of few points can be suppressed this way.<br>
 The next step in the LaneCenter class is run-length encoding of the classes in each direction for object tracking. Here are the RLE lists from this example:
 
 |         Left objects          |         Center objects        |         Right objects         |
@@ -94,7 +94,7 @@ If the alive-number is low, the probability of this entry beeing a false detecti
 One more comment about the negative distances in the lists above. The distance of 0 starts at the number and increases from there out to the front. A negative value would indicate something under the car or behind. The camera would not be able to see it, so why is it kept in the list?<br>
 When approaching an intersection, there might be a left turn only arrow or a stop text. But getting closer to entering the intersection or at the stop line, it is already out of sight. Those objects will have to be kept in the lists to make the correct turn or to make a stop correctly. After the turn or passing the intersection, those entries need to be cleaned up via special calls.<br>
 The cleanup also sets the flags that all directions are allowed for the next intersection to come. Whenever an arrow appears, these flags are updated accordingly. So, when the next left or right turn code comes up and a direction was requested, these flags are checked before a turn can be initiated.<br>
-It can be imagined, that there are a lot of conditions to be checked while driving. The process() method of the LaneTracker class contains a lot of if-statements to make it work. And there are many defined thresholds, that worked for tested conditions. But real-world/real-time conditions might still cause the car making wrong decisions. Fortunately, nobody will be run over by a toy car and you can play around with the code to find better solutions.<br><br>
+It can be imagined, that there are a lot of conditions to be checked while driving. The process() method of the LaneTracker class contains many if-statements to make it work. And there are many defined thresholds, that worked for tested conditions. But real-world/real-time conditions might still cause the car making wrong decisions. Fortunately, nobody will be run over by a toy car and you can play around with the code to find better solutions.<br><br>
 Implementing a stop is relatively easy. Just keep the throttle at 0 for a bit and it looks like a stop. No traffic is expected at this point :-). So, a stop counter will do just fine.<br>
 Turning is a different problem. The lane ahead is our driving lane and the turn lane might be coded left turn or right turn lane. What happens while turning? The answer is: Chaos.<br>
 <img src="assets/images/operation/09-turn.jpg"/><br>
