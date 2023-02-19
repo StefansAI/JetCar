@@ -29,8 +29,8 @@ The dialog changed the extension to .txt, make sure to rename it back to .sh and
 Open the terminal and type:<br>
 
 ```
-chmod +x install.sh<br>
-./install.sh [root_password]<br>
+chmod +x install.sh
+./install.sh [root_password]
 ```
 
 The script will run now for about an hour to install everything needed.
