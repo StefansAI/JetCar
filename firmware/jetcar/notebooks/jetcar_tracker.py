@@ -327,6 +327,14 @@ class LaneTracker:
         self.lane_left.update_objects()
         self.lane_center.update_objects()
         self.lane_right.update_objects()
+
+        if jetcar_lane.DEBUG_MASK_IMG == True and jetcar_lane.DEBUG_MASK_IMG_LEFT_RIGHT == True:
+            mask_img = jetcar_lane.DEBUG_MASK_IMG_REFERENCE.copy()
+            mask_img = self.lane_left.draw_code_points(mask_img)
+            mask_img = self.lane_center.draw_code_points(mask_img)
+            mask_img = self.lane_right.draw_code_points(mask_img)
+            cv2.imwrite(f'{jetcar_lane.DEBUG_MASK_IMG_FILE_NAME}_class_pts.jpg',mask_img)
+
         return
 
     def set_direction_enables(self, code):
@@ -463,14 +471,17 @@ class LaneTracker:
                     break
 
             # If there were no arrows, but there is an intersection, check if straight forward is allowed
-            if self.intersection == True:
-                for i in range(len(self.lane_center.objects)):
+            if self.intersection == True and len(self.lane_center.objects) > 0:
+                for i in range(len(self.lane_center.objects)-1, 0):
                     if self.lane_center.objects[i].code in [NOTHING_CODE, SegmClass.lane_wrong_dir.value] and \
                        self.lane_center.objects[i].size >= CLASS_CODE_OBJ_MIN_SIZE and self.lane_center.objects[i].alive >= CLASS_CODE_OBJ_MIN_ALIVE:
-                        self.go_straight_allowed = False
-                        if DEBUG_PRINT_PROCESS_CLASSES == True:
-                            print("Straight not allowed! code: %d=%s in Nothing" % (self.lane_center.codes[N_CENTER_CLASS_POINTS-1].code,\
-                                                                                    SegmClass(self.lane_center.codes[N_CENTER_CLASS_POINTS-1].code).name))
+                        # Somethimes, the condition above becomes true when an intersection comes up after a curve, so check the neighbors too
+                        if self.lane_left.objects[len(self.lane_left.objects)-1].code in [NOTHING_CODE, SegmClass.lane_wrong_dir.value] and \
+                           self.lane_right.objects[len(self.lane_right.objects)-1].code in [NOTHING_CODE, SegmClass.lane_wrong_dir.value]:
+                            self.go_straight_allowed = False
+                            if DEBUG_PRINT_PROCESS_CLASSES == True:
+                                print("Straight not allowed! code: %d=%s in Nothing" % (self.lane_center.codes[N_CENTER_CLASS_POINTS-1].code,\
+                                                                                        SegmClass(self.lane_center.codes[N_CENTER_CLASS_POINTS-1].code).name))
 
         # Found intersection conditions
         if self.intersection == True:
