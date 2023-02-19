@@ -47,7 +47,7 @@ Mounte the servo with arm to the front axle using the tapping screws.
 Mount the servo push rod by gently pressing it over the 2 balls of servo arm and steering rack until it snaps in.
 <br>
 <br><img src="assets/images/assembly/16-Wiring_Diagram.jpg"/><br>
-This is the wiring diagram including optional LED lights. The pin assignment shown represents the current connections. But they can be completely re-arranged. If so, don't forget to change the channel definitions in JetCar_Car.py.
+This is the wiring diagram including optional LED lights. The pin assignment shown represents the current connections. But they can be completely re-arranged. If so, don't forget to change the channel definitions in <a href="https://github.com/StefansAI/JetCar/blob/main/firmware/jetcar/notebooks/jetcar_car.py">JetCar_Car.py</a>.
 <br>
 <br><img src="assets/images/assembly/17-power_cable.jpg"/><br>
 The right angle USB cable will be used as power cable.

@@ -17,7 +17,7 @@ After initial startup, go through the standard setup dialogs. As in the JetBot s
 For all startup initialization the Jetson Nano has to have a wired or wireless internet connection, which can be later replaced by a separate Wi-Fi.
 <br>
 <br><img src="assets/images/SD_card_setup/06-get_script.jpg"/><br>
-Open the browser and open github.com/StefansAI/JetCar/firmware and click on the file "install.sh". Once open, click on the RAW button in the upper right.
+Open the browser and open github.com/StefansAI/JetCar/firmware and click on the file <a href="https://github.com/StefansAI/JetCar/blob/main/firmware/install.sh">"install.sh"</a>. Once open, click on the RAW button in the upper right.
 <br>
 <br><img src="assets/images/SD_card_setup/07-save_page.jpg"/><br>
 Then go up the File menu and hit "Save page as.."
@@ -27,10 +27,12 @@ The dialog changed the extension to .txt, make sure to rename it back to .sh and
 <br>
 <br><img src="assets/images/SD_card_setup/09-execute.jpg"/><br>
 Open the terminal and type:<br>
+
 ```
 chmod +x install.sh<br>
 ./install.sh [root_password]<br>
 ```
+
 The script will run now for about an hour to install everything needed.
 <br>
 At this point, the JetCar can be cut off from the internet by switching Wi-Fi settings to a sandbox Wi-Fi. It will be best to use a separate Wi-Fi router or only connected to the PC to connect the JetCar to. This way, the JetCar will not have to share all the Wi-Fi traffic of the family watching Netflix, YouTube or Prime :-)
