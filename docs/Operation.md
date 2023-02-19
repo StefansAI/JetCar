@@ -1,16 +1,16 @@
 <h1 style="text-align: center;">JetCar</h1>
 <h2 style="text-align: center;">Operation</h2>
 <br>
-<img src="assets/images/operation/01-notebook.jpg"/><br>
+<img src="assets/images/operation/01-notebook.jpg"/>
 The self-driving functionality is implemented in the notebook <a href="https://github.com/StefansAI/JetCar/blob/main/firmware/jetcar/notebooks/JetCar_Auto_Drive.ipynb">JetCar_Auto_Drive.jpynb</a>. This notebook instantiates a couple of classes and GUI elements for visualization and control.
 It utilizes widgets, arranges them in a display layout and defines event handlers.
-<br>
-<img src="assets/images/operation/02-execute.jpg"/><br>
-But in the ned it all comes down to this execute handler, which is called for each new frame from the camera. Right at the beginning after getting the camera image this function exits immediately, if the last cycle ran over its time limit. For real-time processing it is better to skip a data sample than starting to buffer and increasing the reaction time.
-<br>
-<img src="assets/images/operation/03-timing.jpg"/><br>
+<br><br>
+<img src="assets/images/operation/02-execute.jpg"/>
+But in the end it all comes down to this execute handler, which is called for each new frame from the camera. Right at the beginning after getting the camera image this function exits immediately, if the last cycle ran over its time limit. For real-time processing it is better to skip a data sample than starting to buffer and increasing the reaction time.
+<br><br>
+<img src="assets/images/operation/03-timing.jpg"/>
 A timing graph created from the SimpleTiming class logging shows, that the execution time occasionally spikes because of longer processing or because the system is busy. Skipping frames is essential to keep it in sync.
-<br>
+<br><br>
 The core of the processing in the execute() handler to run the car comes down to the following:<br>
 
 ```Python
