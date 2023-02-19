@@ -1,12 +1,11 @@
 <h1 style="text-align: center;">JetCar</h1>
 <h2 style="text-align: center;">Assembly</h2>
 <br>
-<p style="text-align: center;">
- <img src="assets/images/assembly/01-printed_parts.jpg"/><br>
+<img src="assets/images/assembly/01-printed_parts.jpg"/><br>
 Get the parts from the 3D printer, remove the support layers and clean up the parts, sand them where necessary and make them smooth for assembly.
 <br>
 <br><img src="assets/images/assembly/02-steering.jpg"/><br>
-Start with the undercarraige and the steering parts. Place the wheel spindles on the undercarriage and make sure, they move and don't grind. File, sand or use drill bits where necessary to make them fit snug and smoth.
+Start with the undercarriage and the steering parts. Place the wheel spindles on the undercarriage and make sure, they move and don't grind. File, sand or use drill bits where necessary to make them fit snug and smooth.
 <br>
 <br><img src="assets/images/assembly/03-steering.jpg"/><br>
 Place the steering rack part and the front axle part on top of the wheel spindles and make sure again, it moves smoothly.
@@ -36,7 +35,7 @@ Since the steering does not work well with the original wheels, use the printed 
 Use the M3 screws to fix the front wheels to the wheel spindles.
 <br>
 <br><img src="assets/images/assembly/12-all_wheels.jpg"/><br>
-With all four wheels assembled it shoul look like this.
+Here it is with all four wheels assembled.
 <br>
 <br><img src="assets/images/assembly/13-servo_arm.jpg"/><br>
 Mount the servo arm to the servo. If you have a servo tester to center the servo first, then the screw can be tightened. Otherwise wait with tightening until the power up test later.
@@ -48,7 +47,7 @@ Mounte the servo with arm to the front axle using the tapping screws.
 Mount the servo push rod by gently pressing it over the 2 balls of servo arm and steering rack until it snaps in.
 <br>
 <br><img src="assets/images/assembly/16-Wiring_Diagram.jpg"/><br>
-This is the wiring diagram including optional LED lights. The pin assignment shown represents the current connections. But they can be completely re-arranged. If so, don't forget to change the channel assignemnts in JetCar_Car.py.
+This is the wiring diagram including optional LED lights. The pin assignment shown represents the current connections. But they can be completely re-arranged. If so, don't forget to change the channel definitions in JetCar_Car.py.
 <br>
 <br><img src="assets/images/assembly/17-power_cable.jpg"/><br>
 The right angle USB cable will be used as power cable.
@@ -57,13 +56,13 @@ The right angle USB cable will be used as power cable.
 Cut it at the end of the smaller connector.
 <br>
 <br><img src="assets/images/assembly/19-Cut_data_lines.jpg"/><br>
-Cut the data lines and leave only red (+) and black(-). Solder 3 pairs of extensions for the servo driver board and the 2 H-bridge boards. Use shrink tube to isolate and stabilize the wires.
+Cut the data lines and leave only red (+) and black (-) wires. Solder 3 pairs of extensions for the servo driver board and the 2 H-bridge boards. Use shrink tube to isolate and stabilize the wires.
 <br>
 <br><img src="assets/images/assembly/20-motor_wired.jpg"/><br>
 Plug in the wire connectors from the H-bridges to the servo board, the motor connectors to the H-bridge boards and the USB power cable connectors to all. (This picture does not match the wiring diagram above. It was a first test.)
 <br>
 <br><img src="assets/images/assembly/21-wifi_card.jpg"/><br>
-To prepare the Jetson Nano board, remove the nano module with the heatsink and plug the Wifi-board with the snapped in antennas in. Fix the wifi card with the original screw.
+To prepare the Jetson Nano board, remove the nano module with the heatsink and plug the Wi-Fi-board with the snapped in antennas in. Fix the Wi-Fi card with the original screw.
 <br>
 <br><img src="assets/images/assembly/22-nano_antennas.jpg"/><br>
 Snap the nano module back in place.
@@ -75,7 +74,7 @@ Mount the fan on top of the heatsink.
 Solder the right angle header on the top side of the PiOLED display and plug it into the header connector of the Jetson Nano.
 <br>
 <br><img src="assets/images/assembly/25-Jetson_Nano_Header.jpg"/><br>
-The I2C interface used for this OLED and the servo board is located at thelast pins of this connector. Grab some wires and note the colors used at the pins.
+The I2C interface used for this OLED and the servo board is located at the last pins of this connector. Grab some wires and note the colors used at the pins.
 <br>
 <br><img src="assets/images/assembly/26-oled.jpg"/><br>
 Make sure it sits on the correct pins.
@@ -87,10 +86,10 @@ Connect to the correct I2C pins on the servo board.
 Connect the 2 USB cables to the 2 battery ports and the system should start up for first testing. Make sure to have the micro SD card prepared correctly (see firmware setup) and inserted. The wheels should not touch the ground for this test.
 <br>
 <br><img src="assets/images/assembly/28a-IP-address.jpg"/><br>
-After the Jetson Nano is started up, the OLED display shows the the IP address the board is on at this moment. Now open a webbrowser and type in the top this address plus port number 8888. In this case 192.168.1.105:8888 to connect to the board. Attention: Go through the firmware setup first.
+After the Jetson Nano is started up, the OLED display shows the IP address the board is on at this moment. Now open a web browser and type in the top this address plus port number 8888. In this case 192.168.1.105:8888 to connect to the board. Attention: Go through the firmware setup first.
 <br>
 <br><img src="assets/images/assembly/29-Basic_Motion.jpg"/><br>
-When connected, navigate to the Jupyter notebooks, open and run "JetCar_Basic_Motion". You can now move the sliders for steering and throttle. The sliders on top are only indicators, the ones at the bottom for adjustments. 
+When connected, navigate to the Jupyter notebooks, open and run <a href="https://github.com/StefansAI/JetCar/blob/main/firmware/jetcar/notebooks/JetCar_Basic_Motion.ipynb">JetCar_Basic_Motion.jpynb</a>. You can now move the sliders for steering and throttle. The sliders on top are only indicators, the ones at the bottom for adjustments. 
 <br>
 <br><img src="assets/images/assembly/30-LED_schematics.png"/><br>
 Adding LEDs to the setup is not necessary, but gives a nice touch. Here is the schematics for the wiring below.<br>
@@ -98,7 +97,7 @@ In essence, all back and signal lights are wired as serial pairs without resisto
 The white headlights have forward voltages of 3.2V at 20mA and will have to get their own serial resistors. Each pair can now be driven by their individual H-bridge.
 <br>
 <br><img src="assets/images/assembly/31-LED_wiring.jpg"/><br>
-For the LED wiring use thinner and more flexible wires to connect between the LEDs and the the more stiffer ones with the connector just to get to the header. Fix the LEDs and wires with hot glue, which can be peeled off if needed.
+For the LED wiring use thinner and more flexible wires to connect between the LEDs and the stiffer ones with the connector just to get to the header. Fix the LEDs and wires with hot glue, which can be peeled off if needed.
 <br>
 <br><img src="assets/images/assembly/32-LED_wiring_front.jpg"/><br>
 The headlight LEDs have all their serial resistors in shrink tubes with the wires coming out to connect to the other side.
@@ -125,7 +124,7 @@ Now another test exactly the same way as above with the JetCar_Basic_Motion note
 Mount the upper body on top and fix with screws.
 <br>
 <br><img src="assets/images/assembly/40-battery.jpg"/><br>
-Plug in USB connectors and place battery in compartment after placing the switch piece into the opening. Sand it down if necessary. In the end it should easily turn on the battery pack with one click and turn off with a double click. The cables ar running on the side to the front.
+Plug in USB connectors and place battery in compartment after placing the switch piece into the opening. Sand it down if necessary. In the end it should easily turn on the battery pack with one click and turn off with a double click. The cables are running on the side to the front.
 <br>
 <br><img src="assets/images/assembly/41-flatbed.jpg"/><br>
 Now place the flatbed with the Jetson Nano on top. It slides under in the front and can be fixed with 2 screws in the back. Connect the power cable and the I2C wires with tweezers.
@@ -142,4 +141,4 @@ Congratulation. It's done and ready to go.
 
 - [BOM](BOM.md)
 - [SD Card Setup](SD%20Card%20Setup.md)
-</p>
+

@@ -1,6 +1,6 @@
 
-  <h1>Bill of Materials</h1>
-
+<h1>Bill of Materials</h1>
+<br>
 <h3>Needed parts</h3>
 <table>
 <thead>

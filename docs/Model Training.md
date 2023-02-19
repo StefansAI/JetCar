@@ -1,7 +1,6 @@
 <h1 style="text-align: center;">JetCar</h1>
 <h2 style="text-align: center;">Data Preparation with ImageSegmenter</h2>
 <br>
-<p style="text-align: center;">
 <br><img src="assets/images/model_training/01-anaconda.jpg"/><br>
 The training can be performed on the PC after installing <a href="https://docs.anaconda.com/anaconda/install/windows/">Anaconda</a> and then Jupyter notebook and many other tools and libraries. But training with thousands of images can easily take days and turn the PC into a heater. So, moving into the cloud removes the stress from the local machine.
 <br>
@@ -9,7 +8,7 @@ The training can be performed on the PC after installing <a href="https://docs.a
 The first step is getting a Google drive account and copy the dataset zip file there.
 <br>
 <br><img src="assets/images/model_training/03-colab.jpg"/><br>
-Then open the <a href="https://github.com/StefansAI/JetCar/tools/jetcar_pytorch_unet_mobilenetv2_catalyst.ipynb">training notebook</a> in <a href="https://colab.research.google.com/">Google Colab</a>. For faster execution and stable connections upgrade to Colab Pro or Colab Pro+ to purchase units. Make sure to change runtime type to GPU and High-RAM.
+Then open the <a href="https://github.com/StefansAI/JetCar/tree/main/tools/jetcar_pytorch_unet_mobilenetv2_catalyst.ipynb">training notebook</a> in <a href="https://colab.research.google.com/">Google Colab</a>. For faster execution and stable connections upgrade to Colab Pro or Colab Pro+ to purchase units. Make sure to change runtime type to GPU and High-RAM.
 <br>
 <br><img src="assets/images/model_training/04-constants.jpg"/><br>
 The notebook starts with defining a couple of constants. The ImageSegmenter defined 22 classes, so N_CLASSES should be 22.<br>

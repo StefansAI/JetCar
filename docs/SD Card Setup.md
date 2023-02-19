@@ -1,7 +1,6 @@
 <h1 style="text-align: center;">JetCar</h1>
 <h2 style="text-align: center;">SD Card Setup</h2>
 <br>
-<p style="text-align: center;">
 <br><img src="assets/images/SD_card_setup/01-jetpack.jpg"/><br>
 JetCar runs on the <a href="https://developer.nvidia.com/embedded/jetpack">Jetpack</a> image provided by NVIDIA. Several different versions are available for download and there is a lot of other information to find.
 <br><br>
@@ -28,11 +27,13 @@ The dialog changed the extension to .txt, make sure to rename it back to .sh and
 <br>
 <br><img src="assets/images/SD_card_setup/09-execute.jpg"/><br>
 Open the terminal and type:<br>
+```
 chmod +x install.sh<br>
 ./install.sh [root_password]<br>
+```
 The script will run now for about an hour to install everything needed.
 <br>
-At this point, the JetCar can be cut off from the internet by switching Wi-Fi settings to a sandbox Wi-Fi. It will be best to use a separate Wi-Fi router or only connected to the PC to connect the JetCar to. This way, the JetCar will not have to share all the Wi-Fi traffic of the family watching Netflix, Youtube or Prime :-)
+At this point, the JetCar can be cut off from the internet by switching Wi-Fi settings to a sandbox Wi-Fi. It will be best to use a separate Wi-Fi router or only connected to the PC to connect the JetCar to. This way, the JetCar will not have to share all the Wi-Fi traffic of the family watching Netflix, YouTube or Prime :-)
 <br>
 <br><img src="assets/images/assembly/28a-IP-address.jpg"/><br>
 After the installation, the PiOLED display should show an IP address. Open a browser on the PC and type that address in plus port number 8888. For instance in this case it would be 192.168.1.103:8888.

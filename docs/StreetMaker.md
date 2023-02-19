@@ -1,7 +1,6 @@
 <h1 style="text-align: center;">JetCar</h1>
 <h2 style="text-align: center;">StreetMaker</h2>
 <br>
-<p style="text-align: center;">
 <img src="assets/images/streetmaker/01-initial_streets.jpg"/><br>
 Making a street map with a lot of different templates, cut out of paper and hours of spray painting is a lot of work. It turned out to be too large to spread it out, when the garage had to be used for those big cars. :-(<br>
 Something new was needed to create a street map in a much simpler way and could possibly do much more ...
@@ -34,7 +33,7 @@ Pressing "A" instead of "S", left mouse click and drag will result in radius and
 <br>
 <br><img src="assets/images/streetmaker/10-properties.jpg"/><br>
 Right clicking on any street element bring up its property page dialog as seen here for the curve piece. Change the "Inner Radius" to 200mm and the "Curve Angle" to 90 degrees for instance.<br>
-There are many other parameter to change for each street element, like number of lanes in both directions and the limiting lines. In fact, each street can even be changed into any other street, except into intersections. But any intersection type can also be changed into any other intersection type.<br>
+There are many other parameters to change for each street element, like number of lanes in both directions and the limiting lines. In fact, each street can even be changed into any other street, except into intersections. But any intersection type can also be changed into any other intersection type.<br>
 After the change the curve might be separated from the straight street. Each element has a starting point as reference and changes are made to that reference, which might cause it to shorten or lengthen on the other side.
 <br>
 <br><img src="assets/images/streetmaker/11-offramp.jpg"/><br>
@@ -55,7 +54,7 @@ Use the hot key "A" when grabbing a connector on the right to drag it to the rig
 <br><img src="assets/images/streetmaker/16-straight.jpg"/><br>
 The other method is following: Add straight streets close enough for instance.
 <br>
-<br><img src="assets/images/streetmaker/17-properties.jpg"/><br>
+<br><img src="assets/images/streetmaker/17-properties.jpg"/><br>1 i
 Now open the property dialog of the T-Intersection. The entering streets are indexed and the numbering appears with the outline when hovering over the intersection. In this case, the length of "Street 0" can be adjusted to shift "Street 1" down closer to the desired connection.<br>
 Set "Street 0" length to 200mm.
 <br>
@@ -75,7 +74,7 @@ Now grab some street signs, like different arrows from the right and drop them a
 <br>
 <br><img src="assets/images/streetmaker/22-file.jpg"/><br>
 It's time to check on the menus. Open "File" and "Save" this map for continuing later via "Load". <br>"New Map" will start with a clear area of a choosable size.<br>
-Of course printing this map is possible from here too. Despite setting for instance a 1 inch margin in the "Page Setup" dialog all around, the printer might do it only on top and left, while the bottom and right margins end up smaller. To test out the printer without wasting colors, the "Print Outlines only" can be used. "Print" will send all pages in color.
+Of course printing this map is possible from here too. Despite setting for instance a 1-inch margin in the "Page Setup" dialog all around, the printer might do it only on top and left, while the bottom and right margins end up smaller. To test out the printer without wasting colors, the "Print Outlines only" can be used. "Print" will send all pages in color.
 <br>
 <br><img src="assets/images/streetmaker/23-edit.jpg"/><br>
 The "Edit" menu contains some special case items easily to guess from the texts. Let's have a look at "Settings".
@@ -91,27 +90,27 @@ Whenever there are some drawing artefacts left from ovberlapping elements while 
 "Show Item Numbers" and "Show Lane numbers" can be used for any identification for troubleshooting by overlaying the index of each street element in the internal list and the lane index of each street or intersection.
 <br>
 <br><img src="assets/images/streetmaker/26-process.jpg"/><br>
-When opening the "Process" menu, it might be surprising to see menu items similar to the ImageSegmenter application described before. As it turned out, when writing the StreetMaker application, most of the information needed for creating segmentation masks was already there. Connectors kept track of the directions and lines can be selected by type. The drawing area is a bird's eye view on the street map. What was needed was a camera view, a camera view of a wide angle camera with lens distortion from a certain height above the ground looking forward in a definied angle on the same map from a specific point of view.
+When opening the "Process" menu, it might be surprising to see menu items similar to the ImageSegmenter application described before. As it turned out, when writing the StreetMaker application, most of the information needed for creating segmentation masks was already there. Connectors kept track of the directions and lines can be selected by type. The drawing area is a bird's eye view on the street map. What was needed was a camera view, a camera view of a wide-angle camera with lens distortion from a certain height above the ground looking forward in a defined angle on the same map from a specific point of view.
 <br>
 <br><img src="assets/images/streetmaker/27-tbird.jpg"/><br>
-Let's steart a new map and just put a T-Intersection on a new map and see what dataset would be created when hitting "Create Dataset". 
+Let's start a new map and just put a T-Intersection on a new map and see what dataset would be created when hitting "Create Dataset". 
 <br>
 <br><img src="assets/images/streetmaker/28-CameraView.jpg"/><br>
-Similar to the ImageSegmenter application you can see, how different tilts, brightnesses and noise levels are applied, while the view seems to go forward and backwards. On the left side an artificial camera view is displayed, while a mask appears on the right side.<br>
-Of course, the camera view is totally artificial. It misses light reflections we had seen in the real images and other effects of a a real scene. But it is close enough for training a model, that might need only few additional real photos and masks from the ImageSegementer. 
+Similar to the ImageSegmenter application you can see, how different tilts, brightness values and noise levels are applied, while the view seems to go forward and backwards. On the left side an artificial camera view is displayed, while a mask appears on the right side.<br>
+Of course, the camera view is totally artificial. It misses light reflections we had seen in the real images and other effects of a real scene. But it is close enough for training a model, that might need only few additional real photos and masks from the ImageSegementer. 
 <br>
 <br><img src="assets/images/streetmaker/29-classimg.jpg"/><br>
 Here is an illustration on how the algorithm works. The white triangle represents the camera point and direction. It starts with lane 0 of street 0 close to the entry connector and goes forward to the end. Then it goes backwards on the other side. After that it repeats this scheme for the second street.<br>
 Of course, the camera point will always be on the lane it drives, so it should be the driving direction lane and the other side the wrong lane. Left and right turns are added depending on the view direction.
 <br>
 <br><img src="assets/images/streetmaker/30-data_generation.jpg"/><br>
-Understanding the dataset creation in StreetMaker will make it clearer to look at the "Data Generation" page of the "Settings" dialog. Besides similar folder and subfolder structure and class definitions as in ImageSegementer, there are a number of parameter around the virtual camera geometry. Unless there is a real need for a complete customization, it will not be necessary to change.<br>
-Even if it says 120 degrees of horizontal field of view for the camera and the actual camera module in the JetCar design states 145 degree, don't try to adjust it. When dealing with optical system for a long time, you'll have to accept that specifically wide angle lenses have their own rules because of the distortion. 120 can be seen as nominal and 145 after distortion. The optical simulation here was also simplified.<br>
+Understanding the dataset creation in StreetMaker will make it clearer to look at the "Data Generation" page of the "Settings" dialog. Besides similar folder and subfolder structure and class definitions as in ImageSegementer, there are a number of parameters around the virtual camera geometry. Unless there is a real need for a complete customization, it will not be necessary to change.<br>
+Even if it says 120 degrees of horizontal field of view for the camera and the actual camera module in the JetCar design states 145 degree, don't try to adjust it. When dealing with optical system for a long time, you'll have to accept that specifically wide-angle lenses have their own rules because of the distortion. 120 can be seen as nominal and 145 after distortion. The optical simulation here was also simplified.<br>
 Besides geometrical distortion, there are fields for color distortion. When the camera looks at a printout of a specific color, it does not see the same as the color printed out. Experimentally the overall brightness factor came out around 80%, but the red color was much higher around 95%. That's why there are 3 color correction values for creating a camera view image. A different camera and different lighting may result in other factors.<br>
-The last parameter "Mark Lane Max Front", "Mark Lane Max Side" and "Mask Max Detail Dist." determine how far out or to the side anything is represented in the mask and how far overlay details are generated. It doesn't make too much sense to train on a few pixel arrow or even a street far out. These limits create some kind of horizon for the mask.<br>
+The last parameter "Mark Lane Max Front", "Mark Lane Max Side" and "Mask Max Detail Dist." determine how far out or to the side anything is represented in the mask and how far overlay details are generated. It doesn't make too much sense to train on a few pixels arrow or even a street far out. These limits create some kind of horizon for the mask.<br>
 The augmentation area shows similar parameter fields as in the ImageSegmenter and similar multiplication rules apply when adding more values. But there is also an "Image Step Size". This is exactly the step size moving the camera forward or backwards as described in the previous images above. Increasing this number will reduce the number of images in the dataset and decreasing the step size will result in more.<br>
 There are some more checkboxes to be ignored for now, since they were introduced for testing different options. But the defaults are best.<br>
-The class definition table here on the right side is a bit different than the one in the ImageSegmenter not only because more class possibilities were introduced with StreetMaker, like crosswalks. Some items were also renamed slightly. But the column "UseCount" hints to another feature of this application. It will always optimize the class output to what is actually used in the particular street map. Every UseCount of 0 will be removed from the ClassCode enumeration. Note that the ClassCode is set to -1 for each class that is not used. This will result in an optimal set of classes for each individual map, which is more efficient for run-time execution but worse for exchangability of model weights between different maps. The compromise is training on a map with more classes used, but printing maps with subsets of that training map. <br>
+The class definition table here on the right side is a bit different than the one in the ImageSegmenter not only because more class possibilities were introduced with StreetMaker, like crosswalks. Some items were also renamed slightly. But the column "UseCount" hints to another feature of this application. It will always optimize the class output to what is actually used in the particular street map. Every UseCount of 0 will be removed from the ClassCode enumeration. Note that the ClassCode is set to -1 for each class that is not used. This will result in an optimal set of classes for each individual map, which is more efficient for run-time execution but worse for exchangeability of model weights between different maps. The compromise is training on a map with more classes used, but printing maps with subsets of that training map. <br>
 Let's have a look at the "File Names" group. When generating a new dataset, these 2 files are generated too and written to the data path.
 <br>
 <br><img src="assets/images/streetmaker/31-classes.jpg"/><br>
