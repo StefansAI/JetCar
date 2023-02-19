@@ -6,8 +6,38 @@ The self-driving functionality is implemented in the notebook <a href="https://g
 It utilizes widgets, arranges them in a display layout and defines event handlers.
 <br>
 <img src="assets/images/operation/02-execute.jpg"/><br>
-But in the ned it all comes down to this execute handler, which is called for each new frame from the camera. Right at the beginning after getting the camera image this function exits immediately, if the last cycle ran over its time limit. For real-time processing it is better to skip a data sample than starting to buffer and increasing the reaction time.<br>
-When continuing, the mask is generated via model inference and then it is processed by the tracker object.
+But in the ned it all comes down to this execute handler, which is called for each new frame from the camera. Right at the beginning after getting the camera image this function exits immediately, if the last cycle ran over its time limit. For real-time processing it is better to skip a data sample than starting to buffer and increasing the reaction time.
+<br>
+<img src="assets/images/operation/03-timing.jpg"/><br>
+A timing graph created from the SimpleTiming class logging shows, that the execution time occasionally spikes because of longer processing or because the system is busy. Skipping frames is essential to keep it in sync.
+<br>
+The core of the processing in the execute() handler to run the car comes down to the following:<br>
+
+```Python
+def execute(change):
+    # get the new frame
+    image = change['new']  
+    
+    # Infer camera frame and get the 8bit class mask
+    mask = model(preprocess(image)).detach().squeeze().cpu().numpy().astype(np.uint8)
+
+    # Now let the tracker object process the mask
+    tracker.process(mask, next_turn_direction)
+
+    # Pass on the steering and throttle values to the car object
+    car.steering = tracker.steering_value
+    car.throttle = tracker.throttle_value * throttle_value_slider.value
+    
+    # increment the image counter used in logging
+    img_count += 1
+    # Update turn signals and brake light
+    car.signal_left = tracker.signal_left_enable & (img_count >>1 ) & 1
+    car.signal_right = tracker.signal_right_enable & (img_count >>1 ) & 1
+    car.brake_light = tracker.brake_light_enable
+       
+```
+The mask is generated via model inference and then it is processed by the tracker object and its results are then passed on to the car.<br>
+Let's dive deeper:
 <br>
 <img src="assets/images/operation/03-flow.png"/><br>
 This graph shows the data flow. The LaneTracker class in the file <a href="https://github.com/StefansAI/JetCar/blob/main/firmware/jetcar/notebooks/jetcar_tracker.pyhttps://github.com/StefansAI/JetCar/blob/main/firmware/jetcar/notebooks/jetcar_tracker.py">jetcar_tracker.py</a> now passes the mask on to its LaneLimits (<a href="https://github.com/StefansAI/JetCar/blob/main/firmware/jetcar/notebooks/jetcar_lane.py">jetcar_lane.py</a>) instances and after some preparations to LaneCenter (<a href="https://github.com/StefansAI/JetCar/blob/main/firmware/jetcar/notebooks/jetcar_center.py">jetcar_center.py</a>) instances. In the end, the LaneTracker class calculates new steering and throttle values and signals, which are then passed on to the JetCar class instance by the notebook to control the servo, the motors and the LEDs.
@@ -74,3 +104,4 @@ In the implementation the LaneTracker class owns a steering_fixed_count, which i
 - [Data Preparation with ImageSegmenter](Data%20Preparation.md)
 - [Model Training](Model%20Training.md)
 - [Street Maker](StreetMaker.md)
+- [Debugging](Debugging.md)

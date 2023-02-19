@@ -1,10 +1,5 @@
 from jetcar_definitions import *
 
-RECORDING_DIR = "DebugData/"
-RECORDING_MIN = 0 
-RECORDING_MAX = 1000
-START_DIRECTION = Direction.Straight.value
-
 import cv2
 import PIL.Image
 import numpy as np
