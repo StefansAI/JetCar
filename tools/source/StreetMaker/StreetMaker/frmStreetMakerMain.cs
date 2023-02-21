@@ -1069,6 +1069,36 @@ namespace StreetMaker
                 frmCameraView.BringToFront();
         }
 
+        /// <summary>
+        /// ToolStripMenuItem click event handler to open the online documentation.
+        /// </summary>
+        /// <param name="sender">Sender of notification.</param>
+        /// <param name="e">Standard event arguments.</param>
+        private void tsmiOnlineHelp_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/StefansAI/JetCar/blob/main/docs/StreetMaker.md");
+        }
+
+        /// <summary>
+        /// ToolStripMenuItem click event handler to open the JetCar project page.
+        /// </summary>
+        /// <param name="sender">Sender of notification.</param>
+        /// <param name="e">Standard event arguments.</param>
+        private void tsmiJetCarProject_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/StefansAI/JetCar/");
+        }
+
+        /// <summary>
+        /// ToolStripMenuItem click event handler to open the about box.
+        /// </summary>
+        /// <param name="sender">Sender of notification.</param>
+        /// <param name="e">Standard event arguments.</param>
+        private void tsmiAbout_Click(object sender, EventArgs e)
+        {
+            (new AboutBox1()).Show();
+        }
+
         #endregion Menu Handler
 
         #region Add New Elements
@@ -1927,8 +1957,8 @@ namespace StreetMaker
 
 
 
-        #endregion Public Methods
 
+        #endregion Public Methods
 
     }
 }

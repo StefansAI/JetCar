@@ -81,22 +81,27 @@
             this.cbSegmClass = new System.Windows.Forms.ComboBox();
             this.lbCursorValuesLeft = new System.Windows.Forms.Label();
             this.pnLeft = new System.Windows.Forms.Panel();
-            this.pbLeft = new System.Windows.Forms.PixelPictureBox();
             this.pnRight = new System.Windows.Forms.Panel();
-            this.pbRight = new System.Windows.Forms.PixelPictureBox();
             this.pnMarginLeft = new System.Windows.Forms.Panel();
             this.pnMarginRight = new System.Windows.Forms.Panel();
             this.tmAutoMaskUpdateTrigger = new System.Windows.Forms.Timer(this.components);
             this.tmAutoMaskUpdateClear = new System.Windows.Forms.Timer(this.components);
             this.tmToggleMasks = new System.Windows.Forms.Timer(this.components);
+            this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOnlineDoc = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.pbRight = new System.Windows.Forms.PixelPictureBox();
+            this.pbLeft = new System.Windows.Forms.PixelPictureBox();
+            this.tsmiJetCarProject = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.pnControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudStepSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWindowSize)).BeginInit();
             this.pnLeft.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbLeft)).BeginInit();
             this.pnRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbRight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLeft)).BeginInit();
             this.SuspendLayout();
             // 
             // msMainMenu
@@ -106,7 +111,8 @@
             this.tsmiSetttings,
             this.tsmiProcess,
             this.tsmiPrevious,
-            this.tsmiNext});
+            this.tsmiNext,
+            this.tsmiHelp});
             this.msMainMenu.Location = new System.Drawing.Point(0, 0);
             this.msMainMenu.Name = "msMainMenu";
             this.msMainMenu.Size = new System.Drawing.Size(1884, 24);
@@ -608,22 +614,6 @@
             this.pnLeft.Size = new System.Drawing.Size(896, 896);
             this.pnLeft.TabIndex = 3;
             // 
-            // pbLeft
-            // 
-            this.pbLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbLeft.Location = new System.Drawing.Point(0, 0);
-            this.pbLeft.Name = "pbLeft";
-            this.pbLeft.Size = new System.Drawing.Size(896, 896);
-            this.pbLeft.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbLeft.TabIndex = 1;
-            this.pbLeft.TabStop = false;
-            this.pbLeft.Paint += new System.Windows.Forms.PaintEventHandler(this.pbLeft_Paint);
-            this.pbLeft.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pbLeft_MouseDoubleClick);
-            this.pbLeft.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbLeft_MouseDown);
-            this.pbLeft.MouseLeave += new System.EventHandler(this.pbLeft_MouseLeave);
-            this.pbLeft.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbLeft_MouseMove);
-            this.pbLeft.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbLeft_MouseUp);
-            // 
             // pnRight
             // 
             this.pnRight.Controls.Add(this.pbRight);
@@ -632,18 +622,6 @@
             this.pnRight.Name = "pnRight";
             this.pnRight.Size = new System.Drawing.Size(896, 896);
             this.pnRight.TabIndex = 4;
-            // 
-            // pbRight
-            // 
-            this.pbRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbRight.Location = new System.Drawing.Point(0, 0);
-            this.pbRight.Name = "pbRight";
-            this.pbRight.Size = new System.Drawing.Size(896, 896);
-            this.pbRight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbRight.TabIndex = 2;
-            this.pbRight.TabStop = false;
-            this.pbRight.MouseLeave += new System.EventHandler(this.pbRight_MouseLeave);
-            this.pbRight.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbRight_MouseMove);
             // 
             // pnMarginLeft
             // 
@@ -676,6 +654,71 @@
             this.tmToggleMasks.Interval = 1000;
             this.tmToggleMasks.Tick += new System.EventHandler(this.tmToggleMasks_Tick);
             // 
+            // tsmiHelp
+            // 
+            this.tsmiHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiOnlineDoc,
+            this.tsmiJetCarProject,
+            this.toolStripMenuItem3,
+            this.tsmiAbout});
+            this.tsmiHelp.Name = "tsmiHelp";
+            this.tsmiHelp.Size = new System.Drawing.Size(44, 20);
+            this.tsmiHelp.Text = "Help";
+            // 
+            // tsmiOnlineDoc
+            // 
+            this.tsmiOnlineDoc.Name = "tsmiOnlineDoc";
+            this.tsmiOnlineDoc.Size = new System.Drawing.Size(180, 22);
+            this.tsmiOnlineDoc.Text = "Online Doc";
+            this.tsmiOnlineDoc.Click += new System.EventHandler(this.tsmiOnlineDoc_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 6);
+            // 
+            // tsmiAbout
+            // 
+            this.tsmiAbout.Name = "tsmiAbout";
+            this.tsmiAbout.Size = new System.Drawing.Size(180, 22);
+            this.tsmiAbout.Text = "About";
+            this.tsmiAbout.Click += new System.EventHandler(this.tsmiAbout_Click);
+            // 
+            // pbRight
+            // 
+            this.pbRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbRight.Location = new System.Drawing.Point(0, 0);
+            this.pbRight.Name = "pbRight";
+            this.pbRight.Size = new System.Drawing.Size(896, 896);
+            this.pbRight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbRight.TabIndex = 2;
+            this.pbRight.TabStop = false;
+            this.pbRight.MouseLeave += new System.EventHandler(this.pbRight_MouseLeave);
+            this.pbRight.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbRight_MouseMove);
+            // 
+            // pbLeft
+            // 
+            this.pbLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbLeft.Location = new System.Drawing.Point(0, 0);
+            this.pbLeft.Name = "pbLeft";
+            this.pbLeft.Size = new System.Drawing.Size(896, 896);
+            this.pbLeft.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbLeft.TabIndex = 1;
+            this.pbLeft.TabStop = false;
+            this.pbLeft.Paint += new System.Windows.Forms.PaintEventHandler(this.pbLeft_Paint);
+            this.pbLeft.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pbLeft_MouseDoubleClick);
+            this.pbLeft.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbLeft_MouseDown);
+            this.pbLeft.MouseLeave += new System.EventHandler(this.pbLeft_MouseLeave);
+            this.pbLeft.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbLeft_MouseMove);
+            this.pbLeft.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbLeft_MouseUp);
+            // 
+            // tsmiJetCarProject
+            // 
+            this.tsmiJetCarProject.Name = "tsmiJetCarProject";
+            this.tsmiJetCarProject.Size = new System.Drawing.Size(180, 22);
+            this.tsmiJetCarProject.Text = "JetCar Project";
+            this.tsmiJetCarProject.Click += new System.EventHandler(this.tsmiJetCarProject_Click);
+            // 
             // frmImageSegmenterMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -704,9 +747,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudStepSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWindowSize)).EndInit();
             this.pnLeft.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbLeft)).EndInit();
             this.pnRight.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbRight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLeft)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -775,6 +818,11 @@
         private System.Windows.Forms.CheckBox ckbAutoToggleMasks;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox ckbShowSteeringAngles;
+        private System.Windows.Forms.ToolStripMenuItem tsmiHelp;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOnlineDoc;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAbout;
+        private System.Windows.Forms.ToolStripMenuItem tsmiJetCarProject;
     }
 }
 

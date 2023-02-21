@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("StreetMaker")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("StreetMaker is an application for creating street maps for the JetCar project. It allows printing of maps and creating datasets for model training to infer on the JetCar.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Stefan Warnke")]
 [assembly: AssemblyProduct("StreetMaker")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyCopyright("Copyright ©  2021-2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

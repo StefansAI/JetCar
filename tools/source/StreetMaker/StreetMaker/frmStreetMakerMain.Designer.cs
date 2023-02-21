@@ -50,6 +50,12 @@
             this.tsmiResizeMap = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiView = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRedraw = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiShowPageLimits = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowItemNumbers = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowLaneNumbers = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiProcess = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiCreateDataset = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
@@ -61,6 +67,10 @@
             this.tsmiDeleteDataset = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiWriteClassesAndColors = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAbort = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOnlineHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.ssMainStatus = new System.Windows.Forms.StatusStrip();
             this.tsslCursorValues = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslLocation = new System.Windows.Forms.ToolStripStatusLabel();
@@ -150,12 +160,7 @@
             this.ofdLoadStreetMap = new System.Windows.Forms.OpenFileDialog();
             this.pdPrintStreepMap = new System.Windows.Forms.PrintDialog();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
-            this.tsmiRedraw = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiShowPageLimits = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiShowItemNumbers = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiShowLaneNumbers = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiView = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiJetCarProject = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.tscTools.ContentPanel.SuspendLayout();
             this.tscTools.LeftToolStripPanel.SuspendLayout();
@@ -178,7 +183,8 @@
             this.tsmiEdit,
             this.tsmiView,
             this.tsmiProcess,
-            this.tsmiAbort});
+            this.tsmiAbort,
+            this.tsmiHelp});
             this.msMainMenu.Location = new System.Drawing.Point(0, 0);
             this.msMainMenu.Name = "msMainMenu";
             this.msMainMenu.Size = new System.Drawing.Size(1904, 24);
@@ -338,6 +344,57 @@
             this.tsmiSettings.ToolTipText = "Open the setup dialog for the application to change any of the parameter.";
             this.tsmiSettings.Click += new System.EventHandler(this.tsmiSettings_Click);
             // 
+            // tsmiView
+            // 
+            this.tsmiView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiRedraw,
+            this.toolStripSeparator18,
+            this.tsmiShowPageLimits,
+            this.tsmiShowItemNumbers,
+            this.tsmiShowLaneNumbers});
+            this.tsmiView.Name = "tsmiView";
+            this.tsmiView.Size = new System.Drawing.Size(44, 20);
+            this.tsmiView.Text = "View";
+            // 
+            // tsmiRedraw
+            // 
+            this.tsmiRedraw.Name = "tsmiRedraw";
+            this.tsmiRedraw.Size = new System.Drawing.Size(183, 22);
+            this.tsmiRedraw.Text = "Redraw";
+            this.tsmiRedraw.ToolTipText = "Redraw the current street map design to get rid of any possible edit artefacts.";
+            this.tsmiRedraw.Click += new System.EventHandler(this.tsmiRedraw_Click);
+            // 
+            // toolStripSeparator18
+            // 
+            this.toolStripSeparator18.Name = "toolStripSeparator18";
+            this.toolStripSeparator18.Size = new System.Drawing.Size(180, 6);
+            // 
+            // tsmiShowPageLimits
+            // 
+            this.tsmiShowPageLimits.CheckOnClick = true;
+            this.tsmiShowPageLimits.Name = "tsmiShowPageLimits";
+            this.tsmiShowPageLimits.Size = new System.Drawing.Size(183, 22);
+            this.tsmiShowPageLimits.Text = "Show Page Limits";
+            this.tsmiShowPageLimits.CheckStateChanged += new System.EventHandler(this.tsmiShowPageLimits_CheckStateChanged);
+            // 
+            // tsmiShowItemNumbers
+            // 
+            this.tsmiShowItemNumbers.CheckOnClick = true;
+            this.tsmiShowItemNumbers.Name = "tsmiShowItemNumbers";
+            this.tsmiShowItemNumbers.Size = new System.Drawing.Size(183, 22);
+            this.tsmiShowItemNumbers.Text = "Show Item Numbers";
+            this.tsmiShowItemNumbers.ToolTipText = "Turn on or off displaying all item numbers for all street elements.";
+            this.tsmiShowItemNumbers.CheckStateChanged += new System.EventHandler(this.tsmiShowItemNumbers_CheckStateChanged);
+            // 
+            // tsmiShowLaneNumbers
+            // 
+            this.tsmiShowLaneNumbers.CheckOnClick = true;
+            this.tsmiShowLaneNumbers.Name = "tsmiShowLaneNumbers";
+            this.tsmiShowLaneNumbers.Size = new System.Drawing.Size(183, 22);
+            this.tsmiShowLaneNumbers.Text = "Show Lane Numbers";
+            this.tsmiShowLaneNumbers.ToolTipText = "Turn on or off displaying the individual lane numbers for all street elements.";
+            this.tsmiShowLaneNumbers.CheckStateChanged += new System.EventHandler(this.tsmiShowLaneNumbers_CheckStateChanged);
+            // 
             // tsmiProcess
             // 
             this.tsmiProcess.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -433,6 +490,36 @@
             this.tsmiAbort.ToolTipText = "Abort the current DataSet generation process if not satisfied.";
             this.tsmiAbort.Visible = false;
             this.tsmiAbort.Click += new System.EventHandler(this.tsmiAbort_Click);
+            // 
+            // tsmiHelp
+            // 
+            this.tsmiHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiOnlineHelp,
+            this.tsmiJetCarProject,
+            this.toolStripMenuItem3,
+            this.tsmiAbout});
+            this.tsmiHelp.Name = "tsmiHelp";
+            this.tsmiHelp.Size = new System.Drawing.Size(44, 20);
+            this.tsmiHelp.Text = "Help";
+            // 
+            // tsmiOnlineHelp
+            // 
+            this.tsmiOnlineHelp.Name = "tsmiOnlineHelp";
+            this.tsmiOnlineHelp.Size = new System.Drawing.Size(180, 22);
+            this.tsmiOnlineHelp.Text = "Online Doc";
+            this.tsmiOnlineHelp.Click += new System.EventHandler(this.tsmiOnlineHelp_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 6);
+            // 
+            // tsmiAbout
+            // 
+            this.tsmiAbout.Name = "tsmiAbout";
+            this.tsmiAbout.Size = new System.Drawing.Size(180, 22);
+            this.tsmiAbout.Text = "About";
+            this.tsmiAbout.Click += new System.EventHandler(this.tsmiAbout_Click);
             // 
             // ssMainStatus
             // 
@@ -1354,56 +1441,12 @@
             // 
             this.pdPrintStreepMap.UseEXDialog = true;
             // 
-            // tsmiRedraw
+            // tsmiJetCarProject
             // 
-            this.tsmiRedraw.Name = "tsmiRedraw";
-            this.tsmiRedraw.Size = new System.Drawing.Size(183, 22);
-            this.tsmiRedraw.Text = "Redraw";
-            this.tsmiRedraw.ToolTipText = "Redraw the current street map design to get rid of any possible edit artefacts.";
-            this.tsmiRedraw.Click += new System.EventHandler(this.tsmiRedraw_Click);
-            // 
-            // toolStripSeparator18
-            // 
-            this.toolStripSeparator18.Name = "toolStripSeparator18";
-            this.toolStripSeparator18.Size = new System.Drawing.Size(180, 6);
-            // 
-            // tsmiShowPageLimits
-            // 
-            this.tsmiShowPageLimits.CheckOnClick = true;
-            this.tsmiShowPageLimits.Name = "tsmiShowPageLimits";
-            this.tsmiShowPageLimits.Size = new System.Drawing.Size(183, 22);
-            this.tsmiShowPageLimits.Text = "Show Page Limits";
-            this.tsmiShowPageLimits.CheckStateChanged += new System.EventHandler(this.tsmiShowPageLimits_CheckStateChanged);
-            // 
-            // tsmiShowItemNumbers
-            // 
-            this.tsmiShowItemNumbers.CheckOnClick = true;
-            this.tsmiShowItemNumbers.Name = "tsmiShowItemNumbers";
-            this.tsmiShowItemNumbers.Size = new System.Drawing.Size(183, 22);
-            this.tsmiShowItemNumbers.Text = "Show Item Numbers";
-            this.tsmiShowItemNumbers.ToolTipText = "Turn on or off displaying all item numbers for all street elements.";
-            this.tsmiShowItemNumbers.CheckStateChanged += new System.EventHandler(this.tsmiShowItemNumbers_CheckStateChanged);
-            // 
-            // tsmiShowLaneNumbers
-            // 
-            this.tsmiShowLaneNumbers.CheckOnClick = true;
-            this.tsmiShowLaneNumbers.Name = "tsmiShowLaneNumbers";
-            this.tsmiShowLaneNumbers.Size = new System.Drawing.Size(183, 22);
-            this.tsmiShowLaneNumbers.Text = "Show Lane Numbers";
-            this.tsmiShowLaneNumbers.ToolTipText = "Turn on or off displaying the individual lane numbers for all street elements.";
-            this.tsmiShowLaneNumbers.CheckStateChanged += new System.EventHandler(this.tsmiShowLaneNumbers_CheckStateChanged);
-            // 
-            // tsmiView
-            // 
-            this.tsmiView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiRedraw,
-            this.toolStripSeparator18,
-            this.tsmiShowPageLimits,
-            this.tsmiShowItemNumbers,
-            this.tsmiShowLaneNumbers});
-            this.tsmiView.Name = "tsmiView";
-            this.tsmiView.Size = new System.Drawing.Size(44, 20);
-            this.tsmiView.Text = "View";
+            this.tsmiJetCarProject.Name = "tsmiJetCarProject";
+            this.tsmiJetCarProject.Size = new System.Drawing.Size(180, 22);
+            this.tsmiJetCarProject.Text = "JetCar Project";
+            this.tsmiJetCarProject.Click += new System.EventHandler(this.tsmiJetCarProject_Click);
             // 
             // frmStreetMakerMain
             // 
@@ -1577,6 +1620,11 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiShowPageLimits;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowItemNumbers;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowLaneNumbers;
+        private System.Windows.Forms.ToolStripMenuItem tsmiHelp;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOnlineHelp;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAbout;
+        private System.Windows.Forms.ToolStripMenuItem tsmiJetCarProject;
     }
 }
 

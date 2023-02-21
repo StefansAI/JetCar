@@ -56,7 +56,7 @@ LIMIT_FOUND_CORRECTION_THRESHOLD = N_SEARCH_POINTS - 2
 # Few y coordinates for calculating the steering value
 STEERING_Y = [IMG_YMAX, (IMG_YMAX+IMG_YC)//2, IMG_YC]
 # Scaling factor from x coordinate to steering value
-STEERING_X_SCALE = 3.5*IMG_XC
+STEERING_X_SCALE = 2.5*IMG_XC
 # Number of cycles to stop at the wait line
 THROTTLE_STOP_CYCLES = 10
 # Throttle value when approaching an intersection
@@ -328,7 +328,7 @@ class LaneTracker:
         self.lane_center.update_objects()
         self.lane_right.update_objects()
 
-        if jetcar_lane.DEBUG_MASK_IMG == True and jetcar_lane.DEBUG_MASK_IMG_LEFT_RIGHT == True:
+        if jetcar_lane.DEBUG_MASK_IMG == True and jetcar_lane.DEBUG_MASK_IMG_CENTER == True:
             mask_img = jetcar_lane.DEBUG_MASK_IMG_REFERENCE.copy()
             mask_img = self.lane_left.draw_code_points(mask_img)
             mask_img = self.lane_center.draw_code_points(mask_img)

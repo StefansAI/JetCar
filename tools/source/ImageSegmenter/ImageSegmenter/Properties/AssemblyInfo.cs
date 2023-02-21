@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ImageSegmenter")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("This application is used to outline areas in the scene with polygons, creating code masks and datasets for model training for the JetCar project.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Stefan Warnke")]
 [assembly: AssemblyProduct("ImageSegmenter")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("Copyright ©  2020-2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

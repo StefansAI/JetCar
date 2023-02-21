@@ -67,9 +67,11 @@ DEBUG_MASK_IMG_FILE_NAME = None
 DEBUG_MASK_IMG_REFERENCE = None
 # Set to true for all image sequences left and right, when DEBUG_MASK_IMG is true
 DEBUG_MASK_IMG_LEFT_RIGHT = False
+# Set to true for all images of the center points, when DEBUG_MASK_IMG is true
+DEBUG_MASK_IMG_CENTER = False
 
 # Typical minimal width of a lane at the ORIGIN right in front of the car bumper
-ORIGIN_LANE_WIDTH = 75
+ORIGIN_LANE_WIDTH = 80
 # A tolerance adder of the lane width at the ORIGIN right in front of the car bumper
 ORIGIN_LANE_WIDTH_TOL = (2*ORIGIN_LANE_WIDTH)//3 # 30
 
@@ -255,7 +257,7 @@ class LaneLimitPoint(Point):
         the center straight ahead. The calculation is an approximation from
         real images of a 145 degree HOV camera.
         direction   -- Direction enum code to ininitialize for."""
-        dist_corr = (abs(self.default_origin_distance - OPTICAL_CENTER_Y_OFFS) * 3) //15
+        dist_corr = (abs(self.default_origin_distance - OPTICAL_CENTER_Y_OFFS) * 3) //19
         dist_corr += (max(self.default_origin_distance - IMG_YC//2, 0)) //10
         if direction != Direction.Left and direction != Direction.Right:
             dist_corr += abs(self.x - IMG_XC) //3
@@ -752,6 +754,10 @@ class LaneLimits:
                 s += "%3d,%3d:%s "%(self.points[i].x,self.points[i].y, tf[0])
             print(s)
 
+        if DEBUG_MASK_IMG == True and DEBUG_MASK_IMG_LEFT_RIGHT == True:
+            mask_img = self.draw_points_only(DEBUG_MASK_IMG_REFERENCE.copy())
+            cv2.imwrite(f'{DEBUG_MASK_IMG_FILE_NAME}_{self.side.name}_pts.jpg',mask_img)
+
         # now run line approximation and check and replace outliers for a limited 
         # number of repeatitions only, if necessary. The result should be a 
         # clean-up linear approximation of the lane limits
@@ -833,6 +839,25 @@ class LaneLimits:
 
         # draw all individual extrapolated points of the vector
         for i in range(N_SEARCH_POINTS,N_LANE_POINTS):
+            img = self.points[i].draw(img, bgr)
+
+        #return the resulting image
+        return img
+
+
+    def draw_points_only(self, img):
+        """ Method to draw found limit points 
+        onto the passed input image and return the resulting image.
+        img     -- image bitmap to draw to."""
+
+        # define a color depending on left or right side
+        if self.side == Side.Left:
+            bgr = (255,128,0)
+        else:
+            bgr = (255,0,128)
+
+        # draw all individual search points of the vector
+        for i in range(N_SEARCH_POINTS):
             img = self.points[i].draw(img, bgr)
 
         #return the resulting image

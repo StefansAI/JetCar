@@ -30,3 +30,13 @@ def make_or_clear_directory(directory_name):
         #files = [f for f in os.listdir(directory_name) if os.path.isfile(f)]
         for name in files:
             os.remove(os.path.join(directory_name, name))
+
+
+import pandas as pd
+
+def load_log_file(file_name):
+    log_file = None
+    if os.path.exists(file_name): 
+        log_file = pd.read_csv(file_name)
+        print('Log file loaded!')
+    return log_file

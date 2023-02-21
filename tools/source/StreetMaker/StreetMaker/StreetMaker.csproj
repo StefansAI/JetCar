@@ -50,6 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutBox1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox1.Designer.cs">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </Compile>
     <Compile Include="AppSettings.cs" />
     <Compile Include="BaseElement.cs" />
     <Compile Include="ConnectionIssue.cs" />
@@ -120,6 +126,9 @@
     <Compile Include="StreetMap.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="VirtualCamera.cs" />
+    <EmbeddedResource Include="AboutBox1.resx">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmAppSettingsSetup.resx">
       <DependentUpon>frmAppSettingsSetup.cs</DependentUpon>
     </EmbeddedResource>

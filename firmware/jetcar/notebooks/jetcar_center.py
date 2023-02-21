@@ -229,7 +229,7 @@ class LaneCenter:
         side            -- Defines if it is the center lane or left/right neighbor
         init_obj        -- Array of points in the lane center to use y-coordinates from"""
         self.side = side
-        self.origin = Point(IMG_XC + side.value*ORIGIN_LANE_WIDTH,IMG_YMAX)
+        self.origin = Point(IMG_XC + side.value*(ORIGIN_LANE_WIDTH-2),IMG_YMAX)
         self.points = [Point(IMG_XC, init_obj.points[i].y) for i in range(len(init_obj.points))]
         if side == Side.Center:
             w = CENTER_WINDOW_WIDTH
@@ -275,7 +275,6 @@ class LaneCenter:
             print(sc)       
 
         return
-
 
     def check_ttls(self):
         """ Decrement the TTL counters of all current objects and remove expired ones.
@@ -410,7 +409,25 @@ class LaneCenter:
         return STREET_ARROW_CODES[idx]
         
 
+    def draw_code_points(self, img):
+        """ Method to draw all code location points 
+        onto the passed input image and return the resulting image.
+        img     -- image bitmap to draw to."""
+
+        # define a color depending on left, center or right side
+        if self.side == Side.Center:
+            bgr = (128,128,128)
+        elif self.side == Side.Left:
+            bgr = (64, 64, 128)
+        else:
+            bgr = (64, 128, 64)
+
+        # draw all individual search points of the vector
+        for i in range(len(self.codes)):
+            img = self.codes[i].location.draw(img, bgr)
+
+        #return the resulting image
+        return img
+
 #============================================================================================
 
-
-#============================================================================================
