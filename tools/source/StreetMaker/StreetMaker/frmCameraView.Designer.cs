@@ -42,11 +42,16 @@
             this.pbPredictionImage = new System.Windows.Forms.PictureBox();
             this.lbStatus = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.pnCursor = new System.Windows.Forms.Panel();
+            this.lbMaskCursor = new System.Windows.Forms.Label();
+            this.lbPredCursor = new System.Windows.Forms.Label();
+            this.lbImgCursor = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbMaskImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCameraImg)).BeginInit();
             this.pnControl.SuspendLayout();
             this.pnButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPredictionImage)).BeginInit();
+            this.pnCursor.SuspendLayout();
             this.SuspendLayout();
             // 
             // pbMaskImage
@@ -58,6 +63,8 @@
             this.pbMaskImage.TabIndex = 6;
             this.pbMaskImage.TabStop = false;
             this.toolTip1.SetToolTip(this.pbMaskImage, "Generated object class map for the same scene as displayed in the camera view.");
+            this.pbMaskImage.MouseLeave += new System.EventHandler(this.pbCameraImg_MouseLeave);
+            this.pbMaskImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCameraImg_MouseMove);
             // 
             // pbCameraImg
             // 
@@ -68,12 +75,14 @@
             this.pbCameraImg.TabIndex = 5;
             this.pbCameraImg.TabStop = false;
             this.toolTip1.SetToolTip(this.pbCameraImg, "Artificial image of a camera view of the street scene.");
+            this.pbCameraImg.MouseLeave += new System.EventHandler(this.pbCameraImg_MouseLeave);
+            this.pbCameraImg.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCameraImg_MouseMove);
             // 
             // pnControl
             // 
             this.pnControl.Controls.Add(this.pnButtons);
             this.pnControl.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnControl.Location = new System.Drawing.Point(0, 479);
+            this.pnControl.Location = new System.Drawing.Point(0, 521);
             this.pnControl.Name = "pnControl";
             this.pnControl.Size = new System.Drawing.Size(1368, 40);
             this.pnControl.TabIndex = 4;
@@ -153,23 +162,64 @@
             this.pbPredictionImage.TabIndex = 7;
             this.pbPredictionImage.TabStop = false;
             this.toolTip1.SetToolTip(this.pbPredictionImage, "Prediction object code mask from the training run. ");
+            this.pbPredictionImage.MouseLeave += new System.EventHandler(this.pbCameraImg_MouseLeave);
+            this.pbPredictionImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCameraImg_MouseMove);
             // 
             // lbStatus
             // 
             this.lbStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lbStatus.Location = new System.Drawing.Point(0, 459);
+            this.lbStatus.Location = new System.Drawing.Point(0, 484);
             this.lbStatus.Name = "lbStatus";
-            this.lbStatus.Size = new System.Drawing.Size(1368, 20);
+            this.lbStatus.Size = new System.Drawing.Size(1368, 37);
             this.lbStatus.TabIndex = 8;
             this.lbStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.toolTip1.SetToolTip(this.lbStatus, "File name of the current camera view image. Mask and prediction filenames are ide" +
         "ntical except the prefix.");
             // 
+            // pnCursor
+            // 
+            this.pnCursor.Controls.Add(this.lbMaskCursor);
+            this.pnCursor.Controls.Add(this.lbPredCursor);
+            this.pnCursor.Controls.Add(this.lbImgCursor);
+            this.pnCursor.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnCursor.Location = new System.Drawing.Point(0, 464);
+            this.pnCursor.Name = "pnCursor";
+            this.pnCursor.Size = new System.Drawing.Size(1368, 20);
+            this.pnCursor.TabIndex = 9;
+            // 
+            // lbMaskCursor
+            // 
+            this.lbMaskCursor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbMaskCursor.Location = new System.Drawing.Point(453, 0);
+            this.lbMaskCursor.Name = "lbMaskCursor";
+            this.lbMaskCursor.Size = new System.Drawing.Size(462, 20);
+            this.lbMaskCursor.TabIndex = 2;
+            this.lbMaskCursor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbPredCursor
+            // 
+            this.lbPredCursor.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lbPredCursor.Location = new System.Drawing.Point(915, 0);
+            this.lbPredCursor.Name = "lbPredCursor";
+            this.lbPredCursor.Size = new System.Drawing.Size(453, 20);
+            this.lbPredCursor.TabIndex = 1;
+            this.lbPredCursor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbImgCursor
+            // 
+            this.lbImgCursor.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lbImgCursor.Location = new System.Drawing.Point(0, 0);
+            this.lbImgCursor.Name = "lbImgCursor";
+            this.lbImgCursor.Size = new System.Drawing.Size(453, 20);
+            this.lbImgCursor.TabIndex = 0;
+            this.lbImgCursor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // frmCameraView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1368, 519);
+            this.ClientSize = new System.Drawing.Size(1368, 561);
+            this.Controls.Add(this.pnCursor);
             this.Controls.Add(this.lbStatus);
             this.Controls.Add(this.pbPredictionImage);
             this.Controls.Add(this.pbMaskImage);
@@ -187,6 +237,7 @@
             this.pnControl.ResumeLayout(false);
             this.pnButtons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbPredictionImage)).EndInit();
+            this.pnCursor.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -205,5 +256,9 @@
         private System.Windows.Forms.Label lbStatus;
         private System.Windows.Forms.Label lbIdx;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Panel pnCursor;
+        private System.Windows.Forms.Label lbMaskCursor;
+        private System.Windows.Forms.Label lbPredCursor;
+        private System.Windows.Forms.Label lbImgCursor;
     }
 }

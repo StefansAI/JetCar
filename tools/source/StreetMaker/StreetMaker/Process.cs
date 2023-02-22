@@ -771,5 +771,34 @@ namespace StreetMaker
             return bmResult;
         }
 
+        /// <summary>
+        /// Gets the byte value of the SourceBitmap at the location of x,y.
+        /// </summary>
+        /// <param name="SourceBitmap">SourceBitmap in PixelFormat Format8bppIndexed</param>
+        /// <param name="x">x-coordinate of the pixel to read.</param>
+        /// <param name="y">y-coordinate of the pixel to read.</param>
+        /// <returns>Byte valye read from the bitmap coordinates x,y</returns>
+        public static byte Get8bitValue(Bitmap SourceBitmap, int x, int y)
+        {
+            if (SourceBitmap.PixelFormat != PixelFormat.Format8bppIndexed)
+                throw new Exception("Get8bitValue  SourceBitmap.PixelFormat has to be Format8bppIndexed!");
+
+            if ((x<0) || (x>= SourceBitmap.Width) || (y < 0) || (y >= SourceBitmap.Height))
+                throw new Exception("Get8bitValue x,y parameter out of range");
+
+            byte value=0;
+            unsafe
+            {
+                BitmapData bmdSource = SourceBitmap.LockBits(new Rectangle(0, 0, SourceBitmap.Width, SourceBitmap.Height), ImageLockMode.ReadWrite, SourceBitmap.PixelFormat);
+
+                int bppSource = System.Drawing.Bitmap.GetPixelFormatSize(SourceBitmap.PixelFormat) / 8;
+                byte* ptrBaseSource = (byte*)bmdSource.Scan0;
+                byte* currentLineSource = ptrBaseSource + (y * bmdSource.Stride);
+                value = currentLineSource[x * bppSource];
+                SourceBitmap.UnlockBits(bmdSource);
+            }
+            return value;
+        }
+
     }
 }

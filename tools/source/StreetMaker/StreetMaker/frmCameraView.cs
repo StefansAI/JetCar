@@ -41,6 +41,12 @@ namespace StreetMaker
         private int ImgIdx;
         /// <summary>Array of colors to be assigned to the mask codes in FileMode</summary>
         private Color[] colorPalette;
+        /// <summary>Array of strings to map code values to names.</summary>
+        private string[] classText;
+        /// <summary>Reference to the current code mask object.</summary>
+        private Bitmap codeMask;
+        /// <summary>Reference to the current prediction mask object</summary>
+        private Bitmap predMask;
         #endregion Private Fields
 
         #region Constructors
@@ -57,6 +63,8 @@ namespace StreetMaker
             PredPath = null;
             ImgFileNames = new List<string>();
             FileMode = false;
+            codeMask = null;
+            predMask = null;
             SetPredictionVisible(false);
         }
 
@@ -68,12 +76,16 @@ namespace StreetMaker
         public frmCameraView(frmStreetMakerMain MainForm, string[] SubDirs):this(MainForm)
         {
             FileMode = true;
+            codeMask = null;
+            predMask = null;
             string imgPath = MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.SubDirDataSet + MainForm.AppSettings.SubDirImg;
             //MaskPath = MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.SubDirDataSet + MainForm.AppSettings.SubDirMask + SubDir;
             PredPath = MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.SubDirDataSet + MainForm.AppSettings.SubDirPred;
 
             LoadPalette(MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.ColorMapFileName);
-            foreach(string subDir in SubDirs)
+            LoadClassTexts(MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.ClassTextFileName);
+
+            foreach (string subDir in SubDirs)
                 ImgFileNames.AddRange(Directory.GetFiles(imgPath+subDir));
             LoadImgAndMask(0);
         }
@@ -110,6 +122,40 @@ namespace StreetMaker
                     string[] s = sr.ReadLine().Split(new char[] { ',' });
                     Color color = Color.FromArgb(Convert.ToInt32(s[2]), Convert.ToInt32(s[1]), Convert.ToInt32(s[0]));
                     ColorPalette[idx++] = color;
+                }
+                sr.Close();
+            }
+        }
+
+        private void LoadClassTexts(string FileName)
+        {
+            classText = new string[256];
+            for (int i = 0; i < 256; i++)
+                classText[i] = "Unknown_#" + i.ToString();
+
+            if (File.Exists(FileName))
+            {
+                bool in_enum = false;
+                int n = 0;
+                StreamReader sr = new StreamReader(FileName);
+                while (!sr.EndOfStream)
+                {
+                    string line = sr.ReadLine();
+                    if (line.StartsWith("N_CLASSES"))
+                    {
+                        string[] s = line.Split(new char[] { '=' });
+                        n = Convert.ToInt32(s[1].Trim());
+                    }
+                    else if (line.StartsWith("class SegmClass"))
+                        in_enum = true;
+                    else if (line.Contains("#Unused"))
+                        in_enum = false;
+                    else if (in_enum == true)
+                    {
+                        string[] s = line.Split(new char[] { '=' });
+                        int idx = Convert.ToInt32(s[1].Trim());
+                        classText[idx] = s[0].Trim();
+                     }
                 }
                 sr.Close();
             }
@@ -154,18 +200,24 @@ namespace StreetMaker
                 s[s.Length - 2] = MainForm.AppSettings.SubDirMask;
                 string maskPath = Path.Combine(s).Replace(":", ":" + Path.DirectorySeparatorChar);
                 maskFileName = maskPath + Path.DirectorySeparatorChar + maskFileName + ".png";
-                BitmapMaskImage = Process.ImageColorMap((Bitmap)Bitmap.FromFile(maskFileName), ColorPalette, 255);
+                codeMask = (Bitmap)Bitmap.FromFile(maskFileName);
+                BitmapMaskImage = Process.ImageColorMap(codeMask, ColorPalette, 255);
 
                 string predFileName = imgFileName.Replace(MainForm.AppSettings.PrefixImg.ToLower(), MainForm.AppSettings.PrefixPred.ToLower());
                 predFileName = PredPath + Path.DirectorySeparatorChar + predFileName + ".png";
                 try
                 {
-                    BitmapPrediction = Process.ImageColorMap((Bitmap)Bitmap.FromFile(predFileName), ColorPalette, 255);
+                    predMask = (Bitmap)Bitmap.FromFile(predFileName);
+                    BitmapPrediction = Process.ImageColorMap(predMask, ColorPalette, 255);
                     PredictionVisible = true;
+                    lbPredCursor.Visible = true;
                 }
                 catch
                 {
+                    predMask = null;
                     BitmapPrediction = null;
+                    PredictionVisible = false;
+                    lbPredCursor.Visible = false;
                 }
             }
         }
@@ -211,6 +263,49 @@ namespace StreetMaker
             LoadImgAndMask(ImgFileNames.Count - 1);
         }
 
+
+        /// <summary>
+        /// Synchronized MouseMove event for all 3 views to display the value of the image or mask in the labels below the picture boxes.
+        /// </summary>
+        /// <param name="sender">Sender of the notification.</param>
+        /// <param name="e">Event arguments.</param>
+        private void pbCameraImg_MouseMove(object sender, MouseEventArgs e)
+        {
+            // it is assumed, that all 3 bitmaps have the same size and all 3 picture boxes have their same size.
+            float xfactor = (float)BitmapCameraView.Width/ pbCameraImg.Width ;
+            float yfactor = (float)BitmapCameraView.Height / pbCameraImg.Height;
+            int x = Math.Min(Math.Max((int)(e.X * xfactor), 0),BitmapCameraView.Width-1);
+            int y = Math.Min(Math.Max((int)(e.Y * yfactor), 0), BitmapCameraView.Height-1);
+
+            Color color = BitmapCameraView.GetPixel(x, y);
+            lbImgCursor.Text = "Img: x=" + x.ToString() + "  y=" + y.ToString() + "  R=" + color.R.ToString() + " G=" + color.G.ToString() + "  B=" + color.B.ToString();
+
+            int maskCode = Process.Get8bitValue(codeMask, x, y);
+            string maskCodeName = classText[maskCode];
+            lbMaskCursor.Text = "Mask: x=" + x.ToString() + "  y=" + y.ToString() + "  code=" + maskCode.ToString() + "  name=" + maskCodeName;
+
+            if (predMask != null)
+            {
+                int predCode = predMask.GetPixel(x, y).R; ;
+                string predCodeName = classText[predCode];
+                lbPredCursor.Text = "Pred: x=" + x.ToString() + "  y=" + y.ToString() + "  code=" + predCode.ToString() + "  name=" + predCodeName;
+
+                if (maskCode != predCode)
+                    lbMaskCursor.ForeColor = Color.Red;
+                else
+                    lbMaskCursor.ForeColor = Color.Black;
+            }
+            else lbMaskCursor.ForeColor = Color.Black;
+
+            lbPredCursor.ForeColor = lbMaskCursor.ForeColor;
+        }
+
+        private void pbCameraImg_MouseLeave(object sender, EventArgs e)
+        {
+            lbImgCursor.Text = "";
+            lbMaskCursor.Text = "";
+            lbPredCursor.Text = "";
+        }
         #endregion Private Methods
 
         #region Public Methods
@@ -330,6 +425,5 @@ namespace StreetMaker
         }
 
         #endregion Public Properties
-
     }
 }
