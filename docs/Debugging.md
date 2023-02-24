@@ -63,7 +63,16 @@ if True:
     jetcar_tracker.DEBUG_PRINT_HANDLE_DIRECTIONS = True
     jetcar_tracker.DEBUG_PRINT_PROCESS_CLASSES = True
 ```
-The main loop can be boiled down to just reading the files and process the mask and direction<br>:
+<br>
+After those definitions it loads these 2 files, that have to be available. One is the color map that matches the one from the JetCar. And the other one contains log entries from the run. The next direction requests, stored here, will be loaded with each frame below to synch up the recording run with the debug run.
+
+```Python
+color_map = load_color_map("jetcar_colormap.csv")
+log_file = load_log_file(os.path.join(RECORDING_DIR, "log_file.csv"))
+```
+
+<br>
+The main loop can be boiled down to just reading the files and process the mask and direction.<br>:
 
 ```Python
 for img_count in range(RECORDING_MIN,RECORDING_MAX):
@@ -78,6 +87,9 @@ for img_count in range(RECORDING_MIN,RECORDING_MAX):
         mask_path = os.path.join(RECORDING_DIR, filename)
         mask = np.load(mask_path,mmap_mode='r') 
         #...
+        if img_count < len(log_file.index):
+            next_direction = Direction[log_file.loc[img_count]['nextdir']]
+        #...
         if img_count > 0:
             tracker.process(mask, next_direction)
         
@@ -89,6 +101,8 @@ for img_count in range(RECORDING_MIN,RECORDING_MAX):
 ```
 
 Constants in Python are actually variables and can be changed at runtime and here it can be used as a benefit. You can change the direction at a specific frame number or turn on more logging at another frame number to dig into the code.<br>
+The next direction requests loaded from the log file can also be overwritten here if needed.
+<br>
 
 ```Python
         if img_count == 0:
