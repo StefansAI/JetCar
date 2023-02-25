@@ -1,6 +1,6 @@
 <h1 style="text-align: center;">JetCar</h1>
 <h2 style="text-align: center;">Debugging</h2>
-<br>
+<br><br>
 Debugging a real-time system is a special task. The GUI cannot give all the information needed to recognize an issue and it also might disappear very quickly. It is not possible to step through the code in real-time. The printf-commands can be very intrusive to the real-time performance and should be avoided.<br>
 What works well for real-time embedded systems is logging. If possible, log binary information in RAM to be stored and processed later. But here it was best to simply store the camera frame and the mask from the inference to the SD card. The system normally buffers in RAM and writes to SD in the background.<br>
 <img src="assets/images/debugging/01-notebook.jpg"/><br>
@@ -21,15 +21,16 @@ This enables these lines in the execute function:<br>
         save_img_and_mask(recording_dir, img_count, image, mask)
 ```
 With this, repeat the same scenario and let it record images and masks in the recording_dir. Just record enough to include the issue and then stop.
+<br><br>
 <img src="assets/images/debugging/02-zip_recording.jpg"/><br>
-Execute this cell after stopping and download the file "Recording.zip".<br>
+Execute this cell after stopping and download the file "Recording.zip".<br><br>
 <img src="assets/images/debugging/03-VS-env.jpg"/><br>
 Set up an environment with <a href="https://code.visualstudio.com/Download">Visual Code</a> for instance and copy the <a href="https://github.com/StefansAI/JetCar/tree/main/firmware/offline_debug">offline debug files</a> and all needed Python files from <a href="https://github.com/StefansAI/JetCar/tree/main/firmware/jetcar/notebooks">JetCar/notebooks/</a><br>:
 
-- jetcar_definitions.py
-- jetcar_tracker.py
-- jetcar_center.py
-- jetcar_lane.py
+- <a href="https://github.com/StefansAI/JetCar/tree/main/firmware/jetcar/notebooks/jetcar_definitions.py">jetcar_definitions.py</a>
+- <a href="https://github.com/StefansAI/JetCar/tree/main/firmware/jetcar/notebooks/jetcar_tracker.py">jetcar_tracker.py</a>
+- <a href="https://github.com/StefansAI/JetCar/tree/main/firmware/jetcar/notebooks/jetcar_center.py">jetcar_center.py</a>
+- <a href="https://github.com/StefansAI/JetCar/tree/main/firmware/jetcar/notebooks/jetcar_lane.py">jetcar_lane.py</a>
 
 Open <a href="https://github.com/StefansAI/JetCar/blob/main/firmware/offline_debug/offline_debug.py">offline_debug.py</a>. At the top it defines the input and output directories and the range of image/mask pairs to be processed:<br>
 
@@ -123,8 +124,8 @@ The next direction requests loaded from the log file can also be overwritten her
 
 ```
 
-Besides utilizing all the possible logging capabilities, you can now also step through the code. And you can break at a specific frame and then step through.<br><br>
-
+Besides utilizing all the possible logging capabilities, you can now also step through the code. And you can break at a specific frame and then step through.
+<br><br>
 <img src="assets/images/debugging/04-output.jpg"/><br>
 The output directory now contains readably mask images with overlaid information and more outputs for frame 22.<br><br>
 The Terminal window contains all the logging output for each frame. It could look like this for instance:<br>
@@ -166,4 +167,78 @@ steering value:0.209  dir:Straight
 Img: 21 ->processed!
 ```
 
+A log with all debug outputs turned on is just too much information to go through. It is best to leave all DEBUG_PRINT_... constants off and only enable the specific ones that are relevant for the current debugging goal.<br>
+It is very likely, that problems occur in the top level where all the decisions are made. This happens in these two methods of the LaneTracker class  in <a href="https://github.com/StefansAI/JetCar/tree/main/firmware/jetcar/notebooks/jetcar_tracker.py">jetcar_tracker.py</a>:
+<br>
+
+```Python
+    def process_classes(self, next_turn_direction: Direction):
+        """ Processes the objects in the center of the current lane and handles 
+        direction arrow street markings to determine the allowed directions of 
+        any intersection, the slow down and brake lights when entering an intersection
+        or acceleration when the intersection is passed.
+        next_turn_direction     -- direction code for the next upcoming turn.  """
+
+```
+<br>
+
+```Python
+    def handle_directions(self, mask, next_turn_direction: Direction):
+        """ Check for direction change request and look for left or right lane codes 
+        and initiate the turn when recognized. In case of no turn, a steering value is 
+        calculated to keep the car in the center of the current lane.
+        mask                -- segmentation mask containing the SegmClass code.
+        next_turn_direction -- direction code for the next upcoming turn. """
+```
+
+Many decisions are made using the constant definition at the top of <a href="https://github.com/StefansAI/JetCar/tree/main/firmware/jetcar/notebooks/jetcar_tracker.py">jetcar_tracker.py</a>. Before changing the code, it might help to change these constants:<br>
+
+```Python
+# When less points are found, run corrections on the points
+LIMIT_FOUND_CORRECTION_THRESHOLD = N_SEARCH_POINTS - 2
+# Few y coordinates for calculating the steering value
+STEERING_Y = [IMG_YMAX, (IMG_YMAX+IMG_YC)//2, IMG_YC]
+# Scaling factor from x coordinate to steering value
+STEERING_X_SCALE = 2.5*IMG_XC
+# Number of cycles to stop at the wait line
+THROTTLE_STOP_CYCLES = 10
+# Throttle value when approaching an intersection
+THROTTLE_VALUE_APPROACHING_INTERSECTION = 0.75
+# Throttle value when entering the inner intersection area
+THROTTLE_VALUE_ENTERING_INTERSECTION = 0.6
+# Throttle value to be used in a turn of an intersection
+THROTTLE_VALUE_IN_TURN = 0.8
+# Throttle value to be used in a curve outside intersections
+THROTTLE_VALUE_IN_CURVE = 0.9
+# Steering value threshold for reducing the speed to THROTTLE_VALUE_IN_CURVE
+THROTTLE_CURVE_STEERING_THRESHOLD = 0.3
+# Filter coefficient to low pass new throttle value with old one
+THROTTLE_VALUE_FILTER_COEFF = 0.25
+# Number of cycles to keep the current steering value when turning
+STEERING_FIXED_TURN_CYCLES = 16
+# Cycle count in fixed turn to switch to diagonal search
+STEERING_FIXED_TURN_DIAG_CYCLES = (STEERING_FIXED_TURN_CYCLES//2) + 2
+# Fixed steering value used for left turn, left turn can be wider
+STEERING_LEFT_TURN_VALUE = -0.8
+# Fixed steering value used for right turn, right turn must be tight
+STEERING_RIGHT_TURN_VALUE = 1.0
+# Minimum distance of left turn code to ORIGIN to start turning left
+MIN_TURN_LEFT_DISTANCE = 100
+# Minimum distance of right turn code to ORIGIN to start turning right
+MIN_TURN_RIGHT_DISTANCE = 60
+# Minimum limit found point count to check for switching back to straight after turn
+MINIMUM_LIMIT_FOUND_POINTS = (2*N_SEARCH_POINTS)//3
+# A threshold to smooth out small steering changes with a low pass
+STEERING_FILTER_THRESHOLD = 0.05
+# An average slope threshold for intersection detection to see if there is "Nothing" ahead
+AVG_SLOPE_THRESHOLD_INTERSECTION = 5
+# Switch back to straight direction when new average slope value goes above after turn
+AVG_SLOPE_THRESHOLD_STRAIGHT = 3
+# Switch to diagonal direction when new verage slope falls below
+AVG_SLOPE_THRESHOLD_DIAG = 0.9
+```
+<br><br><br>
+
+- [Operation](Operation.md)
+- [README](README.md)
 
