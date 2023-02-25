@@ -6,7 +6,7 @@ What works well for real-time embedded systems is logging. If possible, log bina
 <img src="assets/images/debugging/01-notebook.jpg"/><br>
 For this reason, the Jupyter notebook <a href="https://github.com/StefansAI/JetCar/blob/main/firmware/jetcar/notebooks/JetCar_Auto_Drive.ipynb">JetCar_Auto_Drive.jpynb</a> has this cell above. If there is any wrong behavior, set SAVE_IMG_AND_MASK to true:<br>
 
-```
+```Python
 recording_dir = "DebugData/"
 make_or_clear_directory(recording_dir)
 
@@ -15,7 +15,7 @@ SAVE_IMG_AND_MASK = True   # set to True for recording image and mask in real-ti
 
 This enables these lines in the execute function:<br>
 
-```
+```Python
  # If enabled, save image frame and mask 
     if SAVE_IMG_AND_MASK == True:
         save_img_and_mask(recording_dir, img_count, image, mask)
@@ -34,7 +34,7 @@ Set up an environment with <a href="https://code.visualstudio.com/Download">Visu
 
 Open <a href="https://github.com/StefansAI/JetCar/blob/main/firmware/offline_debug/offline_debug.py">offline_debug.py</a>. At the top it defines the input and output directories and the range of image/mask pairs to be processed:<br>
 
-```
+```Python
 RECORDING_MIN = 0 
 RECORDING_MAX = 1000
 RECORDING_DIR = "DebugData/"
