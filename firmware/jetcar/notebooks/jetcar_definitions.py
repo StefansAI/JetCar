@@ -43,38 +43,38 @@ N_CLASSES = 19
 
 # Definition of all segmentation class names and values
 class SegmClass(enum.Enum):
-	nothing = 0
-	white_shoulder_line = 1
-	yellow_solid_line = 2
-	yellow_dashed_line = 3
-	yellow_double_line = 4
-	lane_driving_dir = 5
-	lane_wrong_dir = 6
-	lane_left_turn = 7
-	lane_right_turn = 8
-	yield_line = 9
-	stop_line = 10
-	stop_text = 11
-	arrow_straight = 12
-	arrow_straight_left = 13
-	arrow_straight_right = 14
-	arrow_left_only = 15
-	arrow_right_only = 16
-	arrow_left_right = 17
-	parking_sign = 18
-	#Unused:
-	white_solid_line = 100
-	white_dashed_line = 101
-	white_double_line = 102
-	yellow_solid_dashed_line = 103
-	yellow_dashed_solid_line = 104
-	lane_limit_line = 105
-	lane_center = 106
-	yield_text = 107
-	crosswalk_lines = 108
-	crosswalk_zebra = 109
-	merge_left = 110
-	merge_right = 111
+    nothing = 0
+    white_shoulder_line = 1
+    yellow_solid_line = 2
+    yellow_dashed_line = 3
+    yellow_double_line = 4
+    lane_driving_dir = 5
+    lane_wrong_dir = 6
+    lane_left_turn = 7
+    lane_right_turn = 8
+    yield_line = 9
+    stop_line = 10
+    stop_text = 11
+    arrow_straight = 12
+    arrow_straight_left = 13
+    arrow_straight_right = 14
+    arrow_left_only = 15
+    arrow_right_only = 16
+    arrow_left_right = 17
+    parking_sign = 18
+    #Unused:
+    white_solid_line = 100
+    white_dashed_line = 101
+    white_double_line = 102
+    yellow_solid_dashed_line = 103
+    yellow_dashed_solid_line = 104
+    lane_limit_line = 105
+    lane_center = 106
+    yield_text = 107
+    crosswalk_lines = 108
+    crosswalk_zebra = 109
+    merge_left = 110
+    merge_right = 111
 
 # Declare some special codes used directly in the classes
 NOTHING_CODE =  SegmClass.nothing.value
