@@ -69,6 +69,7 @@
             this.tsmiAbort = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOnlineHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiJetCarProject = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.ssMainStatus = new System.Windows.Forms.StatusStrip();
@@ -160,7 +161,6 @@
             this.ofdLoadStreetMap = new System.Windows.Forms.OpenFileDialog();
             this.pdPrintStreepMap = new System.Windows.Forms.PrintDialog();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
-            this.tsmiJetCarProject = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.tscTools.ContentPanel.SuspendLayout();
             this.tscTools.LeftToolStripPanel.SuspendLayout();
@@ -410,6 +410,7 @@
             this.tsmiProcess.Name = "tsmiProcess";
             this.tsmiProcess.Size = new System.Drawing.Size(59, 20);
             this.tsmiProcess.Text = "Process";
+            this.tsmiProcess.DropDownOpening += new System.EventHandler(this.tsmiProcess_DropDownOpening);
             // 
             // tsmiCreateDataset
             // 
@@ -505,19 +506,26 @@
             // tsmiOnlineHelp
             // 
             this.tsmiOnlineHelp.Name = "tsmiOnlineHelp";
-            this.tsmiOnlineHelp.Size = new System.Drawing.Size(180, 22);
+            this.tsmiOnlineHelp.Size = new System.Drawing.Size(146, 22);
             this.tsmiOnlineHelp.Text = "Online Doc";
             this.tsmiOnlineHelp.Click += new System.EventHandler(this.tsmiOnlineHelp_Click);
+            // 
+            // tsmiJetCarProject
+            // 
+            this.tsmiJetCarProject.Name = "tsmiJetCarProject";
+            this.tsmiJetCarProject.Size = new System.Drawing.Size(146, 22);
+            this.tsmiJetCarProject.Text = "JetCar Project";
+            this.tsmiJetCarProject.Click += new System.EventHandler(this.tsmiJetCarProject_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(143, 6);
             // 
             // tsmiAbout
             // 
             this.tsmiAbout.Name = "tsmiAbout";
-            this.tsmiAbout.Size = new System.Drawing.Size(180, 22);
+            this.tsmiAbout.Size = new System.Drawing.Size(146, 22);
             this.tsmiAbout.Text = "About";
             this.tsmiAbout.Click += new System.EventHandler(this.tsmiAbout_Click);
             // 
@@ -1441,13 +1449,6 @@
             // 
             this.pdPrintStreepMap.UseEXDialog = true;
             // 
-            // tsmiJetCarProject
-            // 
-            this.tsmiJetCarProject.Name = "tsmiJetCarProject";
-            this.tsmiJetCarProject.Size = new System.Drawing.Size(180, 22);
-            this.tsmiJetCarProject.Text = "JetCar Project";
-            this.tsmiJetCarProject.Click += new System.EventHandler(this.tsmiJetCarProject_Click);
-            // 
             // frmStreetMakerMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1464,6 +1465,7 @@
             this.Text = "Street Maker";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmStreetMakerMain_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.frmStreetMakerMain_KeyUp);
+            this.Resize += new System.EventHandler(this.frmStreetMakerMain_Resize);
             this.msMainMenu.ResumeLayout(false);
             this.msMainMenu.PerformLayout();
             this.tscTools.ContentPanel.ResumeLayout(false);

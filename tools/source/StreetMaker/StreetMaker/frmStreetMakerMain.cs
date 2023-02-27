@@ -291,10 +291,20 @@ namespace StreetMaker
             }
         }
 
+        /// <summary>
+        /// Form resize event has to trigger a resize of the paint area.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void frmStreetMakerMain_Resize(object sender, EventArgs e)
+        {
+            pbDrawingArea_MouseWheel(null, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, -1000));
+        }
+
+
 
 
         #region Drawing Area Mouse Events
-
         /// <summary>
         /// PictureBox mouse wheel is used to zoom in and out keeping the current cursor position in the same place.
         /// </summary>
@@ -934,6 +944,27 @@ namespace StreetMaker
         }
 
 
+        private bool ExistsAndContainsFiles(string FullPath, string SearchPattern)
+        {
+            return Directory.Exists(FullPath) && Directory.GetFiles(FullPath, SearchPattern).Length > 0;
+        }
+
+
+        /// <summary>
+        /// ToolStripMenuItem "Process" drop down opening event handler to eneable menu items depending on folder and file availabilities.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void tsmiProcess_DropDownOpening(object sender, EventArgs e)
+        {
+            string imgPath = AppSettings.PathToDataStorage + AppSettings.SubDirDataSet + AppSettings.SubDirImg;
+            tsmiDisplayTestAndPred.Enabled = ExistsAndContainsFiles(imgPath + AppSettings.SubDirTest,"*.jpg");
+            tsmiDisplayTrainVal.Enabled = ExistsAndContainsFiles(imgPath + AppSettings.SubDirTrain, "*.jpg") || ExistsAndContainsFiles(imgPath + AppSettings.SubDirVal, "*.jpg");
+            tsmiDisplayTrain.Enabled = ExistsAndContainsFiles(imgPath + AppSettings.SubDirTrain, "*.jpg");
+            tsmiDisplayVal.Enabled = ExistsAndContainsFiles(imgPath + AppSettings.SubDirVal, "*.jpg");
+            tsmiDeleteDataset.Enabled = ExistsAndContainsFiles(imgPath + AppSettings.SubDirTest, "*.jpg") || ExistsAndContainsFiles(imgPath + AppSettings.SubDirTrain, "*.jpg") || ExistsAndContainsFiles(imgPath + AppSettings.SubDirVal, "*.jpg");
+        }
+
         /// <summary>
         /// ToolStripMenuItem "Create Dataset" click event handler to start creating virtual images and masks as dataset for Jupyter notebook.
         /// </summary>
@@ -977,8 +1008,15 @@ namespace StreetMaker
             if (frmCameraView != null)
                 frmCameraView.Close();
 
-            frmCameraView = new frmCameraView(this, new string[] { AppSettings.SubDirTest });
-            frmCameraView.Show();
+            try
+            {
+                frmCameraView = new frmCameraView(this, new string[] { AppSettings.SubDirTest });
+                frmCameraView.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
         }
 
         /// <summary>
@@ -991,8 +1029,15 @@ namespace StreetMaker
             if (frmCameraView != null)
                 frmCameraView.Close();
 
-            frmCameraView = new frmCameraView(this, new string[] { AppSettings.SubDirTrain, AppSettings.SubDirVal });
-            frmCameraView.Show();
+            try
+            {
+                frmCameraView = new frmCameraView(this, new string[] { AppSettings.SubDirTrain, AppSettings.SubDirVal });
+                frmCameraView.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
         }
 
 
@@ -1006,8 +1051,15 @@ namespace StreetMaker
             if (frmCameraView != null)
                 frmCameraView.Close();
 
-            frmCameraView = new frmCameraView(this, new string[] { AppSettings.SubDirTrain });
-            frmCameraView.Show();
+            try
+            {
+                frmCameraView = new frmCameraView(this, new string[] { AppSettings.SubDirTrain });
+                frmCameraView.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
         }
 
         /// <summary>
@@ -1020,8 +1072,15 @@ namespace StreetMaker
             if (frmCameraView != null)
                 frmCameraView.Close();
 
-            frmCameraView = new frmCameraView(this, new string[] { AppSettings.SubDirVal });
-            frmCameraView.Show();
+            try
+            {
+                frmCameraView = new frmCameraView(this, new string[] { AppSettings.SubDirVal });
+                frmCameraView.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message,"Error");
+            }
         }
 
         /// <summary>
@@ -1954,11 +2013,6 @@ namespace StreetMaker
             else
                 Cursor = Cursors.WaitCursor;
         }
-
-
-
-
         #endregion Public Methods
-
     }
 }
