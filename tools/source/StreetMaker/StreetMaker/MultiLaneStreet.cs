@@ -514,19 +514,21 @@ namespace StreetMaker
                     poly[4] = poly[0];
                 }
 
-                grfx.FillPolygon(new SolidBrush(lanes[LaneCount - 1].GetDrawColor()), Utils.Scale(poly, ScaleFactor));
+                if ((lanes[0].ColorMode == ColorMode.ImageColor) || (lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir))
+                    grfx.FillPolygon(new SolidBrush(lanes[0].GetDrawColor()), Utils.Scale(poly, ScaleFactor));
+                else
+                    grfx.FillPolygon(new SolidBrush(lanes[LaneCount - 1].GetDrawColor()), Utils.Scale(poly, ScaleFactor));
 
                 if (RampType == RampType.Entrance)
                 {
                     double angle = lanes[0].RightLine.Connectors[1].Angle + Utils.RIGHT_ANGLE_RADIAN;
-
-                    poly[0] = Utils.GetPoint(poly[3], angle - Utils.RIGHT_ANGLE_RADIAN, stopLineOffset / 10);
+                    poly[0] = poly[3];
                     poly[1] = Utils.GetPoint(poly[0], angle - Utils.RIGHT_ANGLE_RADIAN, stopLineWidth);
-
-                    double dist = a2 / 1.4;
+ 
+                    double dist = a2 / 1.2;
                     double w = stopLineWidth * 2 / 3;
                     double w2 = w / 2;
-                    int n = (int)(dist / (w + w2));
+                    int n = (int)(dist / (w + w2)) + 1;
 
                     if (lanes[0].ColorMode == ColorMode.ImageColor)
                     {
@@ -545,18 +547,14 @@ namespace StreetMaker
                     {
                         if (lanes[LaneCount - 1].SegmClassDef == SegmClassDefs.ScdDrivingDir)
                         {
-#if RECTANGULAR_DRIVING_DIR_BLOCK       // Tried this first, but training got confused and offered a left turn in inference
                             PointF[] pp = new PointF[5];
                             pp[0] = poly[3];
                             pp[2] = lanes[LaneCountRight - 1].LeftLine == null ? lanes[LaneCountRight - 1].Connectors[1].EndP0 : lanes[LaneCountRight - 1].LeftLine.Connectors[1].EndP1;
                             pp[3] = lanes[LaneCount - 1].RightLine == null ? lanes[LaneCount - 1].Connectors[1].EndP1 : lanes[LaneCount - 1].RightLine.Connectors[1].EndP0;
                             pp[1] = Utils.GetPoint(poly[3], angle - Utils.RIGHT_ANGLE_RADIAN, -Utils.GetDistance(pp[2], pp[3]));
+                            pp[1] = Utils.GetPoint(pp[1], angle, dist*0.75);
                             pp[4] = pp[0];
                             grfx.FillPolygon(new SolidBrush(lanes[LaneCount - 1].GetDrawColor()), Utils.Scale(pp, ScaleFactor));
-#else
-                            // Just draw curved entrance in driving dir color to force only this direction
-                            lanes[LaneCount - 1].Draw(grfx, ScaleFactor, DrawMode.BaseLayer);
-#endif
                             for (int i = 0; i < LaneCountRight; i++)
                             {
                                 if ((i > 0) && (lanes[i].RightLine != null))
@@ -568,7 +566,7 @@ namespace StreetMaker
                         }
 
                         if (((Utils.GetDistance(CameraPoint,poly[0])<MaxDetailDist) || (Utils.GetDistance(CameraPoint, poly[1]) < MaxDetailDist)) && 
-                            ((DrawWrongDirItems==true) || (lanes[LaneCount - 1].SegmClassDef == SegmClassDefs.ScdDrivingDir)))
+                            ((DrawWrongDirItems==true) || (lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir) || (lanes[LaneCount - 1].SegmClassDef == SegmClassDefs.ScdDrivingDir)))
                         {
                             dist = n * (w + w2) - w2;
                             poly[2] = Utils.GetPoint(poly[1], angle, dist);

@@ -162,11 +162,13 @@ namespace StreetMaker
         #region Print Setup
         /// <summary>Page settings to be used in street map printing.</summary>
         public PageSettings PrintPageSettings = new PageSettings();
- 
+
         #endregion Print Setup
 
 
         #region GUI
+        /// <summary>True to show all view points in the streetmap. Will set the corresponding menu item under Views..</summary>
+        public bool ShowViewPoints = false;
         #region Parameter
         /// <summary>Measurement unit to display all values in settings dialogs.</summary>
         public MeasurementUnit DisplayMeasurementUnit = MeasurementUnit.Millimeter;
@@ -193,6 +195,10 @@ namespace StreetMaker
         public double StreetOutlineLineWidth = 3;
         /// <summary>Overlay outline line width activated when hovering over it with mouse.</summary>
         public double OverlayOutlineLineWidth = 2;
+        /// <summary>ViewPoint triangle length.</summary>
+        public double ViewPointLength = 13;
+        /// <summary>ViewPoint triangle width.</summary>
+        public double ViewPointWidth = 9;
         #endregion Parameter
 
         #region Colors
@@ -211,6 +217,8 @@ namespace StreetMaker
         public Color ConnectionDrawColor = Color.DarkGray;
         /// <summary>Color of the line of a possible connection when the distance is less than ConnectionSnapDistance.</summary>
         public Color ConnectionSnapColor = Color.LightGreen;
+        /// <summary>Color of the outline of ViewPoint markers.</summary>
+        public Color ViewPointOutlineColor = Color.Red;
         #endregion Colors
 
         #region Hotkeys
@@ -297,15 +305,15 @@ namespace StreetMaker
         public bool CenterBrightnessResults = true;
 
         /// <summary>Steps left and right from the lane center to create additional views off center.</summary>
-        public float[] SideSteps = { -25, 0, 25 };
+        public float[] SideSteps = { -20, 0, 20 };
         /// <summary>Angle variations turning left and right from lane center view to create additional views.</summary>
-        public float[] AngleSteps = { -5, 0, 5 };
+        public float[] AngleSteps = { -10, 0, 10 };
         /// <summary>Different brightness variations for more augmentation</summary>
-        public float[] BrightnessFactors = { 0.6f, 1.0f };
+        public float[] BrightnessFactors = { 0.8f, 1.0f };
         /// <summary>Color variations to apply to each of the three basic colors RGB sequentially.</summary>
         public float[] ColorFactors = { 0.8f, 1.0f, 1.2f };
         /// <summary>Adding noise in different levels at the end.</summary>
-        public int[] NoiseLevels = { 8, 8 };
+        public int[] NoiseLevels = { 10, 10 };
         #endregion Augmentation
 
         #region Folders and File Prefixes
@@ -569,6 +577,7 @@ namespace StreetMaker
                 PrintPageSettings.Color = Convert.ToBoolean(nodePrintSettings.SelectSingleNode("color").InnerText);
 
                 XmlNode nodeGui = nodeSettings.SelectSingleNode("gui");
+                ShowViewPoints = Convert.ToBoolean(nodeGui.SelectSingleNode("show_view_points").InnerText);
                 XmlNode nodeGuiParm = nodeGui.SelectSingleNode("parameter");
                 DisplayMeasurementUnit = (MeasurementUnit)Enum.Parse(typeof(MeasurementUnit), nodeGuiParm.SelectSingleNode("display_measurement_unit").InnerText);
                 DefaultStraightLength = Convert.ToDouble(nodeGuiParm.SelectSingleNode("default_straight_length").InnerText);
@@ -583,6 +592,8 @@ namespace StreetMaker
                 ConnectionSnapDistance = Convert.ToDouble(nodeGuiParm.SelectSingleNode("connection_snap_distance").InnerText);
                 StreetOutlineLineWidth = Convert.ToDouble(nodeGuiParm.SelectSingleNode("street_outline_line_width").InnerText);
                 OverlayOutlineLineWidth = Convert.ToDouble(nodeGuiParm.SelectSingleNode("overlay_outline_line_width").InnerText);
+                ViewPointLength = Convert.ToDouble(nodeGuiParm.SelectSingleNode("view_point_length").InnerText);
+                ViewPointWidth = Convert.ToDouble(nodeGuiParm.SelectSingleNode("view_point_width").InnerText);
 
                 XmlNode nodeGuiColors = nodeGui.SelectSingleNode("colors");
                 StreetOutlineColor = Color.FromArgb(Convert.ToInt32(nodeGuiColors.SelectSingleNode("street_outline_color").InnerText, 16));
@@ -592,6 +603,7 @@ namespace StreetMaker
                 ConnectorNoDirColor = Color.FromArgb(Convert.ToInt32(nodeGuiColors.SelectSingleNode("connector_no_dir_color").InnerText, 16));
                 ConnectionDrawColor = Color.FromArgb(Convert.ToInt32(nodeGuiColors.SelectSingleNode("connection_draw_color").InnerText, 16));
                 ConnectionSnapColor = Color.FromArgb(Convert.ToInt32(nodeGuiColors.SelectSingleNode("connection_snap_color").InnerText, 16));
+                ViewPointOutlineColor = Color.FromArgb(Convert.ToInt32(nodeGuiColors.SelectSingleNode("viewpoint_outline_color").InnerText, 16));
 
                 XmlNode nodeHotkeys = nodeGui.SelectSingleNode("hotkeys");
                 HotkeyDelete = (Keys)Enum.Parse(typeof(Keys), nodeHotkeys.SelectSingleNode("delete").InnerText);
@@ -789,6 +801,8 @@ namespace StreetMaker
 
 
                 XmlNode nodeGui = nodeSettings.AppendChild(doc.CreateElement("gui"));
+                nodeGui.AppendChild(doc.CreateElement("show_view_points")).AppendChild(doc.CreateTextNode(ShowViewPoints.ToString()));
+
                 XmlNode nodeGuiParm = nodeGui.AppendChild(doc.CreateElement("parameter"));
                 nodeGuiParm.AppendChild(doc.CreateElement("display_measurement_unit")).AppendChild(doc.CreateTextNode(DisplayMeasurementUnit.ToString()));
                 nodeGuiParm.AppendChild(doc.CreateElement("default_straight_length")).AppendChild(doc.CreateTextNode(DefaultStraightLength.ToString()));
@@ -803,6 +817,8 @@ namespace StreetMaker
                 nodeGuiParm.AppendChild(doc.CreateElement("connection_snap_distance")).AppendChild(doc.CreateTextNode(ConnectionSnapDistance.ToString()));
                 nodeGuiParm.AppendChild(doc.CreateElement("street_outline_line_width")).AppendChild(doc.CreateTextNode(StreetOutlineLineWidth.ToString()));
                 nodeGuiParm.AppendChild(doc.CreateElement("overlay_outline_line_width")).AppendChild(doc.CreateTextNode(OverlayOutlineLineWidth.ToString()));
+                nodeGuiParm.AppendChild(doc.CreateElement("view_point_length")).AppendChild(doc.CreateTextNode(ViewPointLength.ToString()));
+                nodeGuiParm.AppendChild(doc.CreateElement("view_point_width")).AppendChild(doc.CreateTextNode(ViewPointWidth.ToString()));
 
                 XmlNode nodeGuiColors = nodeGui.AppendChild(doc.CreateElement("colors"));
                 nodeGuiColors.AppendChild(doc.CreateElement("street_outline_color")).AppendChild(doc.CreateTextNode(StreetOutlineColor.ToArgb().ToString("X8")));
@@ -812,6 +828,7 @@ namespace StreetMaker
                 nodeGuiColors.AppendChild(doc.CreateElement("connector_no_dir_color")).AppendChild(doc.CreateTextNode(ConnectorNoDirColor.ToArgb().ToString("X8")));
                 nodeGuiColors.AppendChild(doc.CreateElement("connection_draw_color")).AppendChild(doc.CreateTextNode(ConnectionDrawColor.ToArgb().ToString("X8")));
                 nodeGuiColors.AppendChild(doc.CreateElement("connection_snap_color")).AppendChild(doc.CreateTextNode(ConnectionSnapColor.ToArgb().ToString("X8")));
+                nodeGuiColors.AppendChild(doc.CreateElement("viewpoint_outline_color")).AppendChild(doc.CreateTextNode(ViewPointOutlineColor.ToArgb().ToString("X8")));
 
                 XmlNode nodeHotkeys = nodeGui.AppendChild(doc.CreateElement("hotkeys"));
                 nodeHotkeys.AppendChild(doc.CreateElement("delete")).AppendChild(doc.CreateTextNode(HotkeyDelete.ToString()));

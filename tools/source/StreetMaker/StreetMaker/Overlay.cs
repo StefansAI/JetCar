@@ -97,6 +97,8 @@ namespace StreetMaker
         private PointF moveRefPoint;
         /// <summary>Length of the overlay.</summary>
         private double length;
+        /// <summary>Width of the overlay.</summary>
+        private double width;
         /// <summary>Current angle between Connector[0].CenterP and the midPoint in the drawing.</summary>
         private double midPointAngle;
         /// <summary>Current angle between Connector[0].CenterP and the overlay direction in the drawing.</summary>
@@ -168,10 +170,24 @@ namespace StreetMaker
             refPointDistance = MaxArrowOverlayLength;
             refPointAngleDelta = Utils.RIGHT_ANGLE_RADIAN;
             directionAngleDelta = Utils.RIGHT_ANGLE_RADIAN;
-            length = straightTotalLength;
-            if ((OverlayType == OverlayType.ArrowStraightLeft) || (OverlayType == OverlayType.ArrowStraightRight))
-                length += curvedStraightOffset;
-
+            if (OverlayType == OverlayType.ParkingSign)
+            {
+                length = 30;
+                width = 20;
+            }
+            else if (OverlayType == OverlayType.ViewPoint)
+            {
+                length = 13;
+                width = 9;
+                MinArrowOverlayStep = 5;
+            }
+            else
+            {
+                length = straightTotalLength;
+                width = straightArrowWidth;
+                if ((OverlayType == OverlayType.ArrowStraightLeft) || (OverlayType == OverlayType.ArrowStraightRight))
+                    length += curvedStraightOffset;
+            }
             this.Owner = Owner;
         }
         #endregion Constructor
@@ -334,16 +350,34 @@ namespace StreetMaker
         /// <returns>Scaled outline polygon of the parking sign overlay.</returns>
         private PointF[] GetParkingSignOutline(SizeF ScaleFactor)
         {
-            SizeF textSize = new SizeF(50f, 80f); //new SizeF(25.5f,40.4f);
-
-            PointF p0 = Utils.GetPoint(midPoint, directionAngle, -textSize.Height / 2);
+            PointF p0 = Utils.GetPoint(midPoint, directionAngle, -length / 2);
             PointF[] poly = new PointF[5];
-            poly[0] = Utils.GetPoint(p0, directionAngle - Utils.RIGHT_ANGLE_RADIAN, -textSize.Width / 2);
-            poly[1] = Utils.GetPoint(p0, directionAngle - Utils.RIGHT_ANGLE_RADIAN, +textSize.Width / 2);
-            poly[2] = Utils.GetPoint(poly[1], directionAngle, textSize.Height);
-            poly[3] = Utils.GetPoint(poly[2], directionAngle - Utils.RIGHT_ANGLE_RADIAN, -textSize.Width);
+            poly[0] = Utils.GetPoint(p0, directionAngle - Utils.RIGHT_ANGLE_RADIAN, -width / 2);
+            poly[1] = Utils.GetPoint(p0, directionAngle - Utils.RIGHT_ANGLE_RADIAN, +width / 2);
+            poly[2] = Utils.GetPoint(poly[1], directionAngle, length);
+            poly[3] = Utils.GetPoint(poly[2], directionAngle - Utils.RIGHT_ANGLE_RADIAN, -width);
             poly[4] = poly[0];
 
+            return Utils.Scale(poly, ScaleFactor);
+        }
+
+
+        /// <summary>
+        /// Calculate and return the scaled outline polygon of the view point overlay.
+        /// </summary>
+        /// <param name="ScaleFactor">Scale factor in both dimensions.</param>
+        /// <returns>Scaled outline polygon of the view point overlay.</returns>
+        private PointF[] GetViewPointPolygon(SizeF ScaleFactor)
+        {
+            PointF p1 = Utils.GetPoint(midPoint, directionAngle, -length/2);
+            PointF p2 = Utils.GetPoint(midPoint, directionAngle, length/2);
+
+            PointF[] poly = new PointF[4];
+            poly[0] = p1;
+            poly[1] = Utils.GetPoint(p2, directionAngle + Utils.RIGHT_ANGLE_RADIAN, width/2);
+            poly[2] = Utils.GetPoint(p2, directionAngle + Utils.RIGHT_ANGLE_RADIAN, -width/2);
+            poly[3] = p1;
+   
             return Utils.Scale(poly, ScaleFactor);
         }
 
@@ -536,6 +570,16 @@ namespace StreetMaker
                         }
                     }
                     break;
+
+                case OverlayType.ViewPoint:
+                    if (DrawMode == DrawMode.Outline)
+                        grfx.DrawPolygon(new Pen(OutlineColor, (float)OutlineLineWidth), GetViewPointPolygon(ScaleFactor));
+                    else if ((DrawMode == DrawMode.ViewPoint) && (ColorMode == ColorMode.ImageColor))
+                    {
+                        grfx.FillPolygon(new SolidBrush(Color), GetViewPointPolygon(ScaleFactor));
+                        grfx.DrawPolygon(new Pen(Color.Red,2), GetViewPointPolygon(ScaleFactor));
+                    }
+                    break;
             }
         }
 
@@ -577,6 +621,8 @@ namespace StreetMaker
                 case OverlayType.ParkingSign:
                     return Utils.IsInPolygon(P, GetParkingSignOutline(scaleFactor));
 
+                case OverlayType.ViewPoint:
+                    return Utils.IsInPolygon(P, GetViewPointPolygon(scaleFactor));
             }
 
             return false;
@@ -753,7 +799,13 @@ namespace StreetMaker
             get { return endPoint; }
         }
 
-
+        /// <summary>
+        /// Gets the current direction angle in Radian.
+        /// </summary>
+        public double DirectionAngle
+        {
+            get { return directionAngle; }
+        }
         #endregion Public Properties
 
     }

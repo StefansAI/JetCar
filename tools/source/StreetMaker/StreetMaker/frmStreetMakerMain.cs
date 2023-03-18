@@ -69,7 +69,7 @@ namespace StreetMaker
         public frmCameraView frmCameraView = null;
         #endregion Public Fields
 
-        #region Constructor
+        #region Constructor and Closing
         /// <summary>
         /// Creates the instance of this main form of the application.
         /// </summary>
@@ -95,12 +95,25 @@ namespace StreetMaker
 
             pbDrawingArea.MouseWheel += new MouseEventHandler(pbDrawingArea_MouseWheel);
             pbDrawingArea_MouseWheel(null, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, -1000));
+
+            tsmiShowViewPoints.Checked = AppSettings.ShowViewPoints;
         }
 
-
-        #endregion Constructor
+        /// <summary>
+        /// Form closing event handler to save the current settings.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void frmStreetMakerMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            AppSettings.ShowViewPoints = tsmiShowViewPoints.Checked;
+            AppSettings.SaveSettings();
+            e.Cancel = false;
+        }
+        #endregion Constructor and Closing
 
         #region Private Methods
+
 
         #region StreetMap Event Handler
         /// <summary>
@@ -163,12 +176,16 @@ namespace StreetMaker
         /// </summary>
         /// <param name="ViewBitmap">Bitmap of the camera view</param>
         /// <param name="ClassBitmap">Related class color bitmap</param>
-        private void StreetMap_NewBitmapsUpdate(Bitmap ViewBitmap, Bitmap ClassBitmap)
+        /// <param name="Count">Count to be displayed.</param>
+        private void StreetMap_NewBitmapsUpdate(Bitmap ViewBitmap, Bitmap ClassBitmap, Bitmap CodeBitmap, int Count)
         {
             if (frmCameraView != null)
             {
                 frmCameraView.BitmapCameraView = new Bitmap(ViewBitmap);
                 frmCameraView.BitmapMaskImage = new Bitmap(ClassBitmap);
+                if (CodeBitmap != null)
+                    frmCameraView.CodeMask = CodeBitmap;
+                frmCameraView.Count = Count;
                 frmCameraView.Refresh();
                 Application.DoEvents();
             }
@@ -255,7 +272,7 @@ namespace StreetMaker
         {
             ClearStreetBitMap();
             StreetMap.AssignDashSyncOrders();
-            StreetMap.Draw(Graphics.FromImage(StreetBitmap), new Size(1, 1));
+            StreetMap.Draw(Graphics.FromImage(StreetBitmap), new Size(1, 1), tsmiShowViewPoints.Checked);
             pbDrawingArea.Invalidate();
         }
 
@@ -334,7 +351,9 @@ namespace StreetMaker
                 pbDrawingArea.Size = pnDrawingArea.Size;
                 pbDrawingArea.Location = new Point(0, 0);
             }
-            tsslLocation.Text = "Zoom:" + ZoomFactor.ToString() + "  Location: " + pbDrawingArea.Location.ToString();
+
+            tsslLocation.Text = "Zoom=" + new SizeF((float)Math.Round(ZoomFactor.Width,2), (float)Math.Round(ZoomFactor.Height, 2)).ToString() + "  Offset= " + pbDrawingArea.Location.ToString();
+            ssMainStatus.Refresh();
         }
 
         /// <summary>
@@ -419,9 +438,8 @@ namespace StreetMaker
             try
             {
                 BitmapCoord = new PointF((e.X / ZoomFactor.Width), (e.Y / ZoomFactor.Height));
-                Color color = ((Bitmap)pbDrawingArea.Image).GetPixel((int)BitmapCoord.X, (int)BitmapCoord.Y);
-                tsslCursorValues.Text = "X: " + BitmapCoord.X.ToString("F1") + "  Y: " + BitmapCoord.Y.ToString("F1") + " Color: " + color.ToString();
-                tsslCursorValues.Invalidate();
+                //Color color = ((Bitmap)pbDrawingArea.Image).GetPixel((int)BitmapCoord.X, (int)BitmapCoord.Y);
+                tsslCursorValues.Text = "X= " + BitmapCoord.X.ToString("F0") + "  Y= " + BitmapCoord.Y.ToString("F0");// +"   "+ color.ToString();
 
                 if (((StreetEditMode == StreetEditMode.AddNewStreetElement) || (StreetEditMode == StreetEditMode.MoveActiveStreetElement)) && (StreetMap.ActiveElement != null))
                 {
@@ -450,8 +468,9 @@ namespace StreetMaker
             }
             catch
             {
-                tsslCursorValues.Text = "X: " + BitmapCoord.X.ToString("F1") + "  Y: " + BitmapCoord.Y.ToString("F1") + " Color: ----";
+                tsslCursorValues.Text = "X= " + BitmapCoord.X.ToString("F0") + "  Y= " + BitmapCoord.Y.ToString("F0");// + " Color= ----";
             }
+            ssMainStatus.Refresh();
         }
 
         /// <summary>
@@ -476,7 +495,7 @@ namespace StreetMaker
                         StreetMap.ActiveElement.DrawGroup(Graphics.FromImage(StreetBitmap), new SizeF(1, 1));
                         StreetMap.ActiveElement = null;
                         StreetEditMode = StreetEditMode.Nothing;
-                        pbDrawingArea.Invalidate();
+                        RedrawStreetBitmap();
                     }
                 }
                 else if (StreetMap.ActiveOverlay != null)
@@ -509,6 +528,36 @@ namespace StreetMaker
             pbDrawingArea.Invalidate();
         }
 
+        /// <summary>
+        /// PictureBox mouse double click event handler to open the camera view, if the click was on a view point overlay.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void pbDrawingArea_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Overlay ovl = StreetMap.SelectObject(BitmapCoord, true) as Overlay;
+            if ((ovl != null) && (ovl.OverlayType == OverlayType.ViewPoint))
+            {
+                bool showViewPoints = tsmiShowViewPoints.Checked;
+                if (tsmiShowViewPoints.Checked == true)
+                    tsmiShowViewPoints.Checked = false;
+                else
+                    tsmiRedraw_Click(null, null);
+
+                if (frmCameraView != null)
+                    frmCameraView.Close();
+                frmCameraView = new frmCameraView(this);
+                frmCameraView.Show();
+                
+                frmCameraView.ClassNames = StreetMap.GetCurrentClassNames();
+                frmCameraView.ColorPalette = StreetMap.GetCurrentColorMap();
+                StreetMap.GenerateCameraViewImages(StreetBitmap, ovl.MidPoint, ovl.DirectionAngle);
+                frmCameraView.ViewPointMode = true;
+
+                frmCameraView.StatusText = "ViewPoint Location:" + (new PointF((float)Math.Round(ovl.MidPoint.X), (float)Math.Round(ovl.MidPoint.Y))).ToString() + "  Direction:" + Utils.ToDegree(ovl.DirectionAngle).ToString("F0") + "°";
+                tsmiShowViewPoints.Checked = showViewPoints;
+            }
+        }
 
         #endregion Drawing Area Mouse Events
 
@@ -912,6 +961,20 @@ namespace StreetMaker
         }
 
         /// <summary>
+        /// ToolStripMenuItem "Show View Points" check changed event handler to enable or disable showing the view points.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void tsmiShowViewPoints_CheckStateChanged(object sender, EventArgs e)
+        {
+            SetEnabled(false);
+            tsbViewPoint.Visible = tsmiShowViewPoints.Checked;
+            RedrawStreetBitmap();
+            SetEnabled(true);
+        }
+
+
+        /// <summary>
         /// ToolStripMenuItem "Show Page Limits" check changed event handler to enable or disable showing the print page limits.
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
@@ -958,7 +1021,7 @@ namespace StreetMaker
         private void tsmiProcess_DropDownOpening(object sender, EventArgs e)
         {
             string imgPath = AppSettings.PathToDataStorage + AppSettings.SubDirDataSet + AppSettings.SubDirImg;
-            tsmiDisplayTestAndPred.Enabled = ExistsAndContainsFiles(imgPath + AppSettings.SubDirTest,"*.jpg");
+            tsmiDisplayTestAndPred.Enabled = ExistsAndContainsFiles(imgPath + AppSettings.SubDirTest, "*.jpg");
             tsmiDisplayTrainVal.Enabled = ExistsAndContainsFiles(imgPath + AppSettings.SubDirTrain, "*.jpg") || ExistsAndContainsFiles(imgPath + AppSettings.SubDirVal, "*.jpg");
             tsmiDisplayTrain.Enabled = ExistsAndContainsFiles(imgPath + AppSettings.SubDirTrain, "*.jpg");
             tsmiDisplayVal.Enabled = ExistsAndContainsFiles(imgPath + AppSettings.SubDirVal, "*.jpg");
@@ -980,7 +1043,12 @@ namespace StreetMaker
             if (MessageBox.Show("Do you want to start the very time consuming process of creating a new DataSet deleting any previous one?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 SetEnabled(false);
-                tsmiRedraw_Click(null, null);
+                bool showViewPoints = tsmiShowViewPoints.Checked;
+                if (tsmiShowViewPoints.Checked == true)
+                    tsmiShowViewPoints.Checked = false;
+                else
+                    tsmiRedraw_Click(null, null);
+
                 if (frmCameraView != null)
                     frmCameraView.Close();
                 frmCameraView = new frmCameraView(this);
@@ -994,6 +1062,7 @@ namespace StreetMaker
                     frmCameraView.ColorPalette = StreetMap.GetCurrentColorMap();
                     frmCameraView.SwitchToNavigation();
                 }
+                tsmiShowViewPoints.Checked = showViewPoints;
                 SetEnabled(true);
             }
         }
@@ -1979,7 +2048,20 @@ namespace StreetMaker
                 StreetMap.ActiveOverlay = new Overlay(AppSettings, OverlayType.ArrowMergeRight);
                 StreetEditMode = StreetEditMode.AddNewOverlay;
             }
+        }
 
+        /// <summary>
+        /// ToolStripButton click event handler to create a new view point object.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void tsbViewPoint_Click(object sender, EventArgs e)
+        {
+            if (StreetEditMode == StreetEditMode.Nothing)
+            {
+                StreetMap.ActiveOverlay = new Overlay(AppSettings, OverlayType.ViewPoint);
+                StreetEditMode = StreetEditMode.AddNewOverlay;
+            }
         }
 
 
@@ -2006,6 +2088,7 @@ namespace StreetMaker
             tsmiEdit.Enabled = enabled;
             tsmiView.Enabled = enabled;
             tsmiProcess.Enabled = enabled;
+            tsmiHelp.Enabled = enabled;
             tscTools.Enabled = enabled;
 
             if (enabled)

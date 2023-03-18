@@ -74,7 +74,7 @@ namespace StreetMaker
         /// <summary>Delegate definition for text update events. </summary>
         public delegate void TextEvent(string Text);
         /// <summary>Delegate definition for bitmaps update events. </summary>
-        public delegate void NewBitmapsEvent(Bitmap ViewBitmap, Bitmap ClassBitmap);
+        public delegate void NewBitmapsEvent(Bitmap ViewBitmap, Bitmap ClassBitmap, Bitmap CodeBitmap, int Count);
 
         /// <summary>Event definition for connection issue changes.</summary>
         public event GeneralEvent ConnectionIssueChange;
@@ -599,7 +599,7 @@ namespace StreetMaker
         /// </summary>
         /// <param name="grfx">Reference to the graphics object to be used for drawing.</param>
         /// <param name="ScaleFactor">Scale factor in both dimensions.</param>
-        public void Draw(Graphics grfx, SizeF ScaleFactor)
+        public void Draw(Graphics grfx, SizeF ScaleFactor, bool IncludeViewPoints)
         {
             foreach (StreetElement se in Items)
                 se.Draw(grfx, ScaleFactor, DrawMode.BaseLayer);
@@ -607,6 +607,10 @@ namespace StreetMaker
                 se.Draw(grfx, ScaleFactor, DrawMode.TopLayer);
             foreach (StreetElement se in Items)
                 se.Draw(grfx, ScaleFactor, DrawMode.Overlay);
+
+            if (IncludeViewPoints == true)
+                foreach (StreetElement se in Items)
+                    se.Draw(grfx, ScaleFactor, DrawMode.ViewPoint);
         }
 
         /// <summary>
@@ -802,6 +806,26 @@ namespace StreetMaker
         }
 
         /// <summary>
+        /// Creates and returns an array of current class names as used in the current street map.
+        /// The returned array always has 256 entries to allow displaying un assigned codes in a lookup.
+        /// </summary>
+        /// <returns>Array of class name extended to 256 entries with "Unknown#n" entries</returns>
+        public string[] GetCurrentClassNames()
+        {
+            GetUsedClassCount();
+
+            string[] classText = new string[256];
+            for (int i = 0; i < 256; i++)
+                classText[i] = "Unknown_#" + i.ToString();
+
+            foreach (SegmClassDef scd in SegmClassDefs.Defs)
+                if (scd.UseCount > 0)
+                    classText[scd.ClassCode] = scd.Name.ToLower();
+
+            return classText; 
+        }
+
+        /// <summary>
         /// Writes first a list constant names and code assignements and then a list of name strings into a text file to be copied into Python code.
         /// </summary>
         /// <param name="FileName">Full path and file name of the text file to write to</param>
@@ -901,7 +925,7 @@ namespace StreetMaker
 
             // Now draw the street map as class colors
             SetColorMode(ColorMode.ClassColor);
-            Draw(grfx, new SizeF(1, 1));
+            Draw(grfx, new SizeF(1, 1), false);
             // Outline maybe helpful too
             foreach (StreetElement se in Items) se.Draw(grfx, new SizeF(1, 1), DrawMode.Outline);
             SetColorMode(ColorMode.ImageColor);
@@ -997,10 +1021,11 @@ namespace StreetMaker
 #endif
 
             WriteClassFileAndColorMap(DatasetPath);
-            
+
             Random rnd = new Random(DateTime.Now.Millisecond);
             CreatingDataSet = true;
 
+            int datasetCount = 0;
             int trainValCount = 0;
             int testOutCount = 0;
 
@@ -1010,21 +1035,37 @@ namespace StreetMaker
                 // go through each lane of the current street element
                 for (int laneIdx = 0; laneIdx < Items[itemIdx].Lanes.Length; laneIdx++)
                 {
-                    // calculate the number of steps in the lane depending on the settings in AppSettings
-                    double pathLength = Items[itemIdx].Lanes[laneIdx].GetCenterPathLength();
-                    int nSteps = Math.Max((int)(pathLength / AppSettings.ImageStepSize),1);
-                    double stp = 1.0 / nSteps;
-                    double stpOffs = stp/4;
+                    double[] dirAngles = null;
+                    PointF[] points = Items[itemIdx].Lanes[laneIdx].GetViewPoints(out dirAngles);
+
+                    if (points == null)
+                    {
+                        // calculate the number of steps in the lane depending on the settings in AppSettings
+                        double pathLength = Items[itemIdx].Lanes[laneIdx].GetCenterPathLength();
+                        int nSteps = Math.Max((int)(pathLength / AppSettings.ImageStepSize) - 1, 1);
+                        //double offs = (pathLength - nSteps * AppSettings.ImageStepSize;
+                        double stp = 1.0 / nSteps;
+                        double stpOffs = stp / 2;
+                        points = new PointF[nSteps];
+                        dirAngles = new double[nSteps];
+                        for (int stepIdx = 0; stepIdx < nSteps; stepIdx++)
+                        {
+                            double stepPos = stpOffs + stepIdx * stp;
+                            points[stepIdx] = Items[itemIdx].Lanes[laneIdx].GetLaneCenter(stepPos, ref dirAngles[stepIdx]);
+                        }
+                    }
+
 
                     // go through the number of steps along the lane
-                    for (int stepIdx = 0; stepIdx <= nSteps; stepIdx++)
+                    for (int stepIdx = 0; stepIdx < points.Length; stepIdx++)
                     {
                         // determine the number of directional views for the same point, if in a center lane that can be used in both directions
                         int nDirections = 1;
-                        double directionAngle = 0;
-                        double stepPos = Math.Min(stpOffs + stepIdx * stp, 0.99);
-                        PointF pLaneCenter = Items[itemIdx].Lanes[laneIdx].GetLaneCenter(stepPos, ref directionAngle);
-                        CameraPoint = pLaneCenter;
+
+                        PointF pLaneCenter = points[stepIdx];
+                        double directionAngle = dirAngles[stepIdx];
+
+                        CameraPoint = pLaneCenter;  //Set the camera location for generating the views
 
                         if (Items[itemIdx] is MultiLaneStreet)
                         {
@@ -1052,9 +1093,6 @@ namespace StreetMaker
                             {
                                 // Create a bitmap with class code colors around that point with the viewing direction.
                                 Bitmap bmClassCode = DrawClassColorBitmap(StreetBitmap, pLaneCenter, directionAngle);
-                                //Bitmap bmClassCodeRaw = DrawClassColorBitmap(StreetBitmap, pLaneCenter, directionAngle);
-                                //Bitmap bmClassCode = Process.Median(bmClassCodeRaw, new Size(3, 3));
-                                //bmClassCodeRaw.Dispose();
 #if DEBUG_CLASS_STREET_IMAGES
                                 SaveDebugClassStreetImg(bmClassCode, pLaneCenter, directionAngle, ClassStreetImgPath + "StreetClassImg_" + baseName + ".jpg");
 #endif
@@ -1068,9 +1106,9 @@ namespace StreetMaker
                                     {
                                         // Create the virtual view as camera picture and class masks
                                         double viewDir = directionAngle + Utils.ToRadian(AppSettings.AngleSteps[angleIdx]);
-                                        VirtualCamera.TakeImgResult CameraImgs = VirtualCamera.TakeImage(AppSettings, StreetBitmap, bmClassCode, pSide, viewDir);                                        
-                                        Bitmap bmMask = Process.CreateBitmapMask(CameraImgs.ClassMask);
+                                        VirtualCamera.TakeImgResult CameraImgs = VirtualCamera.TakeImage(AppSettings, StreetBitmap, bmClassCode, pSide, viewDir);
 #if ERODE_AND_DILATE_MASK
+                                        Bitmap bmMask = Process.CreateBitmapMask(CameraImgs.ClassMask);
                                         Bitmap bmEroded = Process.BitmapErode(CameraImgs.ClassMask, bmMask, new Size(21, 21));
                                         Bitmap bmDilated = Process.BitmapDilate(bmEroded, bmMask, new Size(31, 31));
                                         Bitmap bmMasked = Process.BitmapAnd(CameraImgs.ClassMask,bmDilated);
@@ -1091,8 +1129,8 @@ namespace StreetMaker
                                                 // apply the color factors to each color individually
                                                 for (int rgbIdx = 0; rgbIdx < rgbN; rgbIdx++)
                                                 {
-                                                    float[] brightnessFactors = new float[] { brightness * (float)AppSettings.CameraColorCorrRed, 
-                                                                                              brightness * (float)AppSettings.CameraColorCorrGreen, 
+                                                    float[] brightnessFactors = new float[] { brightness * (float)AppSettings.CameraColorCorrRed,
+                                                                                              brightness * (float)AppSettings.CameraColorCorrGreen,
                                                                                               brightness * (float)AppSettings.CameraColorCorrBlue };
                                                     brightnessFactors[rgbIdx] *= colorFactor;
 
@@ -1101,14 +1139,15 @@ namespace StreetMaker
                                                     // go through the different noise level applications
                                                     for (int noiseIdx = 0; noiseIdx < AppSettings.NoiseLevels.Length; noiseIdx++)
                                                     {
+                                                        datasetCount++;
                                                         Bitmap bmNoised = Process.ImageNoise(bmBrightOut, AppSettings.NoiseLevels[noiseIdx]);
-                                                    
+
                                                         // choose target directory randomly with the train/val-ration as target
                                                         string trainVal = AppSettings.SubDirTrain;
                                                         trainValCount++;
                                                         bool valOut = AppSettings.ValidateCenterViewsOnly == true ?
                                                             (trainValCount >= AppSettings.TrainValRatio) && (AppSettings.SideSteps[sideIdx] == 0) && (AppSettings.AngleSteps[angleIdx] == 0) :
-                                                            (rnd.Next(AppSettings.TrainValRatio) == 0) || (trainValCount > 2*AppSettings.TrainValRatio);
+                                                            (rnd.Next(AppSettings.TrainValRatio) == 0) || (trainValCount > 2 * AppSettings.TrainValRatio);
 
                                                         if (valOut == true)
                                                         {
@@ -1122,7 +1161,7 @@ namespace StreetMaker
                                                         string fullImgFileName = ImgPath + trainVal + imgFileName;
 
                                                         DisplayFileName?.Invoke(fullImgFileName);
-                                                        NewBitmapsUpdate?.Invoke(bmNoised, CameraImgs.ClassImg);
+                                                        NewBitmapsUpdate?.Invoke(bmNoised, CameraImgs.ClassImg, null, datasetCount);
 
                                                         // save the files
                                                         bmNoised.Save(fullImgFileName);
@@ -1143,7 +1182,7 @@ namespace StreetMaker
                                                         testOutCount++;
                                                         bool testOut = AppSettings.TestCenterViewsOnly == true ?
                                                             (testOutCount >= AppSettings.TestOutRatio) && (AppSettings.SideSteps[sideIdx] == 0) && (AppSettings.AngleSteps[angleIdx] == 0) :
-                                                            (rnd.Next(AppSettings.TestOutRatio) == 0) || (testOutCount > 2*AppSettings.TestOutRatio);
+                                                            (rnd.Next(AppSettings.TestOutRatio) == 0) || (testOutCount > 2 * AppSettings.TestOutRatio);
 
                                                         if (testOut == true)
                                                         {
@@ -1157,7 +1196,7 @@ namespace StreetMaker
                                                         }
                                                         // dispose unused bitmaps to free memory for next loops
                                                         bmNoised.Dispose();
-                                           
+
                                                         if (CreatingDataSet == false)
                                                             return;
                                                     }
@@ -1170,13 +1209,13 @@ namespace StreetMaker
                                         CameraImgs.StreetView.Dispose();
                                         CameraImgs.ClassMask.Dispose();
                                         CameraImgs.ClassImg.Dispose();
+#if ERODE_AND_DILATE_MASK
                                         bmMask.Dispose();
-                                        #if ERODE_AND_DILATE_MASK
                                         bmEroded.Dispose();
                                         bmDilated.Dispose();
                                         bmMasked.Dispose();
                                         bmDiff.Dispose();
-                                        #endif
+#endif
                                     }
                                 }
                                 // dispose unused bitmaps to free memory for next loops
@@ -1185,12 +1224,32 @@ namespace StreetMaker
                             // flip the direction 180 degrees for a next view from the same spot in case of nDirections == 2
                             directionAngle += Math.PI;
                         }
+
                     }
                 }
             }
             CreatingDataSet = false;
         }
 
+        /// <summary>
+        /// Generate  a virtual camera view to the street from the given point and the direction and send it to the CameraView form to update.
+        /// </summary>
+        /// <param name="StreetBitmap">Bitmap of the street map.</param>
+        /// <param name="ViewPoint">Point in the map for the virtual camera location</param>
+        /// <param name="DirectionAngle">Direction to point the virtual camera.</param>
+        public void GenerateCameraViewImages(Bitmap StreetBitmap, PointF ViewPoint, double DirectionAngle)
+        {
+            CameraPoint = ViewPoint;    //Set the camera location for generating the views
+            Bitmap bmClassCode = DrawClassColorBitmap(StreetBitmap, ViewPoint, DirectionAngle);
+            VirtualCamera.TakeImgResult CameraImgs = VirtualCamera.TakeImage(AppSettings, StreetBitmap, bmClassCode, ViewPoint, DirectionAngle);
+#if DEBUG_CLASS_STREET_IMAGES
+            string ClassStreetImgPath = AppSettings.PathToDataStorage + "\\StreetClassImgs\\";
+            if (Directory.Exists(ClassStreetImgPath)==false)
+                Directory.CreateDirectory(ClassStreetImgPath);
+            SaveDebugClassStreetImg(bmClassCode, ViewPoint, DirectionAngle, ClassStreetImgPath + "StreetClassImg_" + ViewPoint.X.ToString("F0") + "-" + ViewPoint.Y.ToString("F0") + ".jpg");
+#endif
+            NewBitmapsUpdate?.Invoke(CameraImgs.StreetView, CameraImgs.ClassImg, CameraImgs.ClassMask, 0);
+        }
 
         /// <summary>
         /// Draw a class colored street map equivalent of the StreetBitmap with the point P0 as starting point and looking to the DirectionAngle. 
@@ -1228,7 +1287,7 @@ namespace StreetMaker
 
             // Now draw the street map as classes
             SetColorMode(ColorMode.ClassCode);
-            Draw(grfx, new SizeF(1, 1));
+            Draw(grfx, new SizeF(1, 1), false);
             SetColorMode(ColorMode.ImageColor);
 
             return bmClassCode;
@@ -1746,7 +1805,7 @@ namespace StreetMaker
                             }
                             else
                             {
-                                //                            throw new Exception("if ((leCurrentC0mode == ConnectorMode.In) && (LaneSegmClassDef == SegmClassDefs.ScdDrivingDir)) else in isn");
+                                //throw new Exception("if ((leCurrentC0mode == ConnectorMode.In) && (LaneSegmClassDef == SegmClassDefs.ScdDrivingDir)) else in isn");
                             }
                         }
                     }
@@ -1801,7 +1860,7 @@ namespace StreetMaker
                     }
                     else
                     {
-                        //                   throw new Exception("else if (leCurrent.Connectors[outIdx].Mode == ConnectorMode.Hidden) else in isn");
+                        //throw new Exception("else if (leCurrent.Connectors[outIdx].Mode == ConnectorMode.Hidden) else in isn");
                     }
                 }
             }
@@ -1880,6 +1939,9 @@ namespace StreetMaker
         }
 
 
+        /// <summary>
+        /// Sets the coordinates of the camera location.
+        /// </summary>
         public PointF CameraPoint
         {
             set

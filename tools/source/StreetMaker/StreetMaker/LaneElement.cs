@@ -329,6 +329,14 @@ namespace StreetMaker
                         }
                     }
                     break;
+
+                case DrawMode.ViewPoint:
+                    if (ColorMode == ColorMode.ImageColor)
+                    {
+                        foreach (Overlay overlay in Overlays)
+                            overlay.Draw(grfx, ScaleFactor, DrawMode);
+                    }
+                    break;
             }
         }
 
@@ -402,7 +410,10 @@ namespace StreetMaker
                         centerAngle = Utils.GetAngle(circleCenter, p);
                         P = Utils.GetPoint(circleCenter, centerAngle, midRadius);
                         RefPointDistance = Utils.GetDistance(Connectors[0].CenterP, P);
-                        dirAngle = Utils.LimitRadian(centerAngle - Utils.RIGHT_ANGLE_RADIAN);
+                        if (CurveAngle >=0 )
+                            dirAngle = Utils.LimitRadian(centerAngle - Utils.RIGHT_ANGLE_RADIAN);
+                        else
+                            dirAngle = Utils.LimitRadian(centerAngle + Utils.RIGHT_ANGLE_RADIAN);
                     }
                     break;
 
@@ -505,6 +516,35 @@ namespace StreetMaker
                 SegmClassDefs.IncUseCount(ovly.SegmClassDef);
         }
 
+        /// <summary>
+        /// Returns a list of view point locations or null, if no view points exist.
+        /// </summary> 
+        /// <returns>Array of view point locations</returns>
+        public PointF[] GetViewPoints(out double[] DirAngles)
+        {
+            PointF[] result = null;
+            DirAngles = null;
+            int n = 0;
+            foreach (Overlay ovl in Overlays)
+                if (ovl.OverlayType == OverlayType.ViewPoint)
+                    n++;
+
+            if (n > 0)
+            {
+                result = new PointF[n];
+                DirAngles = new double[n];
+                n = 0;
+                foreach (Overlay ovl in Overlays)
+                    if (ovl.OverlayType == OverlayType.ViewPoint)
+                    {
+                        result[n] = ovl.MidPoint;
+                        DirAngles[n++] = ovl.DirectionAngle;
+                    }
+            }
+                
+            return result;
+        }
+
         #region XML File Support
         /// <summary>
         /// Write the object contents to the XML document at the specified node.
@@ -587,6 +627,22 @@ namespace StreetMaker
                 }
             }
         }
+
+        /// <summary>
+        /// Returns true, if at least one view point exits in the overlay list.
+        /// </summary>
+        public bool HasViewPoints
+        {
+            get
+            {
+                foreach (Overlay ovl in Overlays)
+                    if (ovl.OverlayType == OverlayType.ViewPoint)
+                        return true;
+
+                return false;
+            }
+        }
+
 
         #endregion Public Properties
 

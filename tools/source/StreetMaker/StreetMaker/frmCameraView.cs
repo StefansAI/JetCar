@@ -29,10 +29,6 @@ namespace StreetMaker
         #region Private Fields
         /// <summary>Reference to the main form object.</summary>
         private frmStreetMakerMain MainForm;
-        /// <summary>Full path to the view images in FileMode.</summary>
-//        private string ImgBasePath;
-        /// <summary>Full path to the mask images in FileMode.</summary>
-//        private string MaskPath;
         /// <summary>Full path to the predicted images in FileMode.</summary>
         private string PredPath;
         /// <summary>Array of all file names in the folder.</summary>
@@ -42,11 +38,13 @@ namespace StreetMaker
         /// <summary>Array of colors to be assigned to the mask codes in FileMode</summary>
         private Color[] colorPalette;
         /// <summary>Array of strings to map code values to names.</summary>
-        private string[] classText;
+        private string[] classNames;
         /// <summary>Reference to the current code mask object.</summary>
         private Bitmap codeMask;
         /// <summary>Reference to the current prediction mask object</summary>
         private Bitmap predMask;
+        /// <summary>True for special mode displaying the virtual camera from a view point.</summary>
+        private bool viewPointMode;
         #endregion Private Fields
 
         #region Constructors
@@ -58,11 +56,10 @@ namespace StreetMaker
         {
             InitializeComponent();
             this.MainForm = MainForm;
-            //ImgPath = null;
-            //MaskPath = null;
             PredPath = null;
             ImgFileNames = new List<string>();
             FileMode = false;
+            viewPointMode = false;
             codeMask = null;
             predMask = null;
             SetPredictionVisible(false);
@@ -79,11 +76,10 @@ namespace StreetMaker
             codeMask = null;
             predMask = null;
             string imgPath = MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.SubDirDataSet + MainForm.AppSettings.SubDirImg;
-            //MaskPath = MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.SubDirDataSet + MainForm.AppSettings.SubDirMask + SubDir;
             PredPath = MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.SubDirDataSet + MainForm.AppSettings.SubDirPred;
 
             LoadPalette(MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.ColorMapFileName);
-            LoadClassTexts(MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.ClassTextFileName);
+            LoadClassNames(MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.ClassTextFileName);
 
             foreach (string subDir in SubDirs)
                 ImgFileNames.AddRange(Directory.GetFiles(imgPath+subDir));
@@ -99,6 +95,12 @@ namespace StreetMaker
         /// <param name="e">Event arguments.</param>
         private void frmCameraView_FormClosing(object sender, FormClosingEventArgs e)
         {
+            BitmapCameraView = null;
+            BitmapMaskImage = null;
+            BitmapPrediction = null;
+            if (codeMask != null)
+                codeMask.Dispose();
+
             MainForm.frmCameraView = null;
             e.Cancel = false;
         }
@@ -127,11 +129,15 @@ namespace StreetMaker
             }
         }
 
-        private void LoadClassTexts(string FileName)
+        /// <summary>
+        /// Load the class text file to get the names of all classes together with their code.
+        /// </summary>
+        /// <param name="FileName">Full path and name of the text file to load.</param>
+        private void LoadClassNames(string FileName)
         {
-            classText = new string[256];
+            classNames = new string[256];
             for (int i = 0; i < 256; i++)
-                classText[i] = "Unknown_#" + i.ToString();
+                classNames[i] = "Unknown_#" + i.ToString();
 
             if (File.Exists(FileName))
             {
@@ -154,7 +160,7 @@ namespace StreetMaker
                     {
                         string[] s = line.Split(new char[] { '=' });
                         int idx = Convert.ToInt32(s[1].Trim());
-                        classText[idx] = s[0].Trim();
+                        classNames[idx] = s[0].Trim();
                      }
                 }
                 sr.Close();
@@ -271,35 +277,45 @@ namespace StreetMaker
         /// <param name="e">Event arguments.</param>
         private void pbCameraImg_MouseMove(object sender, MouseEventArgs e)
         {
-            // it is assumed, that all 3 bitmaps have the same size and all 3 picture boxes have their same size.
-            float xfactor = (float)BitmapCameraView.Width/ pbCameraImg.Width ;
-            float yfactor = (float)BitmapCameraView.Height / pbCameraImg.Height;
-            int x = Math.Min(Math.Max((int)(e.X * xfactor), 0),BitmapCameraView.Width-1);
-            int y = Math.Min(Math.Max((int)(e.Y * yfactor), 0), BitmapCameraView.Height-1);
+            if ((FileMode == true) || (viewPointMode == true))
+                try
+                {
+                    // it is assumed, that all 3 bitmaps have the same size and all 3 picture boxes have their same size.
+                    float xfactor = (float)BitmapCameraView.Width / pbCameraImg.Width;
+                    float yfactor = (float)BitmapCameraView.Height / pbCameraImg.Height;
+                    int x = Math.Min(Math.Max((int)(e.X * xfactor), 0), BitmapCameraView.Width - 1);
+                    int y = Math.Min(Math.Max((int)(e.Y * yfactor), 0), BitmapCameraView.Height - 1);
 
-            Color color = BitmapCameraView.GetPixel(x, y);
-            lbImgCursor.Text = "Img: x=" + x.ToString() + "  y=" + y.ToString() + "  R=" + color.R.ToString() + " G=" + color.G.ToString() + "  B=" + color.B.ToString();
+                    Color color = BitmapCameraView.GetPixel(x, y);
+                    lbImgCursor.Text = "Img: x=" + x.ToString() + "  y=" + y.ToString() + "  R=" + color.R.ToString() + " G=" + color.G.ToString() + "  B=" + color.B.ToString();
 
-            int maskCode = Process.Get8bitValue(codeMask, x, y);
-            string maskCodeName = classText[maskCode];
-            lbMaskCursor.Text = "Mask: x=" + x.ToString() + "  y=" + y.ToString() + "  code=" + maskCode.ToString() + "  name=" + maskCodeName;
+                    int maskCode = Process.Get8bitValue(codeMask, x, y);
+                    string maskCodeName = classNames[maskCode];
+                    lbMaskCursor.Text = "Mask: x=" + x.ToString() + "  y=" + y.ToString() + "  code=" + maskCode.ToString() + "  name=" + maskCodeName;
 
-            if (predMask != null)
-            {
-                int predCode = predMask.GetPixel(x, y).R; ;
-                string predCodeName = classText[predCode];
-                lbPredCursor.Text = "Pred: x=" + x.ToString() + "  y=" + y.ToString() + "  code=" + predCode.ToString() + "  name=" + predCodeName;
+                    if (predMask != null)
+                    {
+                        int predCode = predMask.GetPixel(x, y).R; ;
+                        string predCodeName = classNames[predCode];
+                        lbPredCursor.Text = "Pred: x=" + x.ToString() + "  y=" + y.ToString() + "  code=" + predCode.ToString() + "  name=" + predCodeName;
 
-                if (maskCode != predCode)
-                    lbMaskCursor.ForeColor = Color.Red;
-                else
-                    lbMaskCursor.ForeColor = Color.Black;
-            }
-            else lbMaskCursor.ForeColor = Color.Black;
+                        if (maskCode != predCode)
+                            lbMaskCursor.ForeColor = Color.Red;
+                        else
+                            lbMaskCursor.ForeColor = Color.Black;
+                    }
+                    else lbMaskCursor.ForeColor = Color.Black;
 
-            lbPredCursor.ForeColor = lbMaskCursor.ForeColor;
+                    lbPredCursor.ForeColor = lbMaskCursor.ForeColor;
+                }
+                catch { pbCameraImg_MouseLeave(null, null); }
         }
 
+        /// <summary>
+        /// Mouse leave event handler of the picture boxes to clear the texts.
+        /// </summary>
+        /// <param name="sender">Sender of the notification.</param>
+        /// <param name="e">Event arguments.</param>
         private void pbCameraImg_MouseLeave(object sender, EventArgs e)
         {
             lbImgCursor.Text = "";
@@ -325,6 +341,7 @@ namespace StreetMaker
         public void SwitchToNavigation()
         {
             FileMode = true;
+            LoadClassNames(MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.ClassTextFileName);
             LoadImgAndMask(0);
         }
         #endregion Public Methods
@@ -362,6 +379,20 @@ namespace StreetMaker
         }
 
         /// <summary>
+        /// Gets or sets the 8-bit code mask used to display cursor values when moving the mouse over image positions..
+        /// </summary>
+        public Bitmap CodeMask
+        { 
+            get { return codeMask; }
+            set
+            {
+                Bitmap bmOld = codeMask;
+                codeMask = value;
+                if (bmOld != null)
+                    bmOld.Dispose();
+            }
+        }
+        /// <summary>
         /// Gets or sets the reference to the bitmap to be displayed on the very right side as predicted mask image. When a new reference is set, the previously assigned bitmap will be disposed.
         /// </summary>
         public Bitmap BitmapPrediction
@@ -387,6 +418,23 @@ namespace StreetMaker
             {
                 pnButtons.Visible = value;
                 lbStatus.Text = "";
+                if (value)
+                    viewPointMode = false;
+
+            }
+        }
+
+        /// <summary>
+        /// Get or set the view point mode of the form. This mode is used to display a view from a specific point and the direction angle including mouse move class displays.
+        /// </summary>
+        public bool ViewPointMode
+        {
+            get { return viewPointMode; }
+            set
+            {
+                viewPointMode = value;
+                if (value)
+                    FileMode = false;
             }
         }
 
@@ -413,7 +461,8 @@ namespace StreetMaker
         }
 
         /// <summary>
-        /// Gets or sets the ColorPalette for the class images</summary>
+        /// Gets or sets the ColorPalette for the class images
+        /// </summary>
         public Color[] ColorPalette
         {
             get { return colorPalette; }
@@ -421,6 +470,33 @@ namespace StreetMaker
             {
                 if (value.Length == 256)
                     colorPalette = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the class names array of strings containing the names of the classes
+        /// </summary>
+        public string[] ClassNames
+        {
+            get { return classNames; }
+            set
+            {
+                if (value.Length == 256)
+                    classNames = value;
+            }
+        }
+
+        /// <summary>
+        /// Displays the count on the lbCount label.
+        /// </summary>
+        public int Count
+        {
+            set
+            {
+                if (value > 0)
+                    lbCount.Text = "Dataset entries = " + value.ToString();
+                else
+                    lbCount.Text = "";
             }
         }
 

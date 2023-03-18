@@ -53,6 +53,8 @@
             this.tsmiView = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRedraw = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiShowViewPoints = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator22 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiShowPageLimits = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowItemNumbers = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowLaneNumbers = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,8 +76,8 @@
             this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.ssMainStatus = new System.Windows.Forms.StatusStrip();
             this.tsslCursorValues = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslLocation = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslFileName = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslLocation = new System.Windows.Forms.ToolStripStatusLabel();
             this.tscTools = new System.Windows.Forms.ToolStripContainer();
             this.pnDrawingArea = new System.Windows.Forms.Panel();
             this.pbDrawingArea = new System.Windows.Forms.PictureBox();
@@ -136,6 +138,7 @@
             this.tsbArrowStraightLeft = new System.Windows.Forms.ToolStripButton();
             this.tsbArrowLeftOnly = new System.Windows.Forms.ToolStripButton();
             this.tsbMergeLeft = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsRight2 = new System.Windows.Forms.ToolStrip();
             this.tsbDualLaneExitRight = new System.Windows.Forms.ToolStripButton();
             this.tsbDualLaneJunctionRight = new System.Windows.Forms.ToolStripButton();
@@ -146,6 +149,8 @@
             this.tsbArrowStraightOnly = new System.Windows.Forms.ToolStripButton();
             this.tsbArrowLeftRight = new System.Windows.Forms.ToolStripButton();
             this.tsbParking = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator20 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbViewPoint = new System.Windows.Forms.ToolStripButton();
             this.tsRight3 = new System.Windows.Forms.ToolStrip();
             this.tsbQuadLaneExitRight = new System.Windows.Forms.ToolStripButton();
             this.tsbQuadLaneJunctionRight = new System.Windows.Forms.ToolStripButton();
@@ -156,12 +161,14 @@
             this.tsbArrowStraightRight = new System.Windows.Forms.ToolStripButton();
             this.tsbArrowRightOnly = new System.Windows.Forms.ToolStripButton();
             this.tsbMergeRight = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.sfdSaveStreetMap = new System.Windows.Forms.SaveFileDialog();
             this.ofdLoadStreetMap = new System.Windows.Forms.OpenFileDialog();
             this.pdPrintStreepMap = new System.Windows.Forms.PrintDialog();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
             this.msMainMenu.SuspendLayout();
+            this.ssMainStatus.SuspendLayout();
             this.tscTools.ContentPanel.SuspendLayout();
             this.tscTools.LeftToolStripPanel.SuspendLayout();
             this.tscTools.RightToolStripPanel.SuspendLayout();
@@ -349,6 +356,8 @@
             this.tsmiView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiRedraw,
             this.toolStripSeparator18,
+            this.tsmiShowViewPoints,
+            this.toolStripSeparator22,
             this.tsmiShowPageLimits,
             this.tsmiShowItemNumbers,
             this.tsmiShowLaneNumbers});
@@ -369,12 +378,27 @@
             this.toolStripSeparator18.Name = "toolStripSeparator18";
             this.toolStripSeparator18.Size = new System.Drawing.Size(180, 6);
             // 
+            // tsmiShowViewPoints
+            // 
+            this.tsmiShowViewPoints.CheckOnClick = true;
+            this.tsmiShowViewPoints.Name = "tsmiShowViewPoints";
+            this.tsmiShowViewPoints.Size = new System.Drawing.Size(183, 22);
+            this.tsmiShowViewPoints.Text = "Show View Points";
+            this.tsmiShowViewPoints.ToolTipText = "Turn on or off displaying view point overlays placed on the map. ";
+            this.tsmiShowViewPoints.CheckStateChanged += new System.EventHandler(this.tsmiShowViewPoints_CheckStateChanged);
+            // 
+            // toolStripSeparator22
+            // 
+            this.toolStripSeparator22.Name = "toolStripSeparator22";
+            this.toolStripSeparator22.Size = new System.Drawing.Size(180, 6);
+            // 
             // tsmiShowPageLimits
             // 
             this.tsmiShowPageLimits.CheckOnClick = true;
             this.tsmiShowPageLimits.Name = "tsmiShowPageLimits";
             this.tsmiShowPageLimits.Size = new System.Drawing.Size(183, 22);
             this.tsmiShowPageLimits.Text = "Show Page Limits";
+            this.tsmiShowPageLimits.ToolTipText = "Turn on or off displaying the page limit lines for printing.";
             this.tsmiShowPageLimits.CheckStateChanged += new System.EventHandler(this.tsmiShowPageLimits_CheckStateChanged);
             // 
             // tsmiShowItemNumbers
@@ -531,6 +555,10 @@
             // 
             // ssMainStatus
             // 
+            this.ssMainStatus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsslLocation,
+            this.tsslCursorValues,
+            this.tsslFileName});
             this.ssMainStatus.Location = new System.Drawing.Point(0, 939);
             this.ssMainStatus.Name = "ssMainStatus";
             this.ssMainStatus.Size = new System.Drawing.Size(1904, 22);
@@ -541,19 +569,20 @@
             // 
             this.tsslCursorValues.AutoSize = false;
             this.tsslCursorValues.Name = "tsslCursorValues";
-            this.tsslCursorValues.Size = new System.Drawing.Size(450, 17);
-            // 
-            // tsslLocation
-            // 
-            this.tsslLocation.Name = "tsslLocation";
-            this.tsslLocation.Size = new System.Drawing.Size(12, 17);
-            this.tsslLocation.Text = "-";
+            this.tsslCursorValues.Size = new System.Drawing.Size(250, 17);
             // 
             // tsslFileName
             // 
             this.tsslFileName.Name = "tsslFileName";
             this.tsslFileName.Size = new System.Drawing.Size(12, 17);
             this.tsslFileName.Text = "-";
+            // 
+            // tsslLocation
+            // 
+            this.tsslLocation.AutoSize = false;
+            this.tsslLocation.Name = "tsslLocation";
+            this.tsslLocation.Size = new System.Drawing.Size(350, 17);
+            this.tsslLocation.Text = "-";
             // 
             // tscTools
             // 
@@ -594,11 +623,12 @@
             // 
             this.pbDrawingArea.Location = new System.Drawing.Point(0, 0);
             this.pbDrawingArea.Name = "pbDrawingArea";
-            this.pbDrawingArea.Size = new System.Drawing.Size(1189, 515);
+            this.pbDrawingArea.Size = new System.Drawing.Size(1189, 679);
             this.pbDrawingArea.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbDrawingArea.TabIndex = 2;
             this.pbDrawingArea.TabStop = false;
             this.pbDrawingArea.Paint += new System.Windows.Forms.PaintEventHandler(this.pbDrawingArea_Paint);
+            this.pbDrawingArea.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pbDrawingArea_MouseDoubleClick);
             this.pbDrawingArea.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbDrawingArea_MouseDown);
             this.pbDrawingArea.MouseLeave += new System.EventHandler(this.pbDrawingArea_MouseLeave);
             this.pbDrawingArea.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbDrawingArea_MouseMove);
@@ -1123,10 +1153,11 @@
             this.toolStripSeparator17,
             this.tsbArrowStraightLeft,
             this.tsbArrowLeftOnly,
-            this.tsbMergeLeft});
+            this.tsbMergeLeft,
+            this.toolStripButton1});
             this.tsRight1.Location = new System.Drawing.Point(0, 3);
             this.tsRight1.Name = "tsRight1";
-            this.tsRight1.Size = new System.Drawing.Size(37, 257);
+            this.tsRight1.Size = new System.Drawing.Size(37, 263);
             this.tsRight1.TabIndex = 0;
             // 
             // tsbSingleLaneExitRight
@@ -1217,6 +1248,11 @@
             this.tsbMergeLeft.Text = "Arrow Merge Left";
             this.tsbMergeLeft.Click += new System.EventHandler(this.tsbMergeLeft_Click);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(35, 6);
+            // 
             // tsRight2
             // 
             this.tsRight2.Dock = System.Windows.Forms.DockStyle.None;
@@ -1229,10 +1265,12 @@
             this.toolStripSeparator16,
             this.tsbArrowStraightOnly,
             this.tsbArrowLeftRight,
-            this.tsbParking});
+            this.tsbParking,
+            this.toolStripSeparator20,
+            this.tsbViewPoint});
             this.tsRight2.Location = new System.Drawing.Point(37, 3);
             this.tsRight2.Name = "tsRight2";
-            this.tsRight2.Size = new System.Drawing.Size(37, 257);
+            this.tsRight2.Size = new System.Drawing.Size(37, 263);
             this.tsRight2.TabIndex = 1;
             // 
             // tsbDualLaneExitRight
@@ -1323,6 +1361,23 @@
             this.tsbParking.Text = "Parking Sign";
             this.tsbParking.Click += new System.EventHandler(this.tsbParking_Click);
             // 
+            // toolStripSeparator20
+            // 
+            this.toolStripSeparator20.Name = "toolStripSeparator20";
+            this.toolStripSeparator20.Size = new System.Drawing.Size(35, 6);
+            // 
+            // tsbViewPoint
+            // 
+            this.tsbViewPoint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbViewPoint.Image = ((System.Drawing.Image)(resources.GetObject("tsbViewPoint.Image")));
+            this.tsbViewPoint.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsbViewPoint.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbViewPoint.Name = "tsbViewPoint";
+            this.tsbViewPoint.Size = new System.Drawing.Size(35, 36);
+            this.tsbViewPoint.Text = "View Point";
+            this.tsbViewPoint.Visible = false;
+            this.tsbViewPoint.Click += new System.EventHandler(this.tsbViewPoint_Click);
+            // 
             // tsRight3
             // 
             this.tsRight3.Dock = System.Windows.Forms.DockStyle.None;
@@ -1335,10 +1390,11 @@
             this.toolStripSeparator15,
             this.tsbArrowStraightRight,
             this.tsbArrowRightOnly,
-            this.tsbMergeRight});
+            this.tsbMergeRight,
+            this.toolStripButton2});
             this.tsRight3.Location = new System.Drawing.Point(74, 3);
             this.tsRight3.Name = "tsRight3";
-            this.tsRight3.Size = new System.Drawing.Size(37, 257);
+            this.tsRight3.Size = new System.Drawing.Size(37, 263);
             this.tsRight3.TabIndex = 2;
             // 
             // tsbQuadLaneExitRight
@@ -1429,6 +1485,11 @@
             this.tsbMergeRight.Text = "Arrow Merge Right";
             this.tsbMergeRight.Click += new System.EventHandler(this.tsbMergeRight_Click);
             // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(35, 6);
+            // 
             // toolTip1
             // 
             this.toolTip1.ToolTipTitle = "Title of this Tooltip";
@@ -1463,11 +1524,14 @@
             this.Name = "frmStreetMakerMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Street Maker";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmStreetMakerMain_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmStreetMakerMain_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.frmStreetMakerMain_KeyUp);
             this.Resize += new System.EventHandler(this.frmStreetMakerMain_Resize);
             this.msMainMenu.ResumeLayout(false);
             this.msMainMenu.PerformLayout();
+            this.ssMainStatus.ResumeLayout(false);
+            this.ssMainStatus.PerformLayout();
             this.tscTools.ContentPanel.ResumeLayout(false);
             this.tscTools.LeftToolStripPanel.ResumeLayout(false);
             this.tscTools.LeftToolStripPanel.PerformLayout();
@@ -1627,6 +1691,12 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem tsmiAbout;
         private System.Windows.Forms.ToolStripMenuItem tsmiJetCarProject;
+        private System.Windows.Forms.ToolStripSeparator toolStripButton1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator20;
+        private System.Windows.Forms.ToolStripButton tsbViewPoint;
+        private System.Windows.Forms.ToolStripSeparator toolStripButton2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowViewPoints;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator22;
     }
 }
 

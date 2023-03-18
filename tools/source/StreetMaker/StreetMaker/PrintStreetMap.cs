@@ -117,7 +117,7 @@ namespace StreetMaker
             grfx.Clear(AppSettings.BackgroundColor);
 
             grfx.TranslateTransform((float)(-offsX), (float)(-offsY), MatrixOrder.Prepend);
-            StreetMap.Draw(grfx, scaleFactor);
+            StreetMap.Draw(grfx, scaleFactor, false);
 
             if (OutlinesOnly)
             {

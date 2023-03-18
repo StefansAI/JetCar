@@ -33,6 +33,7 @@
             this.pbMaskImage = new System.Windows.Forms.PictureBox();
             this.pbCameraImg = new System.Windows.Forms.PictureBox();
             this.pnControl = new System.Windows.Forms.Panel();
+            this.lbCount = new System.Windows.Forms.Label();
             this.pnButtons = new System.Windows.Forms.Panel();
             this.lbIdx = new System.Windows.Forms.Label();
             this.btnFirst = new System.Windows.Forms.Button();
@@ -49,6 +50,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbMaskImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCameraImg)).BeginInit();
             this.pnControl.SuspendLayout();
+            this.lbCount.SuspendLayout();
             this.pnButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPredictionImage)).BeginInit();
             this.pnCursor.SuspendLayout();
@@ -80,12 +82,22 @@
             // 
             // pnControl
             // 
-            this.pnControl.Controls.Add(this.pnButtons);
+            this.pnControl.Controls.Add(this.lbCount);
             this.pnControl.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnControl.Location = new System.Drawing.Point(0, 521);
             this.pnControl.Name = "pnControl";
             this.pnControl.Size = new System.Drawing.Size(1368, 40);
             this.pnControl.TabIndex = 4;
+            // 
+            // lbCount
+            // 
+            this.lbCount.Controls.Add(this.pnButtons);
+            this.lbCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbCount.Location = new System.Drawing.Point(0, 0);
+            this.lbCount.Name = "lbCount";
+            this.lbCount.Size = new System.Drawing.Size(1368, 40);
+            this.lbCount.TabIndex = 6;
+            this.lbCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pnButtons
             // 
@@ -94,7 +106,7 @@
             this.pnButtons.Controls.Add(this.btnNext);
             this.pnButtons.Controls.Add(this.btnLast);
             this.pnButtons.Controls.Add(this.btnPrevious);
-            this.pnButtons.Location = new System.Drawing.Point(463, 5);
+            this.pnButtons.Location = new System.Drawing.Point(468, 6);
             this.pnButtons.Name = "pnButtons";
             this.pnButtons.Size = new System.Drawing.Size(429, 29);
             this.pnButtons.TabIndex = 5;
@@ -189,10 +201,9 @@
             // 
             // lbMaskCursor
             // 
-            this.lbMaskCursor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbMaskCursor.Location = new System.Drawing.Point(453, 0);
+            this.lbMaskCursor.Location = new System.Drawing.Point(459, 0);
             this.lbMaskCursor.Name = "lbMaskCursor";
-            this.lbMaskCursor.Size = new System.Drawing.Size(462, 20);
+            this.lbMaskCursor.Size = new System.Drawing.Size(448, 20);
             this.lbMaskCursor.TabIndex = 2;
             this.lbMaskCursor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -235,6 +246,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbMaskImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCameraImg)).EndInit();
             this.pnControl.ResumeLayout(false);
+            this.lbCount.ResumeLayout(false);
             this.pnButtons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbPredictionImage)).EndInit();
             this.pnCursor.ResumeLayout(false);
@@ -260,5 +272,6 @@
         private System.Windows.Forms.Label lbMaskCursor;
         private System.Windows.Forms.Label lbPredCursor;
         private System.Windows.Forms.Label lbImgCursor;
+        private System.Windows.Forms.Label lbCount;
     }
 }

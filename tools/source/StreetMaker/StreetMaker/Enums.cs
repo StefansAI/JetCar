@@ -55,8 +55,10 @@ namespace StreetMaker
         BaseLayer,
         /// <summary>Only draw the top layer of the shape, like lines.</summary>
         TopLayer,
-        /// <summary>Only draw the overlais on top of the shape, like arrows and signs.</summary>
-        Overlay
+        /// <summary>Only draw the overlays on top of the shape, like arrows and signs.</summary>
+        Overlay,
+        /// <summary>Only draw the view points on top of the shape and other overlays.</summary>
+        ViewPoint
     }
 
     /// <summary>
@@ -111,7 +113,9 @@ namespace StreetMaker
         /// <summary>Direction arrow to merge right.</summary>
         ArrowMergeRight,
         /// <summary>Simple parking sign.</summary>
-        ParkingSign
+        ParkingSign,
+        /// <summary>A special overlay to mark a view point for the camera view when creating a dataset.</summary>
+        ViewPoint
     }
 
     /// <summary>
