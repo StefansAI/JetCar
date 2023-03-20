@@ -15,7 +15,7 @@
 // Activate to vizualize the indices of the corner rounds as number strings next to the corner
 //#define DEBUG_DRAW_CORNER_IDX
 
-// Activate to visualize the point arrays recalculated in the CornerRound.Update method. To vizualize, DEBUG_CORNER_ROUND_UPDATE_POINTS has to be enabled in both: Intersection.cs and CornerRound.sc
+// Activate to visualize the point arrays recalculated in the CornerRound.Update method. To vizualize, DEBUG_CORNER_ROUND_UPDATE_POINTS has to be enabled in both: Intersection.cs and CornerRound.cs
 //#define DEBUG_CORNER_ROUND_UPDATE_POINTS
 
 using System;
@@ -494,7 +494,7 @@ namespace StreetMaker
                         {
                             grfx.FillPolygon(new SolidBrush(GetDrawColor(SegmClassDefs.ScdWrongDir)), GetInnerPolygon(ScaleFactor));
                         }
-                        else if (StreetDescriptors[1].Lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir) // when StreetDescriptors.Length == 2
+                        else if ((StreetDescriptors[1].Lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir) && (DrawWrongDirItems == true)) // when StreetDescriptors.Length == 2
                         {
                             // the T-intersection has lanes going through and are now drawn with class codes left and right completely
                             // -> draw wrong dir over right turn code from left to center
@@ -584,7 +584,7 @@ namespace StreetMaker
                             }
                         }
                             
-                        if ((StreetDescriptors.Length == 2) && (StreetDescriptors[1].Lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir))
+                        if ((StreetDescriptors.Length == 2) && (StreetDescriptors[1].Lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir) && (DrawWrongDirItems == true))
                         {
                             // Since lane codes had been drawn over the lines, restore them now on top
                             foreach (LaneElement le in StreetDescriptors[0].Lanes)
@@ -776,7 +776,7 @@ namespace StreetMaker
                             grfx.FillPolygon(new SolidBrush(color), Utils.Scale(poly, ScaleFactor));
                         }
 
-                        bool handleStopYield = (Lanes[0].ColorMode == ColorMode.ImageColor) || (DrawWrongDirItems == true) || ((StreetDescriptors[i].Lanes[0].SegmClassDef != SegmClassDefs.ScdWrongDir) && (StreetDescriptors[i].Lanes[0].SegmClassDef != SegmClassDefs.ScdNothing));
+                        bool handleStopYield = (Lanes[0].ColorMode == ColorMode.ImageColor) || (DrawWrongDirItems == true) || (DrawWrongDirStopYield == true) || ((StreetDescriptors[i].Lanes[0].SegmClassDef != SegmClassDefs.ScdWrongDir) && (StreetDescriptors[i].Lanes[0].SegmClassDef != SegmClassDefs.ScdNothing));
                         if (Lanes[0].ColorMode != ColorMode.ImageColor)
                             handleStopYield &= (Utils.GetDistance(CameraPoint, pl) < MaxDetailDist) && (Utils.GetDistance(CameraPoint, pr) < MaxDetailDist);
 
@@ -971,6 +971,50 @@ namespace StreetMaker
 #endif
                     break;
 
+                case DrawMode.Overlay:
+                    // Overlays are normally handled correctly with the class code assignment to their owning lanes.
+                    // But T-Intersections have through lanes marked as left and right, but then wrong dir drawn over half of them when coming from the side street.
+                    // To correctly handle this, the wrong dir code is drawn over the already drawn overlays.
+                    if ((Lanes[0].ColorMode != ColorMode.ImageColor) && (DrawWrongDirItems == false) && 
+                        (StreetDescriptors.Length == 2) && (StreetDescriptors[1].Lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir))
+                    {
+                        // the T-intersection has lanes going through and are now drawn with class codes left and right completely
+                        // -> draw wrong dir over right turn code from left to center
+                        PointF[] poly = new PointF[5];
+                        if (StreetDescriptors[0].LaneCountRight > 0)
+                        {
+                            poly[0] = StreetDescriptors[1].Lanes[0].Connectors[1].EndP0;
+                            poly[1] = StreetDescriptors[0].Lanes[0].Connectors[0].EndP1;
+                            poly[2] = StreetDescriptors[0].Lanes[StreetDescriptors[0].LaneCountRight - 1].Connectors[0].EndP0;
+                            double w = Utils.GetDistance(poly[1], poly[2]);
+                            double a = Utils.GetAngle(poly[1], poly[2]);
+                            poly[3] = Utils.GetPoint(poly[0], a, w);
+                            poly[4] = poly[0];
+                            grfx.FillPolygon(new SolidBrush(GetDrawColor(SegmClassDefs.ScdWrongDir)), Utils.Scale(poly, ScaleFactor));
+                        }
+                        // draw wrong dir over left turn code from right to center
+                        if (StreetDescriptors[0].LaneCountLeft > 0)
+                        {
+                            poly[0] = innerArea[2]; // innerPoly[2];
+                            poly[1] = StreetDescriptors[0].Lanes[StreetDescriptors[0].LaneCount - 1].Connectors[1].EndP0;
+                            poly[2] = StreetDescriptors[0].Lanes[StreetDescriptors[0].LaneCount - StreetDescriptors[0].LaneCountLeft].RightLine.Connectors[1].EndP0;
+                            double w = Utils.GetDistance(poly[1], poly[2]);
+                            double a = Utils.GetAngle(poly[1], poly[2]);
+                            poly[3] = Utils.GetPoint(poly[0], a, w);
+                            poly[4] = poly[0];
+                            grfx.FillPolygon(new SolidBrush(GetDrawColor(SegmClassDefs.ScdWrongDir)), Utils.Scale(poly, ScaleFactor));
+                        }
+                        // Since lane codes had been drawn over the lines, restore them now on top
+                        foreach (LaneElement le in StreetDescriptors[0].Lanes)
+                        {
+                            if ((le.RightLine != null) && (le != StreetDescriptors[0].Lanes[0]))
+                                le.RightLine.Draw(grfx, ScaleFactor, DrawMode.BaseLayer);
+
+                            if (le.LeftLine != null)
+                                le.LeftLine.Draw(grfx, ScaleFactor, DrawMode.BaseLayer);
+                        }
+                    }
+                    break;
             }
 
 #if DEBUG_CORNER_ROUND_UPDATE_POINTS

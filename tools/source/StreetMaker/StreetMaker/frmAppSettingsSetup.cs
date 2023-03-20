@@ -244,13 +244,12 @@ namespace StreetMaker
 
             nudCameraAxisAngle.Value = (decimal)editSettings.CameraAxisAngle;
 
-            ckbDrawWrongDirItems.Checked = editSettings.DrawWrongDirItems;
 
             nudTrainValRatio.Value = (decimal)editSettings.TrainValRatio;
-            ckbValidateCenterViewsOnly.Checked = editSettings.ValidateCenterViewsOnly;
             nudTestOutRatio.Value = (decimal)editSettings.TestOutRatio;
-            ckbTestCenterViewsOnly.Checked = editSettings.TestCenterViewsOnly;
             ckbCenterBrightnessResults.Checked = editSettings.CenterBrightnessResults;
+            ckbDrawWrongDirItems.Checked = editSettings.DrawWrongDirItems;
+            ckbDrawWrongDirStopYield.Checked = editSettings.DrawWrongDirStopYield;
 
             tbSideSteps.Text = FloatVectorToString(editSettings.SideSteps);
             tbAngleSteps.Text = FloatVectorToString(editSettings.AngleSteps);
@@ -358,13 +357,11 @@ namespace StreetMaker
             editSettings.CameraOutputWidth =  (int)nudCameraOutputWidth.Value;
             editSettings.CameraOutputHeight = (int)nudCameraOutputHeight.Value;
 
-            editSettings.DrawWrongDirItems = ckbDrawWrongDirItems.Checked;
-
             editSettings.TrainValRatio = (int)nudTrainValRatio.Value;
-            editSettings.ValidateCenterViewsOnly = ckbValidateCenterViewsOnly.Checked;
             editSettings.TestOutRatio = (int)nudTestOutRatio.Value;
-            editSettings.TestCenterViewsOnly = ckbTestCenterViewsOnly.Checked;
             editSettings.CenterBrightnessResults = ckbCenterBrightnessResults.Checked;
+            editSettings.DrawWrongDirItems = ckbDrawWrongDirItems.Checked;
+            editSettings.DrawWrongDirStopYield = ckbDrawWrongDirStopYield.Checked;
 
             editSettings.SideSteps = StringToFloatVector(tbSideSteps.Text, (float)editSettings.LaneWidth * AppSettings.SIDE_STEPS_FACTOR_MIN, (float)editSettings.LaneWidth * AppSettings.SIDE_STEPS_FACTOR_MAX);
             editSettings.AngleSteps = StringToFloatVector(tbAngleSteps.Text, AppSettings.ANGLE_STEP_MIN, AppSettings.ANGLE_STEP_MAX);

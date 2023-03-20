@@ -215,11 +215,12 @@
             this.label77 = new System.Windows.Forms.Label();
             this.nudCameraHFOV = new System.Windows.Forms.NumericUpDown();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.lbTranValTest = new System.Windows.Forms.Label();
+            this.label105 = new System.Windows.Forms.Label();
             this.lbResultingImageCount = new System.Windows.Forms.Label();
             this.label104 = new System.Windows.Forms.Label();
             this.ckbCenterBrightnessResults = new System.Windows.Forms.CheckBox();
-            this.ckbTestCenterViewsOnly = new System.Windows.Forms.CheckBox();
-            this.ckbValidateCenterViewsOnly = new System.Windows.Forms.CheckBox();
+            this.ckbDrawWrongDirStopYield = new System.Windows.Forms.CheckBox();
             this.nudImageStepSize = new System.Windows.Forms.NumericUpDown();
             this.label89 = new System.Windows.Forms.Label();
             this.nudTestOutRatio = new System.Windows.Forms.NumericUpDown();
@@ -280,8 +281,6 @@
             this.fbdSelectPath = new System.Windows.Forms.FolderBrowserDialog();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.label105 = new System.Windows.Forms.Label();
-            this.lbTranValTest = new System.Windows.Forms.Label();
             this.gbDefaultDrawingSize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDefaultDrawingHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDefaultDrawingWidth)).BeginInit();
@@ -2151,7 +2150,6 @@
             this.groupBox7.Controls.Add(this.label97);
             this.groupBox7.Controls.Add(this.label98);
             this.groupBox7.Controls.Add(this.nudColorCorrRed);
-            this.groupBox7.Controls.Add(this.ckbDrawWrongDirItems);
             this.groupBox7.Controls.Add(this.label96);
             this.groupBox7.Controls.Add(this.nudMarkMaxDetailDistance);
             this.groupBox7.Controls.Add(this.nudMarkLaneMaxDistSide);
@@ -2287,11 +2285,11 @@
             // ckbDrawWrongDirItems
             // 
             this.ckbDrawWrongDirItems.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckbDrawWrongDirItems.Location = new System.Drawing.Point(225, 199);
+            this.ckbDrawWrongDirItems.Location = new System.Drawing.Point(225, 42);
             this.ckbDrawWrongDirItems.Name = "ckbDrawWrongDirItems";
             this.ckbDrawWrongDirItems.Size = new System.Drawing.Size(153, 24);
             this.ckbDrawWrongDirItems.TabIndex = 43;
-            this.ckbDrawWrongDirItems.Text = "Draw Wrong Dir Items:";
+            this.ckbDrawWrongDirItems.Text = "Draw all Wrong Dir Items:";
             this.toolTip1.SetToolTip(this.ckbDrawWrongDirItems, "If true, overlays and intersection items are drawn in wrong direction.");
             this.ckbDrawWrongDirItems.UseVisualStyleBackColor = true;
             // 
@@ -2700,8 +2698,8 @@
             this.groupBox6.Controls.Add(this.lbResultingImageCount);
             this.groupBox6.Controls.Add(this.label104);
             this.groupBox6.Controls.Add(this.ckbCenterBrightnessResults);
-            this.groupBox6.Controls.Add(this.ckbTestCenterViewsOnly);
-            this.groupBox6.Controls.Add(this.ckbValidateCenterViewsOnly);
+            this.groupBox6.Controls.Add(this.ckbDrawWrongDirStopYield);
+            this.groupBox6.Controls.Add(this.ckbDrawWrongDirItems);
             this.groupBox6.Controls.Add(this.nudImageStepSize);
             this.groupBox6.Controls.Add(this.label89);
             this.groupBox6.Controls.Add(this.nudTestOutRatio);
@@ -2726,6 +2724,25 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Augmentation";
             // 
+            // lbTranValTest
+            // 
+            this.lbTranValTest.AutoSize = true;
+            this.lbTranValTest.Location = new System.Drawing.Point(311, 99);
+            this.lbTranValTest.Name = "lbTranValTest";
+            this.lbTranValTest.Size = new System.Drawing.Size(47, 13);
+            this.lbTranValTest.TabIndex = 50;
+            this.lbTranValTest.Text = "label106";
+            this.toolTip1.SetToolTip(this.lbTranValTest, "Predicted number of images/masks for train/validation and test.");
+            // 
+            // label105
+            // 
+            this.label105.AutoSize = true;
+            this.label105.Location = new System.Drawing.Point(227, 99);
+            this.label105.Name = "label105";
+            this.label105.Size = new System.Drawing.Size(80, 13);
+            this.label105.TabIndex = 49;
+            this.label105.Text = "Train/Val/Test:";
+            // 
             // lbResultingImageCount
             // 
             this.lbResultingImageCount.AutoSize = true;
@@ -2748,7 +2765,7 @@
             // ckbCenterBrightnessResults
             // 
             this.ckbCenterBrightnessResults.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckbCenterBrightnessResults.Location = new System.Drawing.Point(225, 68);
+            this.ckbCenterBrightnessResults.Location = new System.Drawing.Point(225, 16);
             this.ckbCenterBrightnessResults.Name = "ckbCenterBrightnessResults";
             this.ckbCenterBrightnessResults.Size = new System.Drawing.Size(153, 24);
             this.ckbCenterBrightnessResults.TabIndex = 46;
@@ -2757,27 +2774,16 @@
         "e.");
             this.ckbCenterBrightnessResults.UseVisualStyleBackColor = true;
             // 
-            // ckbTestCenterViewsOnly
+            // ckbDrawWrongDirStopYield
             // 
-            this.ckbTestCenterViewsOnly.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckbTestCenterViewsOnly.Location = new System.Drawing.Point(225, 42);
-            this.ckbTestCenterViewsOnly.Name = "ckbTestCenterViewsOnly";
-            this.ckbTestCenterViewsOnly.Size = new System.Drawing.Size(153, 24);
-            this.ckbTestCenterViewsOnly.TabIndex = 45;
-            this.ckbTestCenterViewsOnly.Text = "Test Center Views Only:";
-            this.toolTip1.SetToolTip(this.ckbTestCenterViewsOnly, "If true, only center view sets will be placed into test folders.");
-            this.ckbTestCenterViewsOnly.UseVisualStyleBackColor = true;
-            // 
-            // ckbValidateCenterViewsOnly
-            // 
-            this.ckbValidateCenterViewsOnly.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckbValidateCenterViewsOnly.Location = new System.Drawing.Point(225, 16);
-            this.ckbValidateCenterViewsOnly.Name = "ckbValidateCenterViewsOnly";
-            this.ckbValidateCenterViewsOnly.Size = new System.Drawing.Size(153, 24);
-            this.ckbValidateCenterViewsOnly.TabIndex = 44;
-            this.ckbValidateCenterViewsOnly.Text = "Val. Center Views Only:";
-            this.toolTip1.SetToolTip(this.ckbValidateCenterViewsOnly, "If true, only center view sets will be placed into validation folders.");
-            this.ckbValidateCenterViewsOnly.UseVisualStyleBackColor = true;
+            this.ckbDrawWrongDirStopYield.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ckbDrawWrongDirStopYield.Location = new System.Drawing.Point(225, 68);
+            this.ckbDrawWrongDirStopYield.Name = "ckbDrawWrongDirStopYield";
+            this.ckbDrawWrongDirStopYield.Size = new System.Drawing.Size(153, 24);
+            this.ckbDrawWrongDirStopYield.TabIndex = 44;
+            this.ckbDrawWrongDirStopYield.Text = "Draw Wrong Dir Stop/Y:";
+            this.toolTip1.SetToolTip(this.ckbDrawWrongDirStopYield, "If true, stop and yield lines and their texts are drawn on wrong dirs.");
+            this.ckbDrawWrongDirStopYield.UseVisualStyleBackColor = true;
             // 
             // nudImageStepSize
             // 
@@ -3353,25 +3359,6 @@
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
             this.dataGridViewTextBoxColumn1.Width = 70;
             // 
-            // label105
-            // 
-            this.label105.AutoSize = true;
-            this.label105.Location = new System.Drawing.Point(227, 99);
-            this.label105.Name = "label105";
-            this.label105.Size = new System.Drawing.Size(80, 13);
-            this.label105.TabIndex = 49;
-            this.label105.Text = "Train/Val/Test:";
-            // 
-            // lbTranValTest
-            // 
-            this.lbTranValTest.AutoSize = true;
-            this.lbTranValTest.Location = new System.Drawing.Point(311, 99);
-            this.lbTranValTest.Name = "lbTranValTest";
-            this.lbTranValTest.Size = new System.Drawing.Size(47, 13);
-            this.lbTranValTest.TabIndex = 50;
-            this.lbTranValTest.Text = "label106";
-            this.toolTip1.SetToolTip(this.lbTranValTest, "Predicted number of images/masks for train/validation and test.");
-            // 
             // frmAppSettingsSetup
             // 
             this.AcceptButton = this.btnOK;
@@ -3711,8 +3698,7 @@
         private System.Windows.Forms.CheckBox ckbDrawWrongDirItems;
         private System.Windows.Forms.Label label96;
         private System.Windows.Forms.NumericUpDown nudMarkMaxDetailDistance;
-        private System.Windows.Forms.CheckBox ckbTestCenterViewsOnly;
-        private System.Windows.Forms.CheckBox ckbValidateCenterViewsOnly;
+        private System.Windows.Forms.CheckBox ckbDrawWrongDirStopYield;
         private System.Windows.Forms.CheckBox ckbCenterBrightnessResults;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.TextBox tbSubDirStreetmaps;

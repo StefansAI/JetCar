@@ -283,6 +283,8 @@ namespace StreetMaker
         public double MarkMaxDetailDistance = 1400;
         /// <summary>If true, overlays and intersection items are drawn in wrong direction.</summary>
         public bool DrawWrongDirItems = false;
+        /// <summary>If true, stop and yield lines and signs are drawn in wrong direction.</summary>
+        public bool DrawWrongDirStopYield = false;
         /// <summary>If true, class images are generated to show the classes in different colors.</summary>
         public bool IncludeClassImages = false;
 
@@ -291,12 +293,8 @@ namespace StreetMaker
         #region Augmentation
         /// <summary>Ratio between training and validation output. 50 for instance means that about every 50th image,mask and info set will be placed into the validation folders instead of training folders.</summary>
         public int TrainValRatio = 50;
-        /// <summary>If true, only center view sets will be placed into validation folders.</summary>
-        public bool ValidateCenterViewsOnly = false;
         /// <summary>Ratio between Train/Val and Test output. 100 for instance means that about every 100th image,mask and info set will be copied into the test folder.</summary>
         public int TestOutRatio = 100;
-        /// <summary>If true, only center view sets will be placed into test folders.</summary>
-        public bool TestCenterViewsOnly = false;
 
         /// <summary>Step size for new images to be created along each lane.</summary>
         public double ImageStepSize = 120;
@@ -639,14 +637,13 @@ namespace StreetMaker
                 MarkLaneMaxDistSideAngle = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("mark_lane_max_dist_side_angle").InnerText);
                 MarkMaxDetailDistance = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("mark_max_detail_distance").InnerText);
                 DrawWrongDirItems = Convert.ToBoolean(nodeVirtualCam.SelectSingleNode("draw_wrong_dir_items").InnerText);
+                DrawWrongDirStopYield = Convert.ToBoolean(nodeVirtualCam.SelectSingleNode("draw_wrong_dir_stop_yield").InnerText);
                 IncludeClassImages = Convert.ToBoolean(nodeVirtualCam.SelectSingleNode("include_class_images").InnerText);
 
                 XmlNode nodeAugmentation = nodeDataGen.SelectSingleNode("augmentation");
 
                 TrainValRatio = Convert.ToInt32(nodeAugmentation.SelectSingleNode("train_val_ratio").InnerText);
-                ValidateCenterViewsOnly = Convert.ToBoolean(nodeAugmentation.SelectSingleNode("validate_center_views_only").InnerText);
                 TestOutRatio = Convert.ToInt32(nodeAugmentation.SelectSingleNode("test_out_ratio").InnerText);
-                TestCenterViewsOnly = Convert.ToBoolean(nodeAugmentation.SelectSingleNode("test_center_views_only").InnerText);
                 CenterBrightnessResults = Convert.ToBoolean(nodeAugmentation.SelectSingleNode("center_brightness_results").InnerText);
 
                 XmlNode nodeSideSteps = nodeAugmentation.SelectSingleNode("side_steps");
@@ -864,14 +861,13 @@ namespace StreetMaker
                 nodeVirtualCam.AppendChild(doc.CreateElement("mark_max_detail_distance")).AppendChild(doc.CreateTextNode(MarkMaxDetailDistance.ToString())); ;
 
                 nodeVirtualCam.AppendChild(doc.CreateElement("draw_wrong_dir_items")).AppendChild(doc.CreateTextNode(DrawWrongDirItems.ToString()));
+                nodeVirtualCam.AppendChild(doc.CreateElement("draw_wrong_dir_stop_yield")).AppendChild(doc.CreateTextNode(DrawWrongDirStopYield.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("include_class_images")).AppendChild(doc.CreateTextNode(IncludeClassImages.ToString()));
 
                 XmlNode nodeAugmentation = nodeDataGen.AppendChild(doc.CreateElement("augmentation"));
 
                 nodeAugmentation.AppendChild(doc.CreateElement("train_val_ratio")).AppendChild(doc.CreateTextNode(TrainValRatio.ToString()));
-                nodeAugmentation.AppendChild(doc.CreateElement("validate_center_views_only")).AppendChild(doc.CreateTextNode(ValidateCenterViewsOnly.ToString()));
                 nodeAugmentation.AppendChild(doc.CreateElement("test_out_ratio")).AppendChild(doc.CreateTextNode(TestOutRatio.ToString()));
-                nodeAugmentation.AppendChild(doc.CreateElement("test_center_views_only")).AppendChild(doc.CreateTextNode(TestCenterViewsOnly.ToString()));
                 nodeAugmentation.AppendChild(doc.CreateElement("image_step_size")).AppendChild(doc.CreateTextNode(ImageStepSize.ToString()));
                 nodeAugmentation.AppendChild(doc.CreateElement("center_brightness_results")).AppendChild(doc.CreateTextNode(CenterBrightnessResults.ToString()));
 

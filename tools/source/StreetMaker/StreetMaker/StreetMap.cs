@@ -771,6 +771,18 @@ namespace StreetMaker
 
         #region Dataset Generation
         /// <summary>
+        /// Update the DrawWrongDirItems and DrawWrongDirStopYield fields for all street elements.
+        /// </summary>
+        private void UpdateDrawWrongDir()
+        {
+            foreach (StreetElement se in Items)
+            {
+                se.DrawWrongDirItems = AppSettings.DrawWrongDirItems;
+                se.DrawWrongDirStopYield = AppSettings.DrawWrongDirStopYield;
+            }
+         }
+
+        /// <summary>
         /// Delete all files in the requested folder or creates the folder if doesn't exist.
         /// </summary>
         /// <param name="Path">Full path to the folder.</param>
@@ -1062,6 +1074,7 @@ namespace StreetMaker
             if (Items.Count == 0)
                 return;
 
+            UpdateDrawWrongDir();
             ClearDataset(DatasetPath);
 
             string ImgPath = DatasetPath + AppSettings.SubDirDataSet + AppSettings.SubDirImg;
@@ -1203,9 +1216,7 @@ namespace StreetMaker
                                                         // choose target directory randomly with the train/val-ration as target
                                                         string trainVal = AppSettings.SubDirTrain;
                                                         trainValCount++;
-                                                        bool valOut = AppSettings.ValidateCenterViewsOnly == true ?
-                                                            (trainValCount >= AppSettings.TrainValRatio) && (AppSettings.SideSteps[sideIdx] == 0) && (AppSettings.AngleSteps[angleIdx] == 0) :
-                                                            (rnd.Next(AppSettings.TrainValRatio) == 0) || (trainValCount > 2 * AppSettings.TrainValRatio);
+                                                        bool valOut = (rnd.Next(AppSettings.TrainValRatio) == 0) || (trainValCount > 2 * AppSettings.TrainValRatio);
 
                                                         if (valOut == true)
                                                         {
@@ -1238,9 +1249,7 @@ namespace StreetMaker
 #endif
                                                         // create additional test images in the requested ratio
                                                         testOutCount++;
-                                                        bool testOut = AppSettings.TestCenterViewsOnly == true ?
-                                                            (testOutCount >= AppSettings.TestOutRatio) && (AppSettings.SideSteps[sideIdx] == 0) && (AppSettings.AngleSteps[angleIdx] == 0) :
-                                                            (rnd.Next(AppSettings.TestOutRatio) == 0) || (testOutCount > 2 * AppSettings.TestOutRatio);
+                                                        bool testOut = (rnd.Next(AppSettings.TestOutRatio) == 0) || (testOutCount > 2 * AppSettings.TestOutRatio);
 
                                                         if (testOut == true)
                                                         {
@@ -1297,6 +1306,7 @@ namespace StreetMaker
         /// <param name="DirectionAngle">Direction to point the virtual camera.</param>
         public void GenerateCameraViewImages(Bitmap StreetBitmap, PointF ViewPoint, double DirectionAngle)
         {
+            UpdateDrawWrongDir();
             CameraPoint = ViewPoint;    //Set the camera location for generating the views
             Bitmap bmClassCode = DrawClassColorBitmap(StreetBitmap, ViewPoint, DirectionAngle);
             VirtualCamera.TakeImgResult CameraImgs = VirtualCamera.TakeImage(AppSettings, StreetBitmap, bmClassCode, ViewPoint, DirectionAngle);
@@ -1829,7 +1839,7 @@ namespace StreetMaker
                             }
                             else
                             {
-                                //                            throw new Exception("if (scdX != SegmClassDefs.ScdNothing) else in isn");
+                                // throw new Exception("if (scdX != SegmClassDefs.ScdNothing) else in isn");
                             }
                         }
                         else
@@ -1856,7 +1866,7 @@ namespace StreetMaker
                                         }
                                         else
                                         {
-                                            //                                            throw new Exception("else if (le.Connectors[0].Mode == ConnectorMode.Out) else in isn");
+                                            // throw new Exception("else if (le.Connectors[0].Mode == ConnectorMode.Out) else in isn");
                                         }
                                     }
                                 }

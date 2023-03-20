@@ -39,6 +39,8 @@ namespace StreetMaker
         public int DashSyncOrder;
         /// <summary>If true, overlays and intersection items are drawn in wrong direction.</summary>
         public bool DrawWrongDirItems = false;
+        /// <summary>If true, stop and yield lines and signs are drawn in wrong direction.</summary>
+        public bool DrawWrongDirStopYield = false;
         /// <summary>Point of the camera to be used together with MaxDetailDist to check for marking class details in Draw method.</summary>
         public PointF CameraPoint;
         /// <summary>Maximum distance from CameraPoint for marking class details in Draw method.</summary>
