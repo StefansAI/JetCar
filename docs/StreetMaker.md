@@ -86,6 +86,7 @@ Let's close it for now and continue.
 <br><br>
 <br><img src="assets/images/streetmaker/25-view.jpg"/><br>
 Whenever there are some drawing artefacts left from ovberlapping elements while placing them, the "Redraw" menu item will farce a complete new drawing of the map, clearing it from artefacts.<br>
+Let's ignore "Show View Points" for now. It will be explained further down.<br>
 "Show Page Limits" can help to determine the number of needed print pages in width and height and to center the map.<br>
 "Show Item Numbers" and "Show Lane numbers" can be used for any identification for troubleshooting by overlaying the index of each street element in the internal list and the lane index of each street or intersection.
 <br><br>
@@ -109,6 +110,8 @@ Even if it says 120 degrees of horizontal field of view for the camera and the a
 Besides geometrical distortion, there are fields for color distortion. When the camera looks at a printout of a specific color, it does not see the same as the color printed out. Experimentally the overall brightness factor came out around 80%, but the red color was much higher around 95%. That's why there are 3 color correction values for creating a camera view image. A different camera and different lighting may result in other factors.<br>
 The last parameter "Mark Lane Max Front", "Mark Lane Max Side" and "Mask Max Detail Dist." determine how far out or to the side anything is represented in the mask and how far overlay details are generated. It doesn't make too much sense to train on a few pixels arrow or even a street far out. These limits create some kind of horizon for the mask.<br>
 The augmentation area shows similar parameter fields as in the ImageSegmenter and similar multiplication rules apply when adding more values. But there is also an "Image Step Size". This is exactly the step size moving the camera forward or backwards as described in the previous images above. Increasing this number will reduce the number of images in the dataset and decreasing the step size will result in more.<br>
+<br><img src="assets/images/streetmaker/30a-augmentation.jpg"/><br>
+If a street map is loaded, the program calculates the number of image/mask pairs that will be generated with the current parameter. It will be updated after changing step size or any of the augmentation parameters.<br>
 There are some more checkboxes to be ignored for now, since they were introduced for testing different options. But the defaults are best.<br>
 The class definition table here on the right side is a bit different than the one in the ImageSegmenter not only because more class possibilities were introduced with StreetMaker, like crosswalks. Some items were also renamed slightly. But the column "UseCount" hints to another feature of this application. It will always optimize the class output to what is actually used in the particular street map. Every UseCount of 0 will be removed from the ClassCode enumeration. Note that the ClassCode is set to -1 for each class that is not used. This will result in an optimal set of classes for each individual map, which is more efficient for run-time execution but worse for exchangeability of model weights between different maps. The compromise is training on a map with more classes used, but printing maps with subsets of that training map. <br>
 Let's have a look at the "File Names" group. When generating a new dataset, these 2 files are generated too and written to the data path.
@@ -145,7 +148,26 @@ But the "yield_line" had also a low occurance, which cannot be solved this way.
 Alternatively you can just enlarge the training map and add more street elements and overlays there. The added streets don't have to make real sense as a map, they are just there to create more images and masks in the dataset for training on these classes.
 <br><br>
 <br><img src="assets/images/streetmaker/38-medium_training_classes.jpg"/><br>
-With this training map, the number of occurances look better than before. This training map was used for the model weights file in the firmware/jetcar/notebook folder.
+With this training map, the number of occurances look better than before, but it is still not the best solution.
+<br><br>
+<br><img src="assets/images/streetmaker/39-viewpoints.jpg"/><br>
+Let's get back to the menu item "Show View Points". When checking it, a new overlay is enabled, that wasn't there before.<br>
+Adding this "View Point" to the street map gives you more control over the dataset generation for the model training.<br><br>
+<br><img src="assets/images/streetmaker/40-viewpointmap.jpg"/><br>
+When looking at the medium training map after turning on the view points, a number of small red outlined triangles become visible. When generating the dataset, it will be checked if a lane element had viewpoints assigned or not. If yes, only these view points will be used to generate image/mask pairs for the dataset. If none are assigned, image/mask pairs are generated automatically along the lane element using the step size.<br><br>
+<br><img src="assets/images/streetmaker/41-example1.jpg"/><br>
+View points can be placed strategically to generate clear views on details, like this arrow and the intersection. Double click on the view point and the virtual camera view comes up.<br><br>
+<br><img src="assets/images/streetmaker/42-view1.jpg"/><br>
+The complete arrow is in full view and not a fraction of it. Just imagine, the automatic view placement would have ended up showing just the arraw tip and training the model on the straight-right-arrow class. It might later confuse every arrow tip as that class, even if it is just a straight arrow or a straight-left-arrow.<br><br>
+<br><img src="assets/images/streetmaker/43-example2.jpg"/><br>
+Here is another example of a placement with unwanted results. If the automatic algorithm placed the point just at the end of the intersection, another training problem can occur.<br><br>
+<br><img src="assets/images/streetmaker/44-view2.jpg"/><br>
+At the bottom right of this view there is the artefact of the last piece of intersection with the wrong-direction class code, but the white line in the view.<br> 
+Part of the problem is suppressing all marking on wrong-dir-lanes, which suppressed the stop-line class here. But the line is also recessed and the wrong-dir code will still show up around it.<br>
+This problem occured often enough with automatic view generation, that wrong-dir artefacts showed up between shoulder line class and driving direction class at inference. Placing the view points correctly will avoid this completely. <br><br>
+<br><img src="assets/images/streetmaker/45-intersection.jpg"/><br>
+The picture above shows the placement around one intersection. Several view point had been placed before arrows to enhance the training on the arrows and intersections. View points directly at the stop signs will improve their training. View points at the interscetion exit lanes are placed behind the curves to avoid the artefacts shown above.
+ 
 <br><br><br>
 
 - [Data Preparation with ImageSegmenter](docs/Data%20Preparation.md)

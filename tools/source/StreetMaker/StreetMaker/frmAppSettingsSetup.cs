@@ -175,6 +175,8 @@ namespace StreetMaker
 
             nudStreetOutlineLineWidth.Value = (decimal)editSettings.StreetOutlineLineWidth;
             nudOverlayOutlineLineWidth.Value = (decimal)editSettings.OverlayOutlineLineWidth;
+            nudViewPointLength.Value = (decimal)editSettings.ViewPointLength;
+            nudViewPointWidth.Value = (decimal)editSettings.ViewPointWidth;
 
             btnLaneColor.BackColor = editSettings.LaneColor;
             btnLineColorWhite.BackColor = editSettings.LineColorWhite;
@@ -190,6 +192,7 @@ namespace StreetMaker
             btnConnectorNoDirColor.BackColor = editSettings.ConnectorNoDirColor;
             btnConnectionDrawColor.BackColor = editSettings.ConnectionDrawColor;
             btnConnectionSnapColor.BackColor = editSettings.ConnectionSnapColor;
+            btnViewPointOutlineColor.BackColor = editSettings.ViewPointOutlineColor;
 
             SetHotkeyCB(cbHotkeyDelete,editSettings.HotkeyDelete);
             SetHotkeyCB(cbHotkeyAbort,editSettings.HotkeyAbort);
@@ -266,7 +269,7 @@ namespace StreetMaker
 
                 dtSegmClassDefs.Rows.Add(row);
             }
-
+            lbResultingImageCount.Text = MainForm.StreetMap.GetDatasetImageCount(editSettings).ToString();
         }
 
         /// <summary>
@@ -287,6 +290,8 @@ namespace StreetMaker
 
             editSettings.StreetOutlineLineWidth = (double)nudStreetOutlineLineWidth.Value;
             editSettings.OverlayOutlineLineWidth =(double)nudOverlayOutlineLineWidth.Value;
+            editSettings.ViewPointLength = (double)nudViewPointLength.Value;
+            editSettings.ViewPointWidth = (double)nudViewPointWidth.Value;
 
             editSettings.LaneColor = btnLaneColor.BackColor;
             editSettings.LineColorWhite = btnLineColorWhite.BackColor;
@@ -302,6 +307,7 @@ namespace StreetMaker
             editSettings.ConnectorNoDirColor = btnConnectorNoDirColor.BackColor;
             editSettings.ConnectionDrawColor = btnConnectionDrawColor.BackColor;
             editSettings.ConnectionSnapColor = btnConnectionSnapColor.BackColor;
+            editSettings.ViewPointOutlineColor = btnViewPointOutlineColor.BackColor;
 
             editSettings.HotkeyDelete = (Keys)Enum.Parse(typeof(Keys), cbHotkeyDelete.SelectedItem.ToString());
             editSettings.HotkeyAbort = (Keys)Enum.Parse(typeof(Keys), cbHotkeyAbort.SelectedItem.ToString());
@@ -490,6 +496,17 @@ namespace StreetMaker
             nudMarkMaxDetailDistance.Value = ToDecimal(editSettings.MarkMaxDetailDistance);
             nudImageStepSize.Value = ToDecimal(editSettings.ImageStepSize);
 
+        }
+
+        /// <summary>
+        /// Update lbResultingImageCount and lbTranValTest with the image count predictions from the current parameter and values.
+        /// </summary>
+        private void UpdateDatasetImageCount()
+        {
+            int imgCount = MainForm.StreetMap.GetDatasetImageCount(editSettings);
+            lbResultingImageCount.Text = imgCount.ToString();
+            int valCount = imgCount / (int)nudTrainValRatio.Value;
+            lbTranValTest.Text = (imgCount - valCount).ToString() + "/" + valCount.ToString() + "/" + (imgCount / (int)nudTestOutRatio.Value).ToString();
         }
 
         #region NumericUpDown Events
@@ -991,6 +1008,7 @@ namespace StreetMaker
         private void nudTrainValRatio_ValueChanged(object sender, EventArgs e)
         {
             editSettings.TrainValRatio = (int)nudTrainValRatio.Value;
+            UpdateDatasetImageCount();
         }
 
         /// <summary>
@@ -1001,6 +1019,7 @@ namespace StreetMaker
         private void nudTestOutRatio_ValueChanged(object sender, EventArgs e)
         {
             editSettings.TestOutRatio = (int)nudTestOutRatio.Value;
+            UpdateDatasetImageCount();
         }
 
         /// <summary>
@@ -1011,6 +1030,7 @@ namespace StreetMaker
         private void nudImageStepSize_ValueChanged(object sender, EventArgs e)
         {
             editSettings.ImageStepSize = ToDouble(nudImageStepSize.Value);
+            UpdateDatasetImageCount();
         }
         #endregion NumericUpDown Events
 
@@ -1021,8 +1041,13 @@ namespace StreetMaker
         /// <param name="e">Specific event arguments.</param>
         private void tbSideSteps_Validating(object sender, CancelEventArgs e)
         {
-            if (StringToFloatVector(tbSideSteps.Text, (float)editSettings.LaneWidth * AppSettings.SIDE_STEPS_FACTOR_MIN, (float)editSettings.LaneWidth * AppSettings.SIDE_STEPS_FACTOR_MAX) == null)
-                e.Cancel = true;
+            float[] values = StringToFloatVector(tbSideSteps.Text, (float)editSettings.LaneWidth * AppSettings.SIDE_STEPS_FACTOR_MIN, (float)editSettings.LaneWidth * AppSettings.SIDE_STEPS_FACTOR_MAX);
+            if (values != null)
+            {
+                editSettings.SideSteps = values;
+                UpdateDatasetImageCount();
+            }
+            else e.Cancel = true;
         }
 
         /// <summary>
@@ -1032,8 +1057,13 @@ namespace StreetMaker
         /// <param name="e">Specific event arguments.</param>
         private void tbAngleSteps_Validating(object sender, CancelEventArgs e)
         {
-            if (StringToFloatVector(tbAngleSteps.Text, AppSettings.ANGLE_STEP_MIN, AppSettings.ANGLE_STEP_MAX) == null)
-                e.Cancel = true;
+            float[] values = StringToFloatVector(tbAngleSteps.Text, AppSettings.ANGLE_STEP_MIN, AppSettings.ANGLE_STEP_MAX);
+            if (values != null)
+            {
+                editSettings.AngleSteps = values;
+                UpdateDatasetImageCount();
+            }
+            else e.Cancel = true;
         }
 
         /// <summary>
@@ -1043,8 +1073,13 @@ namespace StreetMaker
         /// <param name="e">Specific event arguments.</param>
         private void tbBrightnessFactors_Validating(object sender, CancelEventArgs e)
         {
-            if (StringToFloatVector(tbBrightnessFactors.Text, AppSettings.BRIGHTNESS_FACTOR_MIN, AppSettings.BRIGHTNESS_FACTOR_MAX) == null)
-                e.Cancel = true;
+            float[] values = StringToFloatVector(tbBrightnessFactors.Text, AppSettings.BRIGHTNESS_FACTOR_MIN, AppSettings.BRIGHTNESS_FACTOR_MAX);
+            if ( values != null)
+            {
+                editSettings.BrightnessFactors = values;
+                UpdateDatasetImageCount();
+            }
+            else e.Cancel = true;
         }
 
         /// <summary>
@@ -1054,8 +1089,13 @@ namespace StreetMaker
         /// <param name="e">Specific event arguments.</param>
         private void tbColorFactors_Validating(object sender, CancelEventArgs e)
         {
-            if (StringToFloatVector(tbColorFactors.Text, AppSettings.COLOR_FACTOR_MIN, AppSettings.COLOR_FACTOR_MAX) == null)
-                e.Cancel = true;
+            float[] values = StringToFloatVector(tbColorFactors.Text, AppSettings.COLOR_FACTOR_MIN, AppSettings.COLOR_FACTOR_MAX);
+            if (values != null)
+            {
+                editSettings.ColorFactors = values;
+                UpdateDatasetImageCount();
+            }
+            else e.Cancel = true;
         }
 
         /// <summary>
@@ -1065,8 +1105,13 @@ namespace StreetMaker
         /// <param name="e">Specific event arguments.</param>
         private void tbNoiseLevels_Validating(object sender, CancelEventArgs e)
         {
-            if (StringToIntVector(tbNoiseLevels.Text, AppSettings.NOISE_LEVEL_MIN, AppSettings.NOISE_LEVEL_MAX) == null)
-                e.Cancel = true;
+            int[] values = StringToIntVector(tbNoiseLevels.Text, AppSettings.NOISE_LEVEL_MIN, AppSettings.NOISE_LEVEL_MAX);
+            if (values != null)
+            {
+                editSettings.NoiseLevels = values;
+                UpdateDatasetImageCount();
+            }
+            else e.Cancel = true;
         }
 
         /// <summary>

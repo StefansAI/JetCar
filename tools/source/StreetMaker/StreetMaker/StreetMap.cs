@@ -122,8 +122,8 @@ namespace StreetMaker
         /// <returns>Minimum size of the current map</returns>
         public SizeF GetMapMinimumSize()
         {
-            float xmax = 2*(float)AppSettings.LaneWidth;
-            float ymax = 2*(float)AppSettings.LaneWidth;
+            float xmax = 2 * (float)AppSettings.LaneWidth;
+            float ymax = 2 * (float)AppSettings.LaneWidth;
             foreach (StreetElement se in Items)
                 foreach (LaneElement lane in se.Lanes)
                     foreach (Connector con in lane.Connectors)
@@ -133,7 +133,7 @@ namespace StreetMaker
                         xmax = Math.Max(xmax, con.EndP1.X);
                         ymax = Math.Max(ymax, con.EndP1.Y);
                     }
-            return new SizeF((float)Math.Round(xmax + AppSettings.LaneWidth/2), (float)Math.Round(ymax + AppSettings.LaneWidth/2));
+            return new SizeF((float)Math.Round(xmax + AppSettings.LaneWidth / 2), (float)Math.Round(ymax + AppSettings.LaneWidth / 2));
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace StreetMaker
         public void ResizeMap(SizeF NewDrawingSize)
         {
             SizeF minSize = GetMapMinimumSize();
-            drawingSize = new SizeF((float)Math.Round(Math.Max(minSize.Width, NewDrawingSize.Width)), (float)Math.Round( Math.Max(minSize.Height, NewDrawingSize.Height)));
+            drawingSize = new SizeF((float)Math.Round(Math.Max(minSize.Width, NewDrawingSize.Width)), (float)Math.Round(Math.Max(minSize.Height, NewDrawingSize.Height)));
         }
 
 
@@ -205,13 +205,13 @@ namespace StreetMaker
             for (int i = 0; i < Math.Min(CurrentStreetElement.Lanes.Length, NewStreetElement.Lanes.Length); i++)
             {
                 NewStreetElement.Lanes[i].Overlays.Clear();
-                for (int j=0; j< CurrentStreetElement.Lanes[i].Overlays.Count; j++)
+                for (int j = 0; j < CurrentStreetElement.Lanes[i].Overlays.Count; j++)
                 {
                     CurrentStreetElement.Lanes[i].Overlays[j].Owner = NewStreetElement.Lanes[i];
                 }
 
             }
-            
+
             ActiveElement = NewStreetElement;
             ReconnectAll();
             RedrawRequest?.Invoke();
@@ -246,7 +246,7 @@ namespace StreetMaker
         /// </summary>
         public void CheckConnectionRotation()
         {
-            if (ActiveElement != null) 
+            if (ActiveElement != null)
             {
                 ConnectorLine closest = null;
                 foreach (ConnectorLine cl in PossibleConnections)
@@ -346,12 +346,12 @@ namespace StreetMaker
         private bool ConnectorAngleInTol(Connector C0, Connector C1)
         {
             double delta = C1.Angle - C0.Angle;
-            if (delta > 1.5*Math.PI)
-                delta -= 2*Math.PI;
+            if (delta > 1.5 * Math.PI)
+                delta -= 2 * Math.PI;
             else if (delta > Math.PI / 2)
                 delta -= Math.PI;
-            else if (delta < -1.5*Math.PI)
-                delta += 2*Math.PI;
+            else if (delta < -1.5 * Math.PI)
+                delta += 2 * Math.PI;
             else if (delta < -Math.PI / 2)
                 delta += Math.PI;
             return (Math.Abs(delta) < AppSettings.MAX_CONN_ANGLE_TOL);
@@ -448,7 +448,7 @@ namespace StreetMaker
                 Object obj = se.IsInside(P, IncludeOverlays);
                 if (obj != null)
                 {
-                    activeOverlay = obj as Overlay;                   
+                    activeOverlay = obj as Overlay;
                     activeElement = activeOverlay == null ? se : null;
                     return obj;
                 }
@@ -642,7 +642,7 @@ namespace StreetMaker
             List<StreetElement> elements = new List<StreetElement>();
             elements.Add(Items[0]);
             int n = 0;
-            while ((n < Items.Count) && (elements.Count>0))
+            while ((n < Items.Count) && (elements.Count > 0))
             {
                 List<StreetElement> nextLevel = new List<StreetElement>();
 
@@ -651,7 +651,7 @@ namespace StreetMaker
                     if (se.DashSyncOrder < 0)
                     {
                         se.DashSyncOrder = n++;
-                        foreach(LaneElement le in se.Lanes)
+                        foreach (LaneElement le in se.Lanes)
                         {
                             foreach (Connector cn in le.Connectors)
                             {
@@ -822,7 +822,7 @@ namespace StreetMaker
                 if (scd.UseCount > 0)
                     classText[scd.ClassCode] = scd.Name.ToLower();
 
-            return classText; 
+            return classText;
         }
 
         /// <summary>
@@ -844,7 +844,7 @@ namespace StreetMaker
             sw.WriteLine("class SegmClass(enum.Enum):");
             foreach (SegmClassDef scd in SegmClassDefs.Defs)
                 if (scd.UseCount > 0)
-                    sw.WriteLine("\t"+scd.Name.ToLower() + " = " + scd.ClassCode);
+                    sw.WriteLine("\t" + scd.Name.ToLower() + " = " + scd.ClassCode);
 
             sw.WriteLine("\t#Unused:");
 
@@ -868,7 +868,7 @@ namespace StreetMaker
             sw.WriteLine("  <segm_class_defs>");
             foreach (SegmClassDef scd in SegmClassDefs.Defs)
                 if (scd.UseCount > 0)
-                    sw.WriteLine("    <item id=\"" + scd.ClassCode.ToString() + "\" draw_order=\"" +scd.DrawOrder.ToString() + "\" draw_color=\"" + scd.DrawColor.ToArgb().ToString("X8") + "\">"+scd.Name+"</item>");
+                    sw.WriteLine("    <item id=\"" + scd.ClassCode.ToString() + "\" draw_order=\"" + scd.DrawOrder.ToString() + "\" draw_color=\"" + scd.DrawColor.ToArgb().ToString("X8") + "\">" + scd.Name + "</item>");
             sw.WriteLine("  </segm_class_defs>");
 
             sw.Close();
@@ -988,6 +988,64 @@ namespace StreetMaker
             SaveColorMapCsv(DatasetPath + AppSettings.ColorMapFileName);
         }
 
+
+        /// <summary>
+        /// Caclulates the total image count in the dataset based on the current settings.
+        /// </summary>
+        /// <param name="Settings">Reference to the current AppSettings object.</param>
+        /// <returns>Number of images/masks in the dataset.</returns>
+        public int GetDatasetImageCount(AppSettings Settings)
+        {
+            int count = 0;
+            int factor = 0;
+            for (int colorIdx = 0; colorIdx < AppSettings.ColorFactors.Length; colorIdx++)
+                 factor += AppSettings.ColorFactors[colorIdx] == 1 ? 1 : 3;
+                
+            factor = factor * Settings.SideSteps.Length * Settings.AngleSteps.Length * Settings.BrightnessFactors.Length * Settings.NoiseLevels.Length;
+
+            for (int itemIdx = 0; itemIdx < Items.Count; itemIdx++)
+            {
+                // go through each lane of the current street element
+                for (int laneIdx = 0; laneIdx < Items[itemIdx].Lanes.Length; laneIdx++)
+                {
+                    // determine the number of directional views for the same point, if in a center lane that can be used in both directions
+                    int nDirections = 1;
+
+                    if (Items[itemIdx] is MultiLaneStreet)
+                    {
+                        MultiLaneStreet mls = Items[itemIdx] as MultiLaneStreet;
+                        if ((mls.LaneCountCenter > 0) && (laneIdx >= mls.LaneCountRight) && ((laneIdx < mls.LaneCountRight + mls.LaneCountCenter)))
+                            nDirections = 2;
+                    }
+                    else if (Items[itemIdx] is Intersection)
+                    {
+                        Intersection isn = Items[itemIdx] as Intersection;
+                        int descrLaneIdx;
+                        int descrIdx = isn.GetDescrIndex(Items[itemIdx].Lanes[laneIdx], out descrLaneIdx);
+                        if ((isn.StreetDescriptors[descrIdx].LaneCountCenter > 0) && (descrLaneIdx >= isn.StreetDescriptors[descrIdx].LaneCountRight) &&
+                            (descrLaneIdx < isn.StreetDescriptors[descrIdx].LaneCountRight + isn.StreetDescriptors[descrIdx].LaneCountCenter))
+                            nDirections = 2;
+                    }
+
+                    double[] dirAngles = null;
+                    PointF[] points = Items[itemIdx].Lanes[laneIdx].GetViewPoints(out dirAngles);
+                    int nSteps;
+                    if (points == null)
+                    {
+                        // calculate the number of steps in the lane depending on the settings in AppSettings
+                        double pathLength = Items[itemIdx].Lanes[laneIdx].GetCenterPathLength();
+                        nSteps = Math.Max((int)(pathLength / AppSettings.ImageStepSize) - 1, 1);
+                    }
+                    else nSteps = points.Length;
+
+                    count += nSteps * nDirections * factor;
+                }
+            }
+
+            return count;
+        }
+
+
         /// <summary>
         /// Generates a dataset of virtual images of a camera like view and related class images from the current street map.
         /// This method iterates through all lanes of all street elements in the possible driving directions to create virtual 
@@ -1035,6 +1093,26 @@ namespace StreetMaker
                 // go through each lane of the current street element
                 for (int laneIdx = 0; laneIdx < Items[itemIdx].Lanes.Length; laneIdx++)
                 {
+                    // determine the number of directional views for the same point, if in a center lane that can be used in both directions
+                    int nDirections = 1;
+
+                    if (Items[itemIdx] is MultiLaneStreet)
+                    {
+                        MultiLaneStreet mls = Items[itemIdx] as MultiLaneStreet;
+                        if ((mls.LaneCountCenter > 0) && (laneIdx >= mls.LaneCountRight) && ((laneIdx < mls.LaneCountRight + mls.LaneCountCenter)))
+                            nDirections = 2;
+                    }
+                    else if (Items[itemIdx] is Intersection)
+                    {
+                        Intersection isn = Items[itemIdx] as Intersection;
+                        int descrLaneIdx;
+                        int descrIdx = isn.GetDescrIndex(Items[itemIdx].Lanes[laneIdx], out descrLaneIdx);
+                        if ((isn.StreetDescriptors[descrIdx].LaneCountCenter > 0) && (descrLaneIdx >= isn.StreetDescriptors[descrIdx].LaneCountRight) &&
+                            (descrLaneIdx < isn.StreetDescriptors[descrIdx].LaneCountRight + isn.StreetDescriptors[descrIdx].LaneCountCenter))
+                            nDirections = 2;
+                    }
+
+
                     double[] dirAngles = null;
                     PointF[] points = Items[itemIdx].Lanes[laneIdx].GetViewPoints(out dirAngles);
 
@@ -1055,33 +1133,13 @@ namespace StreetMaker
                         }
                     }
 
-
                     // go through the number of steps along the lane
                     for (int stepIdx = 0; stepIdx < points.Length; stepIdx++)
                     {
-                        // determine the number of directional views for the same point, if in a center lane that can be used in both directions
-                        int nDirections = 1;
-
                         PointF pLaneCenter = points[stepIdx];
                         double directionAngle = dirAngles[stepIdx];
 
                         CameraPoint = pLaneCenter;  //Set the camera location for generating the views
-
-                        if (Items[itemIdx] is MultiLaneStreet)
-                        {
-                            MultiLaneStreet mls = Items[itemIdx] as MultiLaneStreet;
-                            if ((mls.LaneCountCenter > 0) && (laneIdx >= mls.LaneCountRight) && ((laneIdx < mls.LaneCountRight + mls.LaneCountCenter)))
-                                nDirections = 2;
-                        }
-                        else if (Items[itemIdx] is Intersection)
-                        {
-                            Intersection isn = Items[itemIdx] as Intersection;
-                            int descrLaneIdx;
-                            int descrIdx = isn.GetDescrIndex(Items[itemIdx].Lanes[laneIdx], out descrLaneIdx);
-                            if ((isn.StreetDescriptors[descrIdx].LaneCountCenter > 0) && (descrLaneIdx >= isn.StreetDescriptors[descrIdx].LaneCountRight) &&
-                                (descrLaneIdx < isn.StreetDescriptors[descrIdx].LaneCountRight + isn.StreetDescriptors[descrIdx].LaneCountCenter))
-                                nDirections = 2;
-                        }
 
                         // go through the number of directions for this point. There is normally only one view per lane in the driving direction except for center lanes, that can be used in both directions
                         for (int dirIdx = 0; dirIdx < nDirections; dirIdx++)
@@ -1456,7 +1514,7 @@ namespace StreetMaker
             StreetElement se = leCurrent.Owner;
             PointF pointC = se.GetClosestConnector(StartPoint).CenterP;
 
-            bool behind=true;
+            bool behind = true;
             bool outOfLimits = OutOfLimits(StartPoint, StartDir, leCurrent.Connectors[0].CenterP, ref behind);
             outOfLimits = outOfLimits && OutOfLimits(StartPoint, StartDir, leCurrent.Connectors[1].CenterP, ref behind);
             outOfLimits = outOfLimits && OutOfLimits(StartPoint, StartDir, pointC, ref behind);
@@ -1508,11 +1566,11 @@ namespace StreetMaker
 
             // define the connector index for in and out direction
             int outIdx = leCurrentC0mode == ConnectorMode.Out ? 0 : 1;
-            int inIdx = outIdx ^ 1; 
+            int inIdx = outIdx ^ 1;
 
             // Now handle the lane passed as argument and set it to the requested class if not assigned yet
             // ===============================================================================================
-            if (leCurrent.SegmClassDef == SegmClassDefs.ScdNothing) 
+            if (leCurrent.SegmClassDef == SegmClassDefs.ScdNothing)
             {
                 bool addNext = true;
                 // assign the class to the current lane
@@ -1721,8 +1779,8 @@ namespace StreetMaker
                         double da0 = Utils.LimitRadian(StartDir - Utils.GetAngle(le.Connectors[0].CenterP, StartPoint));
                         double da1 = Utils.LimitRadian(StartDir - Utils.GetAngle(le.Connectors[1].CenterP, StartPoint));
 
-                        bool leBehind =  (Math.Abs(da0) > Utils.RIGHT_ANGLE_RADIAN) && (Math.Abs(da1) > Utils.RIGHT_ANGLE_RADIAN);
-                        assignRemaining = !leBehind || (d0<100) || (d1<100);
+                        bool leBehind = (Math.Abs(da0) > Utils.RIGHT_ANGLE_RADIAN) && (Math.Abs(da1) > Utils.RIGHT_ANGLE_RADIAN);
+                        assignRemaining = !leBehind || (d0 < 100) || (d1 < 100);
                         break;
                     }
 
@@ -1798,7 +1856,7 @@ namespace StreetMaker
                                         }
                                         else
                                         {
-//                                            throw new Exception("else if (le.Connectors[0].Mode == ConnectorMode.Out) else in isn");
+                                            //                                            throw new Exception("else if (le.Connectors[0].Mode == ConnectorMode.Out) else in isn");
                                         }
                                     }
                                 }
@@ -1911,8 +1969,8 @@ namespace StreetMaker
         public StreetElement ActiveElement
         {
             get { return activeElement; }
-            set 
-            { 
+            set
+            {
                 activeElement = value;
                 activeOverlay = null;
             }
@@ -1922,9 +1980,9 @@ namespace StreetMaker
         /// </summary>
         public Overlay ActiveOverlay
         {
-            get { return activeOverlay;  }
-            set 
-            { 
+            get { return activeOverlay; }
+            set
+            {
                 activeOverlay = value;
                 activeElement = null;
             }

@@ -810,6 +810,7 @@ namespace StreetMaker
                     RedrawStreetBitmap();
                 }
                 StreetMapFileName = ofdLoadStreetMap.FileName;
+                Text = "Street Maker - " + Path.GetFileName(StreetMapFileName);
                 SetEnabled(true);
             }
         }
@@ -842,6 +843,7 @@ namespace StreetMaker
                 SetEnabled(false);
                 StreetMap.SaveToXml(sfdSaveStreetMap.FileName);
                 StreetMapFileName = sfdSaveStreetMap.FileName;
+                Text = "Street Maker - " + Path.GetFileName(StreetMapFileName);
                 SetEnabled(true);
             }
         }
