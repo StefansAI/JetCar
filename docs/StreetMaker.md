@@ -158,7 +158,7 @@ When looking at the medium training map after turning on the view points, a numb
 <br><img src="assets/images/streetmaker/41-example1.jpg"/><br>
 View points can be placed strategically to generate clear views on details, like this arrow and the intersection. Double click on the view point and the virtual camera view comes up.<br><br>
 <br><img src="assets/images/streetmaker/42-view1.jpg"/><br>
-The complete arrow is in full view and not a fraction of it. Just imagine, the automatic view placement would have ended up showing just the arraw tip and training the model on the straight-right-arrow class. It might later confuse every arrow tip as that class, even if it is just a straight arrow or a straight-left-arrow.<br><br>
+The complete arrow is in full view and not a fraction of it. Just imagine, the automatic view placement would have ended up showing just the arrow tip and training the model on the straight-right-arrow class. It might later confuse every arrow tip as that class, even if it is just a straight arrow or a straight-left-arrow.<br><br>
 <br><img src="assets/images/streetmaker/43-example2.jpg"/><br>
 Here is another example of a placement with unwanted results. If the automatic algorithm placed the point just at the end of the intersection, another training problem can occur.<br><br>
 <br><img src="assets/images/streetmaker/44-view2.jpg"/><br>
