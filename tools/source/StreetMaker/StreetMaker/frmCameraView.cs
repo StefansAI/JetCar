@@ -341,6 +341,7 @@ namespace StreetMaker
         public void SwitchToNavigation()
         {
             FileMode = true;
+            prbGenerationProgress.Visible = false;
             LoadClassNames(MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.ClassTextFileName);
             LoadImgAndMask(0);
         }
@@ -494,9 +495,28 @@ namespace StreetMaker
             set
             {
                 if (value > 0)
-                    lbCount.Text = "Dataset entries = " + value.ToString();
+                {
+                    lbCount.Text = "Dataset entries = " + value.ToString() + " / " + prbGenerationProgress.Maximum.ToString();
+                    prbGenerationProgress.Value = value;
+                }
                 else
+                {
                     lbCount.Text = "";
+                    prbGenerationProgress.Visible = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set the Maximum of the progress bar.
+        /// </summary>
+        public int MaxCount
+        {
+            set
+            {
+                prbGenerationProgress.Value = 0;
+                prbGenerationProgress.Maximum = value;
+                prbGenerationProgress.Visible = true;
             }
         }
 

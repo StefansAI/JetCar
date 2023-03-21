@@ -44,6 +44,7 @@
             this.lbStatus = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.pnCursor = new System.Windows.Forms.Panel();
+            this.prbGenerationProgress = new System.Windows.Forms.ProgressBar();
             this.lbMaskCursor = new System.Windows.Forms.Label();
             this.lbPredCursor = new System.Windows.Forms.Label();
             this.lbImgCursor = new System.Windows.Forms.Label();
@@ -82,6 +83,7 @@
             // 
             // pnControl
             // 
+            this.pnControl.Controls.Add(this.prbGenerationProgress);
             this.pnControl.Controls.Add(this.lbCount);
             this.pnControl.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnControl.Location = new System.Drawing.Point(0, 521);
@@ -199,6 +201,14 @@
             this.pnCursor.Size = new System.Drawing.Size(1368, 20);
             this.pnCursor.TabIndex = 9;
             // 
+            // prbGenerationProgress
+            // 
+            this.prbGenerationProgress.Location = new System.Drawing.Point(5, -4);
+            this.prbGenerationProgress.Name = "prbGenerationProgress";
+            this.prbGenerationProgress.Size = new System.Drawing.Size(902, 10);
+            this.prbGenerationProgress.TabIndex = 3;
+            this.prbGenerationProgress.Visible = false;
+            // 
             // lbMaskCursor
             // 
             this.lbMaskCursor.Location = new System.Drawing.Point(459, 0);
@@ -273,5 +283,6 @@
         private System.Windows.Forms.Label lbPredCursor;
         private System.Windows.Forms.Label lbImgCursor;
         private System.Windows.Forms.Label lbCount;
+        private System.Windows.Forms.ProgressBar prbGenerationProgress;
     }
 }

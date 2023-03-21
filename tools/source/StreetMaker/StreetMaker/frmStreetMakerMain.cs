@@ -1042,7 +1042,8 @@ namespace StreetMaker
                 MessageBox.Show("Cannot create dataset. The street map is empty.", "Information");
                 return;
             }
-            if (MessageBox.Show("Do you want to start the very time consuming process of creating a new DataSet deleting any previous one?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            int n=StreetMap.GetDatasetImageCount(AppSettings);
+            if (MessageBox.Show("Do you want to start the very time consuming process of creating a new DataSet of "+n.ToString()+" image/mask pairs, deleting any previous one?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 SetEnabled(false);
                 bool showViewPoints = tsmiShowViewPoints.Checked;
@@ -1053,8 +1054,13 @@ namespace StreetMaker
 
                 if (frmCameraView != null)
                     frmCameraView.Close();
+
                 frmCameraView = new frmCameraView(this);
                 frmCameraView.Show();
+                frmCameraView.MaxCount = n;
+                frmCameraView.StatusText = "Deleting previous Dataset!";
+                frmCameraView.Refresh();
+
                 tsmiAbort.Visible = true;
                 StreetMap.GenerateDataset(ref CreatingDataSet, AppSettings.PathToDataStorage, StreetBitmap);
                 tsmiAbort.Visible = false;
