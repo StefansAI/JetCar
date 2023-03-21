@@ -771,14 +771,15 @@ namespace StreetMaker
 
         #region Dataset Generation
         /// <summary>
-        /// Update the DrawWrongDirItems and DrawWrongDirStopYield fields for all street elements.
+        /// Update the DrawWrongDirItems, DrawWrongDirStopYield and MaxDetail fields for all street elements.
         /// </summary>
-        private void UpdateDrawWrongDir()
+        private void UpdateStreetElementSettings()
         {
             foreach (StreetElement se in Items)
             {
                 se.DrawWrongDirItems = AppSettings.DrawWrongDirItems;
                 se.DrawWrongDirStopYield = AppSettings.DrawWrongDirStopYield;
+                se.MaxDetailDist = AppSettings.MarkMaxDetailDistance;
             }
          }
 
@@ -1074,7 +1075,7 @@ namespace StreetMaker
             if (Items.Count == 0)
                 return;
 
-            UpdateDrawWrongDir();
+            UpdateStreetElementSettings();
             ClearDataset(DatasetPath);
 
             string ImgPath = DatasetPath + AppSettings.SubDirDataSet + AppSettings.SubDirImg;
@@ -1306,7 +1307,7 @@ namespace StreetMaker
         /// <param name="DirectionAngle">Direction to point the virtual camera.</param>
         public void GenerateCameraViewImages(Bitmap StreetBitmap, PointF ViewPoint, double DirectionAngle)
         {
-            UpdateDrawWrongDir();
+            UpdateStreetElementSettings();
             CameraPoint = ViewPoint;    //Set the camera location for generating the views
             Bitmap bmClassCode = DrawClassColorBitmap(StreetBitmap, ViewPoint, DirectionAngle);
             VirtualCamera.TakeImgResult CameraImgs = VirtualCamera.TakeImage(AppSettings, StreetBitmap, bmClassCode, ViewPoint, DirectionAngle);
