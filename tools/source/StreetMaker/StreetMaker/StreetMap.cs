@@ -1373,8 +1373,8 @@ namespace StreetMaker
                 return NextLaneList;
 
             List<NextLaneEntry> leSort = new List<NextLaneEntry>();
-            SegmClassDef[] scdTest = { SegmClassDefs.ScdDrivingDir, SegmClassDefs.ScdRightTurnDir, SegmClassDefs.ScdLeftTurnDir };
-            //SegmClassDef[] scdTest = { SegmClassDefs.ScdRightTurnDir, SegmClassDefs.ScdLeftTurnDir, SegmClassDefs.ScdDrivingDir };
+            //SegmClassDef[] scdTest = { SegmClassDefs.ScdDrivingDir, SegmClassDefs.ScdRightTurnDir, SegmClassDefs.ScdLeftTurnDir };
+            SegmClassDef[] scdTest = { SegmClassDefs.ScdRightTurnDir, SegmClassDefs.ScdLeftTurnDir, SegmClassDefs.ScdDrivingDir };
             for (int i = 0; i < scdTest.Length; i++)
             {
                 int j = 0;
@@ -1478,7 +1478,7 @@ namespace StreetMaker
         /// <param name="ConnectorPoint">Connector point to use for angle and distance calculations.</param>
         /// <param name="Behind">True, when the connector point is behind the camera view.</param>
         /// <returns>True, when connector is out of limits for marking.</returns>
-        private bool OutOfLimits(PointF StartPoint, double StartDir, PointF ConnectorPoint, ref bool Behind)
+        private bool OutOfLimits(PointF StartPoint, double StartDir, PointF ConnectorPoint, out bool Behind)
         {
             double limit = AppSettings.MarkLaneMaxDistFront;
             double angleDiff = Utils.LimitRadian(StartDir - Utils.GetAngle(ConnectorPoint, StartPoint));
@@ -1497,7 +1497,7 @@ namespace StreetMaker
                     limit = B / Math.Sin(a);
             }
 
-            Behind = Behind && (Math.Abs(angleDiff) > Utils.RIGHT_ANGLE_RADIAN);
+            Behind = (Math.Abs(angleDiff) > Utils.RIGHT_ANGLE_RADIAN);
             return dist > limit;
         }
 
@@ -1525,10 +1525,13 @@ namespace StreetMaker
             StreetElement se = leCurrent.Owner;
             PointF pointC = se.GetClosestConnector(StartPoint).CenterP;
 
-            bool behind = true;
-            bool outOfLimits = OutOfLimits(StartPoint, StartDir, leCurrent.Connectors[0].CenterP, ref behind);
-            outOfLimits = outOfLimits && OutOfLimits(StartPoint, StartDir, leCurrent.Connectors[1].CenterP, ref behind);
-            outOfLimits = outOfLimits && OutOfLimits(StartPoint, StartDir, pointC, ref behind);
+            bool behind0, behind1, behindC;
+            bool outOfLimits0 = OutOfLimits(StartPoint, StartDir, leCurrent.Connectors[0].CenterP, out behind0);
+            bool outOfLimits1 = OutOfLimits(StartPoint, StartDir, leCurrent.Connectors[1].CenterP, out behind1);
+            bool outOfLimitsC = OutOfLimits(StartPoint, StartDir, pointC, out behindC);
+            
+            bool outOfLimits = outOfLimits0 && outOfLimits1 && outOfLimitsC;
+            bool behind = behind0 && behind1 && behindC;
 
             bool startPointInsideCurrent = (se.IsInside(StartPoint, false) != null);
             bool startPointInsideSource = (SourceSE.IsInside(StartPoint, false) != null);
@@ -1606,12 +1609,12 @@ namespace StreetMaker
 
                     // handle an entrance, when entering, the other lanes in the same direction should be wrong in to the left and driving dir to the right
                     // this is a bit inconsistent, since it is a right turn, but on the other side, the curvature just continues in the driving dir and there is no left turn allowed here
-                    if ((mls.RampType == RampType.Entrance) && (leCurrent == mls.Lanes[mls.LaneCount - 1]) && (LaneSegmClassDef == SegmClassDefs.ScdDrivingDir))
+                    if ((mls.RampType == RampType.Entrance) && (leCurrent == mls.Lanes[mls.LaneCount - 1]) && SegmClassDefs.IsDriveLeftOrRight(LaneSegmClassDef))
                     {
                         // list both connected ends differently
                         for (int i = 0; i < mls.LaneCountRight; i++)
                         {
-                            AddConnectionToList(leNext, mls.Lanes[i], outIdx, SegmClassDefs.ScdDrivingDir, se);
+                            AddConnectionToList(leNext, mls.Lanes[i], outIdx, LaneSegmClassDef, se);
                             AddConnectionToList(leNext, mls.Lanes[i], inIdx, SegmClassDefs.ScdWrongDir, se);
                         }
                         addNext = false;
@@ -1679,7 +1682,13 @@ namespace StreetMaker
                                 }
                                 // Or a wrong direction, if we are on the exit ramp
                                 else if (leCurrent.OwnerIdx == mls.LaneCount - 1)
+                                {
                                     le.SegmClassDef = SegmClassDefs.ScdWrongDir;
+                                    // Current lane is the exit lane, which doesn't have its own connection at connector 0
+                                    // ->extend from lane 0 connector 0 now.
+                                    if (le.OwnerIdx == 0)
+                                        AddConnectionToList(leNext, le, 0, le.SegmClassDef, se);
+                                }
                                 else
                                     le.SegmClassDef = LaneSegmClassDef;
                             }
@@ -1692,7 +1701,7 @@ namespace StreetMaker
                                     idx = inIdx;
                                 }
                                 // seen from the on-ramp, all through lanes are wrong directions
-                                else if (mls.Lanes[mls.LaneCount - 1].SegmClassDef == SegmClassDefs.ScdDrivingDir)
+                                else if (SegmClassDefs.IsDriveLeftOrRight(mls.Lanes[mls.LaneCount - 1].SegmClassDef))
                                     le.SegmClassDef = SegmClassDefs.ScdWrongDir;
                                 else
                                     le.SegmClassDef = LaneSegmClassDef;

@@ -180,7 +180,7 @@ namespace StreetMaker
             else
                 ClientSize = new Size(pbMaskImage.Left + pbMaskImage.Width + 5, ClientSize.Height);
 
-            pnButtons.Left = (ClientSize.Width - pnButtons.Width) / 2;
+            pnNavigation.Left = (ClientSize.Width - pnButtons.Width) / 2;
         }
 
         /// <summary>
@@ -257,6 +257,9 @@ namespace StreetMaker
         private void btnNext_Click(object sender, EventArgs e)
         {
             LoadImgAndMask(ImgIdx + 1);
+
+            if (ImgIdx >= (ImgFileNames.Count - 1))
+                ckbScan.Checked = false;
         }
 
         /// <summary>
@@ -267,6 +270,16 @@ namespace StreetMaker
         private void btnLast_Click(object sender, EventArgs e)
         {
             LoadImgAndMask(ImgFileNames.Count - 1);
+        }
+
+        /// <summary>
+        /// Checkbox change event handler to start or stop the scan timer.
+        /// </summary>
+        /// <param name="sender">Sender of the notification.</param>
+        /// <param name="e">Event arguments.</param>
+        private void ckbScan_CheckedChanged(object sender, EventArgs e)
+        {
+            tmScan.Enabled = ckbScan.Checked;
         }
 
 
@@ -414,10 +427,10 @@ namespace StreetMaker
         /// </summary>
         public bool FileMode
         {
-            get { return pnButtons.Visible; }
+            get { return pnNavigation.Visible; }
             set
             {
-                pnButtons.Visible = value;
+                pnNavigation.Visible = value;
                 lbStatus.Text = "";
                 if (value)
                     viewPointMode = false;

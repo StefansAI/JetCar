@@ -41,9 +41,11 @@ namespace StreetMaker
         /// <summary>
         /// Creates an instance of the segmentation class definition, loading the passed parameter into its fields.
         /// </summary>
+        /// <param name="ClassEnum">Enumeration of LineType, LaneDirType, OverlayType etc.</param>
         /// <param name="ClassCode">Identifier or code of the class.</param>
         /// <param name="Name">Human friendly name of the class, used for the GUI.</param>
         /// <param name="DrawColor">Color to be used in the GUI when displaying the polygon on the image or the filled area in the mask.</param>
+        /// <param name="DrawOrder">Draw order used for ImageSegementer export</param>
         public SegmClassDef(object ClassEnum, int ClassCode, string Name, Color DrawColor, int DrawOrder)
         {
             this.ClassEnum = ClassEnum;
@@ -66,9 +68,11 @@ namespace StreetMaker
         }
     }
 
+    /// <summary>
+    /// Segmentation Class Definitions of varies types used in this application.
+    /// </summary>
     public class SegmClassDefs
     {
-
         /// <summary>
         /// Default segmentation class definitions as loaded initially.
         /// </summary>
@@ -111,6 +115,11 @@ namespace StreetMaker
             new SegmClassDef(OverlayType.ParkingSign,           30, "parking_sign",                Color.FromArgb(unchecked((int)0xFF735AA5)),  7),     // 30
         };
 
+        /// <summary>
+        /// Get the reference to the SegmClassDef object associated with the passed ClassEnum. 
+        /// </summary>
+        /// <param name="ClassEnum">Enumeration to look for.</param>
+        /// <returns>Reference to the SegmClassDef object containing this ClassEnum.</returns>
         public static SegmClassDef GetSegmClassDef(object ClassEnum)
         {
             if (ClassEnum == null)
@@ -128,15 +137,34 @@ namespace StreetMaker
             return Defs[0];
         }
 
-
+        /// <summary>Reference to the SegmClassDef for Nothing.</summary>
         public static SegmClassDef ScdNothing = SegmClassDefs.GetSegmClassDef(null);
+        /// <summary>Reference to the SegmClassDef for WrongDir.</summary>
         public static SegmClassDef ScdWrongDir = SegmClassDefs.GetSegmClassDef(LaneDirType.WrongDir);
+        /// <summary>Reference to the SegmClassDef for DrivingDir.</summary>
         public static SegmClassDef ScdDrivingDir = SegmClassDefs.GetSegmClassDef(LaneDirType.DrivingDir);
+        /// <summary>Reference to the SegmClassDef for SharedDir.</summary>
         public static SegmClassDef ScdCenterLane = SegmClassDefs.GetSegmClassDef(LaneDirType.SharedDir);
+        /// <summary>Reference to the SegmClassDef for LeftTurnDir.</summary>
         public static SegmClassDef ScdLeftTurnDir = SegmClassDefs.GetSegmClassDef(LaneDirType.LeftTurnDir);
+        /// <summary>Reference to the SegmClassDef for RightTurnDir.</summary>
         public static SegmClassDef ScdRightTurnDir = SegmClassDefs.GetSegmClassDef(LaneDirType.RightTurnDir);
+        /// <summary>Reference to the SegmClassDef for Transparent.</summary>
         public static SegmClassDef ScdLaneLimitLine = SegmClassDefs.GetSegmClassDef(LineType.Transparent);
 
+        /// <summary>
+        /// Returns true, if the passed SegmClassDef is a DrivingDir, a LeftTurnDir or a RightTurnDir
+        /// </summary>
+        /// <param name="SCD">SegmClassDef to check</param>
+        /// <returns>True, if one of the directions</returns>
+        public static bool IsDriveLeftOrRight(SegmClassDef SCD)
+        {
+            return (SCD == ScdDrivingDir) || (SCD == ScdLeftTurnDir) || (SCD == ScdRightTurnDir);
+        }
+
+        /// <summary>
+        /// Clear the use counts of all SegmClassDef objeects in Defs.
+        /// </summary>
         public static void ClearUseCounts()
         {
             foreach (SegmClassDef scd in Defs)
@@ -145,6 +173,10 @@ namespace StreetMaker
             ResetClassCodes();
         }
 
+        /// <summary>
+        /// Increment the use count for the SegmClassDef object specified via reference or ClassEnum.
+        /// </summary>
+        /// <param name="EnumOrSCD">EnumClass or reference of the object in Defs.</param>
         public static void IncUseCount(object EnumOrSCD)
         {
             SegmClassDef scd = null;
@@ -157,12 +189,19 @@ namespace StreetMaker
                 scd.UseCount++;
         }
 
+        /// <summary>
+        /// Reset all class codes in Defs by enumerating them in order.
+        /// </summary>
         public static void ResetClassCodes()
         {
             for (int i = 0; i < Defs.Length; i++)
                 Defs[i].ClassCode = i;
         }
 
+        /// <summary>
+        /// Optimize the class codes in Defs by only enumerating the the classes with use counts > 0.
+        /// </summary>
+        /// <returns>Number of used classes.</returns>
         public static int OptClassCodes()
         {
             int i = 0;

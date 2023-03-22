@@ -33,6 +33,7 @@
             this.pbMaskImage = new System.Windows.Forms.PictureBox();
             this.pbCameraImg = new System.Windows.Forms.PictureBox();
             this.pnControl = new System.Windows.Forms.Panel();
+            this.prbGenerationProgress = new System.Windows.Forms.ProgressBar();
             this.lbCount = new System.Windows.Forms.Label();
             this.pnButtons = new System.Windows.Forms.Panel();
             this.lbIdx = new System.Windows.Forms.Label();
@@ -44,17 +45,19 @@
             this.lbStatus = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.pnCursor = new System.Windows.Forms.Panel();
-            this.prbGenerationProgress = new System.Windows.Forms.ProgressBar();
             this.lbMaskCursor = new System.Windows.Forms.Label();
             this.lbPredCursor = new System.Windows.Forms.Label();
             this.lbImgCursor = new System.Windows.Forms.Label();
+            this.ckbScan = new System.Windows.Forms.CheckBox();
+            this.tmScan = new System.Windows.Forms.Timer(this.components);
+            this.pnNavigation = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pbMaskImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCameraImg)).BeginInit();
             this.pnControl.SuspendLayout();
-            this.lbCount.SuspendLayout();
             this.pnButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPredictionImage)).BeginInit();
             this.pnCursor.SuspendLayout();
+            this.pnNavigation.SuspendLayout();
             this.SuspendLayout();
             // 
             // pbMaskImage
@@ -83,6 +86,7 @@
             // 
             // pnControl
             // 
+            this.pnControl.Controls.Add(this.pnNavigation);
             this.pnControl.Controls.Add(this.prbGenerationProgress);
             this.pnControl.Controls.Add(this.lbCount);
             this.pnControl.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -91,9 +95,16 @@
             this.pnControl.Size = new System.Drawing.Size(1368, 40);
             this.pnControl.TabIndex = 4;
             // 
+            // prbGenerationProgress
+            // 
+            this.prbGenerationProgress.Location = new System.Drawing.Point(5, -4);
+            this.prbGenerationProgress.Name = "prbGenerationProgress";
+            this.prbGenerationProgress.Size = new System.Drawing.Size(902, 10);
+            this.prbGenerationProgress.TabIndex = 3;
+            this.prbGenerationProgress.Visible = false;
+            // 
             // lbCount
             // 
-            this.lbCount.Controls.Add(this.pnButtons);
             this.lbCount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbCount.Location = new System.Drawing.Point(0, 0);
             this.lbCount.Name = "lbCount";
@@ -108,9 +119,9 @@
             this.pnButtons.Controls.Add(this.btnNext);
             this.pnButtons.Controls.Add(this.btnLast);
             this.pnButtons.Controls.Add(this.btnPrevious);
-            this.pnButtons.Location = new System.Drawing.Point(468, 6);
+            this.pnButtons.Location = new System.Drawing.Point(0, 0);
             this.pnButtons.Name = "pnButtons";
-            this.pnButtons.Size = new System.Drawing.Size(429, 29);
+            this.pnButtons.Size = new System.Drawing.Size(430, 29);
             this.pnButtons.TabIndex = 5;
             // 
             // lbIdx
@@ -201,14 +212,6 @@
             this.pnCursor.Size = new System.Drawing.Size(1368, 20);
             this.pnCursor.TabIndex = 9;
             // 
-            // prbGenerationProgress
-            // 
-            this.prbGenerationProgress.Location = new System.Drawing.Point(5, -4);
-            this.prbGenerationProgress.Name = "prbGenerationProgress";
-            this.prbGenerationProgress.Size = new System.Drawing.Size(902, 10);
-            this.prbGenerationProgress.TabIndex = 3;
-            this.prbGenerationProgress.Visible = false;
-            // 
             // lbMaskCursor
             // 
             this.lbMaskCursor.Location = new System.Drawing.Point(459, 0);
@@ -235,6 +238,32 @@
             this.lbImgCursor.TabIndex = 0;
             this.lbImgCursor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // ckbScan
+            // 
+            this.ckbScan.AutoSize = true;
+            this.ckbScan.Location = new System.Drawing.Point(457, 7);
+            this.ckbScan.Name = "ckbScan";
+            this.ckbScan.Size = new System.Drawing.Size(51, 17);
+            this.ckbScan.TabIndex = 7;
+            this.ckbScan.Text = "Scan";
+            this.toolTip1.SetToolTip(this.ckbScan, "Automatically scan through the images via timer.");
+            this.ckbScan.UseVisualStyleBackColor = true;
+            this.ckbScan.CheckedChanged += new System.EventHandler(this.ckbScan_CheckedChanged);
+            // 
+            // tmScan
+            // 
+            this.tmScan.Interval = 250;
+            this.tmScan.Tick += new System.EventHandler(this.btnNext_Click);
+            // 
+            // pnNavigation
+            // 
+            this.pnNavigation.Controls.Add(this.pnButtons);
+            this.pnNavigation.Controls.Add(this.ckbScan);
+            this.pnNavigation.Location = new System.Drawing.Point(443, 8);
+            this.pnNavigation.Name = "pnNavigation";
+            this.pnNavigation.Size = new System.Drawing.Size(511, 29);
+            this.pnNavigation.TabIndex = 8;
+            // 
             // frmCameraView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -256,10 +285,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbMaskImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCameraImg)).EndInit();
             this.pnControl.ResumeLayout(false);
-            this.lbCount.ResumeLayout(false);
             this.pnButtons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbPredictionImage)).EndInit();
             this.pnCursor.ResumeLayout(false);
+            this.pnNavigation.ResumeLayout(false);
+            this.pnNavigation.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -284,5 +314,8 @@
         private System.Windows.Forms.Label lbImgCursor;
         private System.Windows.Forms.Label lbCount;
         private System.Windows.Forms.ProgressBar prbGenerationProgress;
+        private System.Windows.Forms.CheckBox ckbScan;
+        private System.Windows.Forms.Timer tmScan;
+        private System.Windows.Forms.Panel pnNavigation;
     }
 }

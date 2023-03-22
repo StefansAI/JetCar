@@ -543,9 +543,9 @@ namespace StreetMaker
                             grfx.FillPolygon(new SolidBrush(stopLineColor), Utils.Scale(p, ScaleFactor));
                         }
                     }
-                    else
+                    else // ColorMode.ClassCode or ColorMode.ClassColor
                     {
-                        if (lanes[LaneCount - 1].SegmClassDef == SegmClassDefs.ScdDrivingDir)
+                        if (SegmClassDefs.IsDriveLeftOrRight(lanes[LaneCount - 1].SegmClassDef))
                         {
                             PointF[] pp = new PointF[5];
                             pp[0] = poly[3];
@@ -555,6 +555,7 @@ namespace StreetMaker
                             pp[1] = Utils.GetPoint(pp[1], angle, dist*0.75);
                             pp[4] = pp[0];
                             grfx.FillPolygon(new SolidBrush(lanes[LaneCount - 1].GetDrawColor()), Utils.Scale(pp, ScaleFactor));
+
                             for (int i = 0; i < LaneCountRight; i++)
                             {
                                 if ((i > 0) && (lanes[i].RightLine != null))
@@ -566,7 +567,7 @@ namespace StreetMaker
                         }
 
                         if (((Utils.GetDistance(CameraPoint,poly[0])<MaxDetailDist) || (Utils.GetDistance(CameraPoint, poly[1]) < MaxDetailDist)) && 
-                            ((DrawWrongDirItems==true) || (lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir) || (lanes[LaneCount - 1].SegmClassDef == SegmClassDefs.ScdDrivingDir)))
+                            ((DrawWrongDirItems==true) || (lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir) || SegmClassDefs.IsDriveLeftOrRight(lanes[LaneCount - 1].SegmClassDef)))
                         {
                             dist = n * (w + w2) - w2;
                             poly[2] = Utils.GetPoint(poly[1], angle, dist);

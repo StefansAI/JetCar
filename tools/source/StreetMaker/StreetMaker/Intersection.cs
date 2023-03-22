@@ -494,7 +494,7 @@ namespace StreetMaker
                         {
                             grfx.FillPolygon(new SolidBrush(GetDrawColor(SegmClassDefs.ScdWrongDir)), GetInnerPolygon(ScaleFactor));
                         }
-                        else if ((StreetDescriptors[1].Lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir) && (DrawWrongDirItems == true)) // when StreetDescriptors.Length == 2
+                        else if ((StreetDescriptors[1].Lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir))//!!!!!!! && (DrawWrongDirItems == true)) // when StreetDescriptors.Length == 2
                         {
                             // the T-intersection has lanes going through and are now drawn with class codes left and right completely
                             // -> draw wrong dir over right turn code from left to center
@@ -584,7 +584,7 @@ namespace StreetMaker
                             }
                         }
                             
-                        if ((StreetDescriptors.Length == 2) && (StreetDescriptors[1].Lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir) && (DrawWrongDirItems == true))
+                        if ((StreetDescriptors.Length == 2) && (StreetDescriptors[1].Lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir))//!!!!!!!! && (DrawWrongDirItems == true))
                         {
                             // Since lane codes had been drawn over the lines, restore them now on top
                             foreach (LaneElement le in StreetDescriptors[0].Lanes)
@@ -985,13 +985,27 @@ namespace StreetMaker
                         {
                             poly[0] = StreetDescriptors[1].Lanes[0].Connectors[1].EndP0;
                             poly[1] = StreetDescriptors[0].Lanes[0].Connectors[0].EndP1;
+                           
+                            // To avoid drawing over the outer lines on the left side, recess points inside the outer lines of wrong dir lanes
+                            if (StreetDescriptors[0].Lanes[0].RightLine != null)
+                            {
+                                double a10 = Utils.GetAngle(poly[1], poly[0]);
+                                double w10 = Utils.GetDistance(poly[1], poly[0]);
+                                poly[1] = StreetDescriptors[0].Lanes[0].RightLine.Connectors[0].EndP0;
+                                poly[0] = Utils.GetPoint(poly[1], a10, w10);
+                            }
+
                             poly[2] = StreetDescriptors[0].Lanes[StreetDescriptors[0].LaneCountRight - 1].Connectors[0].EndP0;
+                            if (StreetDescriptors[0].Lanes[StreetDescriptors[0].LaneCountRight - 1].LeftLine != null)
+                                poly[2] = StreetDescriptors[0].Lanes[StreetDescriptors[0].LaneCountRight - 1].LeftLine.Connectors[0].EndP1;
+
                             double w = Utils.GetDistance(poly[1], poly[2]);
                             double a = Utils.GetAngle(poly[1], poly[2]);
                             poly[3] = Utils.GetPoint(poly[0], a, w);
                             poly[4] = poly[0];
                             grfx.FillPolygon(new SolidBrush(GetDrawColor(SegmClassDefs.ScdWrongDir)), Utils.Scale(poly, ScaleFactor));
                         }
+
                         // draw wrong dir over left turn code from right to center
                         if (StreetDescriptors[0].LaneCountLeft > 0)
                         {
@@ -1004,7 +1018,7 @@ namespace StreetMaker
                             poly[4] = poly[0];
                             grfx.FillPolygon(new SolidBrush(GetDrawColor(SegmClassDefs.ScdWrongDir)), Utils.Scale(poly, ScaleFactor));
                         }
-                        // Since lane codes had been drawn over the lines, restore them now on top
+                        //Since lane codes had been drawn over some of the lines, restore them now on top
                         foreach (LaneElement le in StreetDescriptors[0].Lanes)
                         {
                             if ((le.RightLine != null) && (le != StreetDescriptors[0].Lanes[0]))
