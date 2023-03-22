@@ -189,7 +189,6 @@
             this.label97 = new System.Windows.Forms.Label();
             this.label98 = new System.Windows.Forms.Label();
             this.nudColorCorrRed = new System.Windows.Forms.NumericUpDown();
-            this.ckbDrawWrongDirItems = new System.Windows.Forms.CheckBox();
             this.label96 = new System.Windows.Forms.Label();
             this.nudMarkMaxDetailDistance = new System.Windows.Forms.NumericUpDown();
             this.nudMarkLaneMaxDistSide = new System.Windows.Forms.NumericUpDown();
@@ -221,6 +220,7 @@
             this.label104 = new System.Windows.Forms.Label();
             this.ckbCenterBrightnessResults = new System.Windows.Forms.CheckBox();
             this.ckbDrawWrongDirStopYield = new System.Windows.Forms.CheckBox();
+            this.ckbDrawWrongDirItems = new System.Windows.Forms.CheckBox();
             this.nudImageStepSize = new System.Windows.Forms.NumericUpDown();
             this.label89 = new System.Windows.Forms.Label();
             this.nudTestOutRatio = new System.Windows.Forms.NumericUpDown();
@@ -2282,17 +2282,6 @@
             0,
             65536});
             // 
-            // ckbDrawWrongDirItems
-            // 
-            this.ckbDrawWrongDirItems.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckbDrawWrongDirItems.Location = new System.Drawing.Point(225, 42);
-            this.ckbDrawWrongDirItems.Name = "ckbDrawWrongDirItems";
-            this.ckbDrawWrongDirItems.Size = new System.Drawing.Size(153, 24);
-            this.ckbDrawWrongDirItems.TabIndex = 43;
-            this.ckbDrawWrongDirItems.Text = "Draw all Wrong Dir Items:";
-            this.toolTip1.SetToolTip(this.ckbDrawWrongDirItems, "If true, overlays and intersection items are drawn in wrong direction.");
-            this.ckbDrawWrongDirItems.UseVisualStyleBackColor = true;
-            // 
             // label96
             // 
             this.label96.AutoSize = true;
@@ -2784,6 +2773,17 @@
             this.ckbDrawWrongDirStopYield.Text = "Draw Wrong Dir Stop/Y:";
             this.toolTip1.SetToolTip(this.ckbDrawWrongDirStopYield, "If true, stop and yield lines and their texts are drawn on wrong dirs.");
             this.ckbDrawWrongDirStopYield.UseVisualStyleBackColor = true;
+            // 
+            // ckbDrawWrongDirItems
+            // 
+            this.ckbDrawWrongDirItems.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ckbDrawWrongDirItems.Location = new System.Drawing.Point(225, 42);
+            this.ckbDrawWrongDirItems.Name = "ckbDrawWrongDirItems";
+            this.ckbDrawWrongDirItems.Size = new System.Drawing.Size(153, 24);
+            this.ckbDrawWrongDirItems.TabIndex = 43;
+            this.ckbDrawWrongDirItems.Text = "Draw all Wrong Dir Items:";
+            this.toolTip1.SetToolTip(this.ckbDrawWrongDirItems, "If true, overlays and intersection items are drawn in wrong direction.");
+            this.ckbDrawWrongDirItems.UseVisualStyleBackColor = true;
             // 
             // nudImageStepSize
             // 

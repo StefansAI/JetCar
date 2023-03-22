@@ -1011,8 +1011,8 @@ namespace StreetMaker
         {
             int count = 0;
             int factor = 0;
-            for (int colorIdx = 0; colorIdx < AppSettings.ColorFactors.Length; colorIdx++)
-                 factor += AppSettings.ColorFactors[colorIdx] == 1 ? 1 : 3;
+            for (int colorIdx = 0; colorIdx < Settings.ColorFactors.Length; colorIdx++)
+                 factor += Settings.ColorFactors[colorIdx] == 1 ? 1 : 3;
                 
             factor = factor * Settings.SideSteps.Length * Settings.AngleSteps.Length * Settings.BrightnessFactors.Length * Settings.NoiseLevels.Length;
 

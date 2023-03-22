@@ -85,24 +85,6 @@
         <item>
           <overlay>
             <item>
-              <overlay_type>ArrowStraightLeft</overlay_type>
-              <ref_point_distance>480</ref_point_distance>
-              <ref_point_angle_delta>90</ref_point_angle_delta>
-              <direction_angle_delta>90</direction_angle_delta>
-            </item>
-            <item>
-              <overlay_type>ViewPoint</overlay_type>
-              <ref_point_distance>615</ref_point_distance>
-              <ref_point_angle_delta>90</ref_point_angle_delta>
-              <direction_angle_delta>90</direction_angle_delta>
-            </item>
-            <item>
-              <overlay_type>ViewPoint</overlay_type>
-              <ref_point_distance>560</ref_point_distance>
-              <ref_point_angle_delta>90</ref_point_angle_delta>
-              <direction_angle_delta>90</direction_angle_delta>
-            </item>
-            <item>
               <overlay_type>ViewPoint</overlay_type>
               <ref_point_distance>70</ref_point_distance>
               <ref_point_angle_delta>90</ref_point_angle_delta>
@@ -110,7 +92,25 @@
             </item>
             <item>
               <overlay_type>ViewPoint</overlay_type>
-              <ref_point_distance>360</ref_point_distance>
+              <ref_point_distance>375</ref_point_distance>
+              <ref_point_angle_delta>90</ref_point_angle_delta>
+              <direction_angle_delta>90</direction_angle_delta>
+            </item>
+            <item>
+              <overlay_type>ArrowStraightLeft</overlay_type>
+              <ref_point_distance>520</ref_point_distance>
+              <ref_point_angle_delta>90</ref_point_angle_delta>
+              <direction_angle_delta>90</direction_angle_delta>
+            </item>
+            <item>
+              <overlay_type>ViewPoint</overlay_type>
+              <ref_point_distance>625</ref_point_distance>
+              <ref_point_angle_delta>90</ref_point_angle_delta>
+              <direction_angle_delta>90</direction_angle_delta>
+            </item>
+            <item>
+              <overlay_type>ViewPoint</overlay_type>
+              <ref_point_distance>600</ref_point_distance>
               <ref_point_angle_delta>90</ref_point_angle_delta>
               <direction_angle_delta>90</direction_angle_delta>
             </item>
@@ -205,10 +205,23 @@
               <ref_point_angle_delta>90</ref_point_angle_delta>
               <direction_angle_delta>-90</direction_angle_delta>
             </item>
+            <item>
+              <overlay_type>ViewPoint</overlay_type>
+              <ref_point_distance>305</ref_point_distance>
+              <ref_point_angle_delta>90</ref_point_angle_delta>
+              <direction_angle_delta>-90</direction_angle_delta>
+            </item>
           </overlay>
         </item>
         <item>
-          <overlay />
+          <overlay>
+            <item>
+              <overlay_type>ViewPoint</overlay_type>
+              <ref_point_distance>85</ref_point_distance>
+              <ref_point_angle_delta>90</ref_point_angle_delta>
+              <direction_angle_delta>90</direction_angle_delta>
+            </item>
+          </overlay>
         </item>
         <item>
           <overlay>
@@ -1539,6 +1552,30 @@
               <ref_point_angle_delta>47.4716879628093</ref_point_angle_delta>
               <direction_angle_delta>-175.05662664522</direction_angle_delta>
             </item>
+            <item>
+              <overlay_type>ViewPoint</overlay_type>
+              <ref_point_distance>491.813266716714</ref_point_distance>
+              <ref_point_angle_delta>52.6000866795684</ref_point_angle_delta>
+              <direction_angle_delta>-164.799846883458</direction_angle_delta>
+            </item>
+            <item>
+              <overlay_type>ViewPoint</overlay_type>
+              <ref_point_distance>379.24833471125</ref_point_distance>
+              <ref_point_angle_delta>62.0720641121928</ref_point_angle_delta>
+              <direction_angle_delta>-145.855862158125</direction_angle_delta>
+            </item>
+            <item>
+              <overlay_type>ViewPoint</overlay_type>
+              <ref_point_distance>53.2942657416683</ref_point_distance>
+              <ref_point_angle_delta>86.2262780834237</ref_point_angle_delta>
+              <direction_angle_delta>-97.5475114711889</direction_angle_delta>
+            </item>
+            <item>
+              <overlay_type>ViewPoint</overlay_type>
+              <ref_point_distance>251.931624764088</ref_point_distance>
+              <ref_point_angle_delta>71.872760115</ref_point_angle_delta>
+              <direction_angle_delta>-126.25446554712</direction_angle_delta>
+            </item>
           </overlay>
         </item>
         <item>
@@ -2414,7 +2451,20 @@
       <location_y>4057.574</location_y>
       <lane>
         <item>
-          <overlay />
+          <overlay>
+            <item>
+              <overlay_type>ViewPoint</overlay_type>
+              <ref_point_distance>260</ref_point_distance>
+              <ref_point_angle_delta>90</ref_point_angle_delta>
+              <direction_angle_delta>-90</direction_angle_delta>
+            </item>
+            <item>
+              <overlay_type>ViewPoint</overlay_type>
+              <ref_point_distance>350</ref_point_distance>
+              <ref_point_angle_delta>90</ref_point_angle_delta>
+              <direction_angle_delta>-90</direction_angle_delta>
+            </item>
+          </overlay>
         </item>
         <item>
           <overlay>
@@ -2457,6 +2507,12 @@
               <ref_point_distance>365.541286061758</ref_point_distance>
               <ref_point_angle_delta>59.4894923688519</ref_point_angle_delta>
               <direction_angle_delta>-151.02100140791</direction_angle_delta>
+            </item>
+            <item>
+              <overlay_type>ViewPoint</overlay_type>
+              <ref_point_distance>267.73286036666</ref_point_distance>
+              <ref_point_angle_delta>68.1702024122906</ref_point_angle_delta>
+              <direction_angle_delta>-133.659652162683</direction_angle_delta>
             </item>
           </overlay>
         </item>
