@@ -488,13 +488,13 @@ namespace StreetMaker
                             else grfx.FillPath(new SolidBrush(GetDrawColor(scdR)), cornerRounds[i].GetScaledBasePath(ScaleFactor));
 
                         }
-                        
+
                         // in class mode, draw wrong direction into inner area 
                         if (StreetDescriptors.Length > 2)
                         {
                             grfx.FillPolygon(new SolidBrush(GetDrawColor(SegmClassDefs.ScdWrongDir)), GetInnerPolygon(ScaleFactor));
                         }
-                        else if ((StreetDescriptors[1].Lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir))//!!!!!!! && (DrawWrongDirItems == true)) // when StreetDescriptors.Length == 2
+                        else if ((StreetDescriptors[1].Lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir)) // when StreetDescriptors.Length == 2
                         {
                             // the T-intersection has lanes going through and are now drawn with class codes left and right completely
                             // -> draw wrong dir over right turn code from left to center
@@ -578,12 +578,12 @@ namespace StreetMaker
                                     poly[(i + 2) % 4] = Utils.GetPoint(poly[(i + 3) % 4], dirAngle, dist);
                                     poly[4] = poly[0];
                                     grfx.FillPolygon(new SolidBrush(GetDrawColor(SegmClassDefs.ScdDrivingDir)), Utils.Scale(poly, ScaleFactor));
-
+                                    
                                     drivingDirIdx = i;
                                 }
                             }
                         }
-                            
+                                                    
                         if ((StreetDescriptors.Length == 2) && (StreetDescriptors[1].Lanes[0].SegmClassDef == SegmClassDefs.ScdDrivingDir))//!!!!!!!! && (DrawWrongDirItems == true))
                         {
                             // Since lane codes had been drawn over the lines, restore them now on top
@@ -597,7 +597,7 @@ namespace StreetMaker
                             }
                         }
                     } // End of "ColorMode is set to draw classes"
-
+                    
                     // Continue normal drawing here
                     if (StreetDescriptors.Length == 2)
                     {
@@ -610,7 +610,7 @@ namespace StreetMaker
                         poly[3] = Utils.Scale(innerArea[1], ScaleFactor);
                         poly[4] = poly[0];
                         grfx.FillPolygon(new SolidBrush(StreetDescriptors[1].Lanes[0].GetDrawColor()), poly);
-
+                        
                         if (StreetDescriptors[1].LaneCountLeft > 0)
                         {
                             poly[2] = Utils.Scale(Utils.GetPoint(innerArea[0], lane0Angle + Utils.RIGHT_ANGLE_RADIAN, lineWidth + BaseElement.DRAW_OFFS_WIDTH+1), ScaleFactor);
@@ -618,7 +618,7 @@ namespace StreetMaker
                             grfx.FillPolygon(new SolidBrush(StreetDescriptors[1].Lanes[StreetDescriptors[1].LaneCountRight].GetDrawColor()), poly);
                         }
                     }
-
+                    
                     // Go through street descriptors to add crosswalks and stop or yield lines
                     double angle = lane0Angle - Utils.RIGHT_ANGLE_RADIAN;
                     for (int i = 0; i < StreetDescriptors.Length; i++, angle += Utils.RIGHT_ANGLE_RADIAN)
@@ -950,7 +950,7 @@ namespace StreetMaker
                             // draw driving dir over it from starting point of driving direction lanes
                             PointF[] poly = GetInnerPolygon(new SizeF(1, 1));
 
-                            double dist = -(StreetDescriptors[0].Lanes[0].LeftLine.Connectors[0].Width+1); // bigger to avoid rounding gaps
+                            double dist = -(StreetDescriptors[0].Lanes[0].LeftLine.Connectors[0].Width+2); // bigger to avoid rounding gaps, that occured occasionally
                             double dirAngle = StreetDescriptors[0].Lanes[0].LeftLine.Connectors[0].Angle;
                             poly[2] = Utils.GetPoint(poly[1], dirAngle, dist);
                             poly[3] = Utils.GetPoint(poly[0], dirAngle, dist);

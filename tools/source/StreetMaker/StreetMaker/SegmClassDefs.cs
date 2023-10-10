@@ -27,6 +27,8 @@ namespace StreetMaker
         public readonly object ClassEnum;
         /// <summary>Identifier or code of the class.</summary>
         public int ClassCode;
+        /// <summary>Requested identifier or code of the class.</summary>
+        public int RequestedClassCode;
         /// <summary>Human friendly name of the class, used for the GUI.</summary>
         public string Name;
         /// <summary>Color to be used in the GUI when displaying the polygon on the image or the filled area in the mask.</summary>
@@ -50,6 +52,7 @@ namespace StreetMaker
         {
             this.ClassEnum = ClassEnum;
             this.ClassCode = ClassCode;
+            this.RequestedClassCode = -1;
             this.Name = Name;
             this.DrawColor = DrawColor;
             this.UseCount = 0;
@@ -199,26 +202,47 @@ namespace StreetMaker
         }
 
         /// <summary>
+        /// Reset all requested class codes in Defs by enumerating them in order.
+        /// </summary>
+        public static void ResetRequestedClassCodes()
+        {
+            for (int i = 0; i < Defs.Length; i++)
+                Defs[i].RequestedClassCode = -1;
+        }
+
+
+        /// <summary>
         /// Optimize the class codes in Defs by only enumerating the the classes with use counts > 0.
         /// </summary>
         /// <returns>Number of used classes.</returns>
         public static int OptClassCodes()
         {
-            int i = 0;
-            // Make sure, these are always included
-            ScdNothing.UseCount++;
-            ScdDrivingDir.UseCount++;
-            ScdWrongDir.UseCount++;
-            ScdLeftTurnDir.UseCount++;
-            ScdRightTurnDir.UseCount++;
+            int n = 0;
 
-            // Now, optimize all all
+            // Pre-load requested codes
             foreach (SegmClassDef scd in Defs)
-                if (scd.UseCount > 0)
-                    scd.ClassCode = i++;
+                if (scd.RequestedClassCode >= 0)
+                {
+                    scd.ClassCode = scd.RequestedClassCode;
+                    n = Math.Max(n, scd.RequestedClassCode+1);
+                    scd.UseCount = Math.Max(scd.UseCount,1);
+                }
                 else
                     scd.ClassCode = -1;
-            return i;
+
+            // Make sure, these are always included
+            ScdNothing.UseCount     = Math.Max(ScdNothing.UseCount,1);
+            ScdDrivingDir.UseCount  = Math.Max(ScdDrivingDir.UseCount, 1);
+            ScdWrongDir.UseCount    = Math.Max(ScdWrongDir.UseCount, 1);
+            ScdLeftTurnDir.UseCount = Math.Max(ScdLeftTurnDir.UseCount, 1);
+            ScdRightTurnDir.UseCount = Math.Max(ScdRightTurnDir.UseCount, 1);
+
+            // Now, optimize all
+            foreach (SegmClassDef scd in Defs)
+                if ((scd.ClassCode < 0) && (scd.UseCount > 0))
+                    scd.ClassCode = n++;
+
+            return n;
         }
 
     }

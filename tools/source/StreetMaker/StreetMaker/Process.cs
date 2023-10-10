@@ -99,11 +99,11 @@ namespace StreetMaker
         /// </summary>
         /// <param name="SourceBitmap">Source Bitmap to be processed.</param>
         /// <param name="BrightnessFactor">Factor to apply to RGB values.</param>
-        /// <param name="CenterRange">If true, the min/max range will be centered to 127.</param>
+        /// <param name="ColorCenterOffsRGB">Center offset to apply to RGB values.</param>
         /// <returns>New Bitmap object reference with applied changes.</returns>
-        public static Bitmap ImageBrightness(Bitmap SourceBitmap, float BrightnessFactor, bool CenterRange)
+        public static Bitmap ImageBrightness(Bitmap SourceBitmap, float BrightnessFactor, int[] ColorCenterOffsRGB)
         {
-            return ImageBrightness(SourceBitmap, new float[] { BrightnessFactor, BrightnessFactor, BrightnessFactor }, CenterRange);
+            return ImageBrightness(SourceBitmap, new float[] { BrightnessFactor, BrightnessFactor, BrightnessFactor }, ColorCenterOffsRGB);
         }
 
         /// <summary>
@@ -111,21 +111,13 @@ namespace StreetMaker
         /// </summary>
         /// <param name="SourceBitmap">Source Bitmap to be processed.</param>
         /// <param name="BrightnessFactorsRGB">Factors to apply to RGB values.</param>
-        /// <param name="CenterRange">If true, the min/max range will be centered to 127.</param>
+        /// <param name="ColorCenterOffsRGB">Center offset to apply to RGB values.</param>
         /// <returns>New Bitmap object reference with applied changes.</returns>
-        public static Bitmap ImageBrightness(Bitmap SourceBitmap, float[] BrightnessFactorsRGB, bool CenterRange)
+        public static Bitmap ImageBrightness(Bitmap SourceBitmap, float[] BrightnessFactorsRGB, int[] ColorCenterOffsRGB)
         {
             // if brightness is 1, just return a copy of the original bitmap
             if ((BrightnessFactorsRGB[0] == 1) && (BrightnessFactorsRGB[1] == 1) && (BrightnessFactorsRGB[2] == 1))
                 return new Bitmap(SourceBitmap);
-
-            int offs = 0;
-            if (CenterRange == true )
-            {
-                float factAvg = (BrightnessFactorsRGB[0] + BrightnessFactorsRGB[1] + BrightnessFactorsRGB[2]) / 3;
-//                if (factAvg < 1)
-                    offs = (int)(127 * (1 - factAvg));
-            }
 
             Bitmap bmResult = new Bitmap(SourceBitmap.Width, SourceBitmap.Height);
             Graphics.FromImage(bmResult).Clear(Color.Black);
@@ -147,9 +139,9 @@ namespace StreetMaker
                     byte* currentLineResult = ptrBaseResult + (y * bmdResult.Stride);
                     for (int x = 0; x < bmdSource.Width; x++)
                     {
-                        currentLineResult[x * bppResult    ] = (byte)Math.Min(Math.Max((int)(currentLineSource[x * bppSource    ] * BrightnessFactorsRGB[2]) + offs, 0), 255);    // B
-                        currentLineResult[x * bppResult + 1] = (byte)Math.Min(Math.Max((int)(currentLineSource[x * bppSource + 1] * BrightnessFactorsRGB[1]) + offs, 0), 255);    // G
-                        currentLineResult[x * bppResult + 2] = (byte)Math.Min(Math.Max((int)(currentLineSource[x * bppSource + 2] * BrightnessFactorsRGB[0]) + offs, 0), 255);    // R
+                        currentLineResult[x * bppResult + 0] = (byte)Math.Min(Math.Max((int)(((int)currentLineSource[x * bppSource + 0] - 127) * BrightnessFactorsRGB[2]) + ColorCenterOffsRGB[2], 0), 255);    // B
+                        currentLineResult[x * bppResult + 1] = (byte)Math.Min(Math.Max((int)(((int)currentLineSource[x * bppSource + 1] - 127) * BrightnessFactorsRGB[1]) + ColorCenterOffsRGB[1], 0), 255);    // G
+                        currentLineResult[x * bppResult + 2] = (byte)Math.Min(Math.Max((int)(((int)currentLineSource[x * bppSource + 2] - 127) * BrightnessFactorsRGB[0]) + ColorCenterOffsRGB[0], 0), 255);    // R
                     }
                 };
                 SourceBitmap.UnlockBits(bmdSource);

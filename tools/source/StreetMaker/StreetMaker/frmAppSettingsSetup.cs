@@ -234,9 +234,13 @@ namespace StreetMaker
             nudCameraLensDist1.Value = (decimal)editSettings.CameraLensDistortion1;
             nudCameraLensDist2.Value = (decimal)editSettings.CameraLensDistortion2;
 
-            nudColorCorrRed.Value = (decimal)editSettings.CameraColorCorrRed;
-            nudColorCorrGreen.Value = (decimal)editSettings.CameraColorCorrGreen;
-            nudColorCorrBlue.Value = (decimal)editSettings.CameraColorCorrBlue;
+            nudColorCorrFactRed.Value = (decimal)editSettings.CameraColorCorrFactRed;
+            nudColorCorrFactGreen.Value = (decimal)editSettings.CameraColorCorrFactGreen;
+            nudColorCorrFactBlue.Value = (decimal)editSettings.CameraColorCorrFactBlue;
+
+            nudColorCorrOffsRed.Value = (decimal)editSettings.CameraColorCorrOffsRed;
+            nudColorCorrOffsGreen.Value = (decimal)editSettings.CameraColorCorrOffsGreen;
+            nudColorCorrOffsBlue.Value = (decimal)editSettings.CameraColorCorrOffsBlue;
 
             nudCameraOversampling.Value = (decimal)editSettings.CameraOversampling;
             nudCameraOutputWidth.Value = (decimal)editSettings.CameraOutputWidth;
@@ -244,10 +248,9 @@ namespace StreetMaker
 
             nudCameraAxisAngle.Value = (decimal)editSettings.CameraAxisAngle;
 
-
             nudTrainValRatio.Value = (decimal)editSettings.TrainValRatio;
             nudTestOutRatio.Value = (decimal)editSettings.TestOutRatio;
-            ckbCenterBrightnessResults.Checked = editSettings.CenterBrightnessResults;
+            ckbReusePreviousClasses.Checked = editSettings.ReusePreviousClasses;
             ckbDrawWrongDirItems.Checked = editSettings.DrawWrongDirItems;
             ckbDrawWrongDirStopYield.Checked = editSettings.DrawWrongDirStopYield;
 
@@ -349,9 +352,13 @@ namespace StreetMaker
             editSettings.CameraLensDistortion2 = (double)nudCameraLensDist2.Value;
             editSettings.CameraAxisAngle = (double)nudCameraAxisAngle.Value;
 
-            editSettings.CameraColorCorrRed = (double)nudColorCorrRed.Value;
-            editSettings.CameraColorCorrGreen = (double)nudColorCorrGreen.Value;
-            editSettings.CameraColorCorrBlue = (double)nudColorCorrBlue.Value;
+            editSettings.CameraColorCorrFactRed = (double)nudColorCorrFactRed.Value;
+            editSettings.CameraColorCorrFactGreen = (double)nudColorCorrFactGreen.Value;
+            editSettings.CameraColorCorrFactBlue = (double)nudColorCorrFactBlue.Value;
+
+            editSettings.CameraColorCorrOffsRed = (int)nudColorCorrOffsRed.Value;
+            editSettings.CameraColorCorrOffsGreen = (int)nudColorCorrOffsGreen.Value;
+            editSettings.CameraColorCorrOffsBlue = (int)nudColorCorrOffsBlue.Value;
 
             editSettings.CameraOversampling = (int)nudCameraOversampling.Value;
             editSettings.CameraOutputWidth =  (int)nudCameraOutputWidth.Value;
@@ -359,7 +366,7 @@ namespace StreetMaker
 
             editSettings.TrainValRatio = (int)nudTrainValRatio.Value;
             editSettings.TestOutRatio = (int)nudTestOutRatio.Value;
-            editSettings.CenterBrightnessResults = ckbCenterBrightnessResults.Checked;
+            editSettings.ReusePreviousClasses = ckbReusePreviousClasses.Checked;
             editSettings.DrawWrongDirItems = ckbDrawWrongDirItems.Checked;
             editSettings.DrawWrongDirStopYield = ckbDrawWrongDirStopYield.Checked;
 
@@ -1110,6 +1117,22 @@ namespace StreetMaker
             }
             else e.Cancel = true;
         }
+
+
+        /// <summary>
+        /// Open the open-folder-dialog to select a specific folder.
+        /// </summary>
+        /// <param name="sender">Sender of the notification.</param>
+        /// <param name="e">Event arguments.</param>
+        private void btnBrowseDataPath_Click(object sender, EventArgs e)
+        {
+            fbdSelectPath.SelectedPath = tbPathToDataStorage.Text;
+            if (fbdSelectPath.ShowDialog() == DialogResult.OK)
+            {
+                tbPathToDataStorage.Text = fbdSelectPath.SelectedPath;
+            }
+        }
+
 
         /// <summary>
         /// OK Button Click Event Handler to save the form GUI values to the editSettings object and to copy its contents to the main form AppSettings object before closing this form.

@@ -25,6 +25,8 @@ namespace StreetMaker
     public class PrintStreetMap
     {
         #region Private Fields
+        /// <summary>Reference to the PrintDialog object that owns this object.</summary>
+        private PrintDialog PrintDialog;
         /// <summary>Reference to the StreetMap object used for drawing.</summary>
         private StreetMap StreetMap;
         /// <summary>Reference to the application settings object to get parameter from.</summary>
@@ -55,6 +57,8 @@ namespace StreetMaker
         public PrintDocument PrintDocument;
         /// <summary>If set to true, only outlines will be printed.</summary>
         public bool OutlinesOnly;
+        /// <summary>Total number of pages to print.</summary>
+        public int TotalPages;
         #endregion Public Fields
 
         #region Constructor
@@ -64,8 +68,9 @@ namespace StreetMaker
         /// </summary>
         /// <param name="StreetMap">Reference to the StreetMap object used for drawing.</param>
         /// <param name="AppSettings">Reference to the application settings object to get parameter from.</param>
-        public PrintStreetMap(StreetMap StreetMap, AppSettings AppSettings, bool OutlinesOnly)
+        public PrintStreetMap(PrintDialog PrintDialog, StreetMap StreetMap, AppSettings AppSettings, bool OutlinesOnly)
         {
+            this.PrintDialog = PrintDialog;
             this.StreetMap = StreetMap;
             this.AppSettings = AppSettings;
             this.OutlinesOnly = OutlinesOnly;
@@ -80,6 +85,19 @@ namespace StreetMaker
             
             PrintDocument.BeginPrint += PrintDocument_BeginPrint;
             PrintDocument.PrintPage += PrintDocument_PrintPage;
+
+            int w, h;
+            if (AppSettings.PrintPageSettings.Landscape == true)
+            {
+                w = AppSettings.PrintPageSettings.PaperSize.Height - AppSettings.PrintPageSettings.Margins.Left - AppSettings.PrintPageSettings.Margins.Right;
+                h = AppSettings.PrintPageSettings.PaperSize.Width - AppSettings.PrintPageSettings.Margins.Top - AppSettings.PrintPageSettings.Margins.Bottom;
+            }
+            else
+            {
+                w = AppSettings.PrintPageSettings.PaperSize.Width - AppSettings.PrintPageSettings.Margins.Left - AppSettings.PrintPageSettings.Margins.Right;
+                h = AppSettings.PrintPageSettings.PaperSize.Height - AppSettings.PrintPageSettings.Margins.Top - AppSettings.PrintPageSettings.Margins.Bottom;
+            }
+            TotalPages = (int)Math.Ceiling(totalWidth / w) * (int)Math.Ceiling(totalHeight / h);
         }
         #endregion Constructor
 
@@ -99,6 +117,27 @@ namespace StreetMaker
         }
 
         /// <summary>
+        /// Increase pageCount and calculate offsets and coordinates in x and y for the next page to print.
+        /// </summary>
+        /// <param name="w">Print width exluding the margins.</param>
+        /// <param name="h">Print height exluding the margins.</param>
+        /// <returns>True if more pages to print, false when done.</returns>
+        private bool PrepareNextPage(int w, int h)
+        {
+            pageCount++;
+            pageX++;
+            offsX += w;
+            if (offsX >= totalWidth)
+            {
+                pageX = 0;
+                offsX = 0;
+                pageY++;
+                offsY += h;
+            }
+            return (offsY < totalHeight);
+        }
+
+        /// <summary>
         /// Print Page event handler of the PrintDocument. Since creating a huge bitmap for the complete StreetMap with 100dpi resolution is not possible, 
         /// a smaller bitmap is created for each page with the origin moved to offsetX and offsetY. The complete StreetMap is printed to it,
         /// so the bitmap will contain the correct partial image.
@@ -111,6 +150,11 @@ namespace StreetMaker
             int h = e.MarginBounds.Height;
             int x = e.MarginBounds.X;
             int y = e.MarginBounds.Y;
+
+            // If printing starts at a requested page number, move forward to it
+            if (PrintDialog.PrinterSettings.PrintRange == PrintRange.SomePages)
+                while (pageCount < PrintDialog.PrinterSettings.FromPage - 1)
+                    PrepareNextPage(w, h);
 
             Bitmap bmPage = new Bitmap(w, h);
             Graphics grfx = Graphics.FromImage(bmPage);
@@ -131,18 +175,11 @@ namespace StreetMaker
             //bmPage.Save(Application.StartupPath + "\\Page_" + pageCount.ToString() + ".bmp");
             bmPage.Dispose();
 
-            pageCount++;
-            pageX++;
-            offsX += w;
-            if (offsX >= totalWidth)
-            {
-                pageX = 0;
-                offsX = 0;
-                pageY++;
-                offsY += h;
-            }
+            e.HasMorePages = PrepareNextPage(w, h);
 
-            e.HasMorePages = (offsY < totalHeight);
+            // if there are still more pages but an end page is given, overwrite the flag
+            if ((e.HasMorePages == true) && (PrintDialog.PrinterSettings.PrintRange == PrintRange.SomePages))
+                e.HasMorePages = pageCount < PrintDialog.PrinterSettings.ToPage;
         }
         #endregion Private Methods
 

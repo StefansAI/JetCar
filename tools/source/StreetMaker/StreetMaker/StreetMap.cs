@@ -838,6 +838,11 @@ namespace StreetMaker
             return classText;
         }
 
+        /// <summary>String definition in class file to start class definitions</summary>
+        private const string CLASS_DEF_STR_START = "class SegmClass(enum.Enum):";
+        /// <summary>String definition in class file to end class definitions</summary>
+        private const string CLASS_DEF_STR_END = "\t#Unused:";
+
         /// <summary>
         /// Writes first a list constant names and code assignements and then a list of name strings into a text file to be copied into Python code.
         /// </summary>
@@ -854,12 +859,12 @@ namespace StreetMaker
             sw.WriteLine("N_CLASSES = " + n);
             sw.WriteLine();
             sw.WriteLine("# Definition of all segmentation class names and values");
-            sw.WriteLine("class SegmClass(enum.Enum):");
+            sw.WriteLine(CLASS_DEF_STR_START);
             foreach (SegmClassDef scd in SegmClassDefs.Defs)
                 if (scd.UseCount > 0)
                     sw.WriteLine("\t" + scd.Name.ToLower() + " = " + scd.ClassCode);
 
-            sw.WriteLine("\t#Unused:");
+            sw.WriteLine(CLASS_DEF_STR_END);
 
             int i = 100;
             foreach (SegmClassDef scd in SegmClassDefs.Defs)
@@ -886,6 +891,53 @@ namespace StreetMaker
 
             sw.Close();
             return n;
+        }
+
+        /// <summary>
+        /// Reads the file with code assignements and assigns these codes as requested codes in SegmDefs.
+        /// </summary>
+        /// <param name="FileName">Full path and file name of the text file to read.</param>
+        public void ReadClassText(string FileName)
+        {
+            if (File.Exists(FileName) == false)
+                return;
+
+            StreamReader sr = new StreamReader(FileName);
+            string line = "";
+            try
+            {
+                do
+                {
+                    line = sr.ReadLine();
+                }
+                while (line != CLASS_DEF_STR_START);
+
+                while (sr.EndOfStream == false)
+                {
+                    line = sr.ReadLine();
+                    if (line == CLASS_DEF_STR_END)
+                    {
+                        sr.Close();
+                        return;
+                    }
+
+                    string[] s = line.Split(new char[] { '=' });
+                    string name = s[0].Trim(new char[] { '\t', ' ' });
+                    int code = Convert.ToInt32(s[1].Trim());
+                    foreach (SegmClassDef scd in SegmClassDefs.Defs)
+                        if (scd.Name == name)
+                        {
+                            scd.RequestedClassCode = code;
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                SegmClassDefs.ResetRequestedClassCodes();
+                throw new Exception("Error reading previous class definitions from file:\n" + FileName + "\n"+ex.Message);
+            }
+            sr.Close();
         }
 
         /// <summary>
@@ -993,12 +1045,32 @@ namespace StreetMaker
 
         /// <summary>
         /// Write the 2 output files containing the used class definitions and the color map.
+        /// If ReusePreviousClasses is true, the current Class Text File is read to assign the previous class codes.
+        /// In any case, the previous files are renamed to backup files to keep them for comparison or to revert
         /// </summary>
         /// <param name="DatasetPath"></param>
         public void WriteClassFileAndColorMap(string DatasetPath)
         {
-            WriteClassText(DatasetPath + AppSettings.ClassTextFileName);
-            SaveColorMapCsv(DatasetPath + AppSettings.ColorMapFileName);
+            string fnClassText = DatasetPath + AppSettings.ClassTextFileName;
+            string fnColorMap = DatasetPath + AppSettings.ColorMapFileName;
+
+            SegmClassDefs.ResetRequestedClassCodes();
+            if (AppSettings.ReusePreviousClasses == true)
+                ReadClassText(fnClassText);
+
+            string fnClassTextBackup = fnClassText + ".bak";
+            string fnColorMapBackup = fnColorMap + ".bak";
+
+            if (File.Exists(fnClassTextBackup) == true)
+                File.Delete(fnClassTextBackup);
+            if (File.Exists(fnColorMapBackup) == true)
+                File.Delete(fnColorMapBackup);
+
+            File.Move(fnClassText, fnClassTextBackup);
+            File.Move(fnColorMap, fnColorMapBackup);
+
+            WriteClassText(fnClassText);
+            SaveColorMapCsv(fnColorMap);
         }
 
 
@@ -1201,12 +1273,14 @@ namespace StreetMaker
                                                 // apply the color factors to each color individually
                                                 for (int rgbIdx = 0; rgbIdx < rgbN; rgbIdx++)
                                                 {
-                                                    float[] brightnessFactors = new float[] { brightness * (float)AppSettings.CameraColorCorrRed,
-                                                                                              brightness * (float)AppSettings.CameraColorCorrGreen,
-                                                                                              brightness * (float)AppSettings.CameraColorCorrBlue };
+                                                    int[] colorCorrOffs = { AppSettings.CameraColorCorrOffsRed, AppSettings.CameraColorCorrOffsGreen, AppSettings.CameraColorCorrOffsBlue };
+
+                                                    float[] brightnessFactors = new float[] { brightness * (float)AppSettings.CameraColorCorrFactRed,
+                                                                                              brightness * (float)AppSettings.CameraColorCorrFactGreen,
+                                                                                              brightness * (float)AppSettings.CameraColorCorrFactBlue };
                                                     brightnessFactors[rgbIdx] *= colorFactor;
 
-                                                    Bitmap bmBrightOut = Process.ImageBrightness(CameraImgs.StreetView, brightnessFactors, AppSettings.CenterBrightnessResults);
+                                                    Bitmap bmBrightOut = Process.ImageBrightness(CameraImgs.StreetView, brightnessFactors, colorCorrOffs);
 
                                                     // go through the different noise level applications
                                                     for (int noiseIdx = 0; noiseIdx < AppSettings.NoiseLevels.Length; noiseIdx++)
@@ -1961,7 +2035,7 @@ namespace StreetMaker
         /// </summary>
         /// <returns>Number of used classes.</returns>
         public int GetUsedClassCount()
-        {
+        { 
             SegmClassDefs.ClearUseCounts();
 
             foreach (StreetElement se in Items)

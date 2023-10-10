@@ -258,11 +258,17 @@ namespace StreetMaker
         /// <summary>Optical distortion coefficient 2 of the camera lens. Estimated value for 145 degree lens.</summary>
         public double CameraLensDistortion2 = 0.25;
         /// <summary>Color correction factor of the camera for the red channel. Estimated value for 145 degree camera.</summary>
-        public double CameraColorCorrRed = 1.18*0.8;
+        public double CameraColorCorrFactRed = 0.702;
         /// <summary>Color correction factor of the camera for the green channel. Estimated value for 145 degree camera.</summary>
-        public double CameraColorCorrGreen = 1.0*0.8;
+        public double CameraColorCorrFactGreen = 0.635;
         /// <summary>Color correction factor of the camera for the blue channel. Estimated value for 145 degree camera.</summary>
-        public double CameraColorCorrBlue = 1.05*0.8;
+        public double CameraColorCorrFactBlue = 0.690;
+        /// <summary>Color correction factor of the camera for the red channel. Estimated value for 145 degree camera.</summary>
+        public int CameraColorCorrOffsRed = 130;
+        /// <summary>Color correction factor of the camera for the green channel. Estimated value for 145 degree camera.</summary>
+        public int CameraColorCorrOffsGreen = 129;
+        /// <summary>Color correction factor of the camera for the blue channel. Estimated value for 145 degree camera.</summary>
+        public int CameraColorCorrOffsBlue = 140;
         /// <summary>Height of the camera above ground.</summary>
         public double CameraHeight = 110;
         /// <summary>Angle of the optical axis of the camera.</summary>
@@ -280,7 +286,9 @@ namespace StreetMaker
         /// <summary>Angle to the side of a view to include street elements to mark lanes with class codes or colors.</summary>
         public double MarkLaneMaxDistSideAngle = 45;
         /// <summary>Maximum distance from camera view point to mark all details.</summary>
-        public double MarkMaxDetailDistance = 1400;
+        public double MarkMaxDetailDistance = 700;
+        /// <summary>If true, the previously generated Class-Text-File will be loaded to reuse its class codes.</summary>
+        public bool ReusePreviousClasses = false;
         /// <summary>If true, overlays and intersection items are drawn in wrong direction.</summary>
         public bool DrawWrongDirItems = false;
         /// <summary>If true, stop and yield lines and signs are drawn in wrong direction.</summary>
@@ -292,24 +300,21 @@ namespace StreetMaker
 
         #region Augmentation
         /// <summary>Ratio between training and validation output. 50 for instance means that about every 50th image,mask and info set will be placed into the validation folders instead of training folders.</summary>
-        public int TrainValRatio = 50;
+        public int TrainValRatio = 10;
         /// <summary>Ratio between Train/Val and Test output. 100 for instance means that about every 100th image,mask and info set will be copied into the test folder.</summary>
-        public int TestOutRatio = 100;
+        public int TestOutRatio = 50;
 
         /// <summary>Step size for new images to be created along each lane.</summary>
         public double ImageStepSize = 120;
 
-        /// <summary>If true, brightness calculation results will be offset to center the min/max range.</summary>
-        public bool CenterBrightnessResults = true;
-
         /// <summary>Steps left and right from the lane center to create additional views off center.</summary>
-        public float[] SideSteps = { -20, 0, 20 };
+        public float[] SideSteps = { 0 };
         /// <summary>Angle variations turning left and right from lane center view to create additional views.</summary>
         public float[] AngleSteps = { -10, 0, 10 };
         /// <summary>Different brightness variations for more augmentation</summary>
         public float[] BrightnessFactors = { 0.8f, 1.0f };
         /// <summary>Color variations to apply to each of the three basic colors RGB sequentially.</summary>
-        public float[] ColorFactors = { 0.8f, 1.0f, 1.2f };
+        public float[] ColorFactors = { 0.9f, 1.0f, 1.1f };
         /// <summary>Adding noise in different levels at the end.</summary>
         public int[] NoiseLevels = { 10, 10 };
         #endregion Augmentation
@@ -623,9 +628,12 @@ namespace StreetMaker
                 CameraImageRatio = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_image_ratio").InnerText);
                 CameraLensDistortion1 = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_lens_distortion1").InnerText);
                 CameraLensDistortion2 = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_lens_distortion2").InnerText);
-                CameraColorCorrRed = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_color_correction_red").InnerText);
-                CameraColorCorrGreen = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_color_correction_green").InnerText);
-                CameraColorCorrBlue = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_color_correction_blue").InnerText);
+                CameraColorCorrFactRed = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_color_correction_fact_red").InnerText);
+                CameraColorCorrFactGreen = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_color_correction_fact_green").InnerText);
+                CameraColorCorrFactBlue = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_color_correction_fact_blue").InnerText);
+                CameraColorCorrOffsRed = Convert.ToInt32(nodeVirtualCam.SelectSingleNode("camera_color_correction_offs_red").InnerText);
+                CameraColorCorrOffsGreen = Convert.ToInt32(nodeVirtualCam.SelectSingleNode("camera_color_correction_offs_green").InnerText);
+                CameraColorCorrOffsBlue = Convert.ToInt32(nodeVirtualCam.SelectSingleNode("camera_color_correction_offs_blue").InnerText);
                 CameraHeight = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_height").InnerText);
                 CameraAxisAngle = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("camera_axis_angle").InnerText);
                 CameraOutputWidth = Convert.ToInt32(nodeVirtualCam.SelectSingleNode("camera_output_width").InnerText);
@@ -636,6 +644,7 @@ namespace StreetMaker
                 MarkLaneMaxDistSide = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("mark_lane_max_dist_side").InnerText);
                 MarkLaneMaxDistSideAngle = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("mark_lane_max_dist_side_angle").InnerText);
                 MarkMaxDetailDistance = Convert.ToDouble(nodeVirtualCam.SelectSingleNode("mark_max_detail_distance").InnerText);
+                ReusePreviousClasses = Convert.ToBoolean(nodeVirtualCam.SelectSingleNode("reuse_previous_classes").InnerText);
                 DrawWrongDirItems = Convert.ToBoolean(nodeVirtualCam.SelectSingleNode("draw_wrong_dir_items").InnerText);
                 DrawWrongDirStopYield = Convert.ToBoolean(nodeVirtualCam.SelectSingleNode("draw_wrong_dir_stop_yield").InnerText);
                 IncludeClassImages = Convert.ToBoolean(nodeVirtualCam.SelectSingleNode("include_class_images").InnerText);
@@ -644,7 +653,6 @@ namespace StreetMaker
 
                 TrainValRatio = Convert.ToInt32(nodeAugmentation.SelectSingleNode("train_val_ratio").InnerText);
                 TestOutRatio = Convert.ToInt32(nodeAugmentation.SelectSingleNode("test_out_ratio").InnerText);
-                CenterBrightnessResults = Convert.ToBoolean(nodeAugmentation.SelectSingleNode("center_brightness_results").InnerText);
 
                 XmlNode nodeSideSteps = nodeAugmentation.SelectSingleNode("side_steps");
                 XmlNodeList sideStepsItems = nodeSideSteps.SelectNodes("item");
@@ -847,9 +855,12 @@ namespace StreetMaker
                 nodeVirtualCam.AppendChild(doc.CreateElement("camera_image_ratio")).AppendChild(doc.CreateTextNode(CameraImageRatio.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("camera_lens_distortion1")).AppendChild(doc.CreateTextNode(CameraLensDistortion1.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("camera_lens_distortion2")).AppendChild(doc.CreateTextNode(CameraLensDistortion2.ToString()));
-                nodeVirtualCam.AppendChild(doc.CreateElement("camera_color_correction_red")).AppendChild(doc.CreateTextNode(CameraColorCorrRed.ToString()));
-                nodeVirtualCam.AppendChild(doc.CreateElement("camera_color_correction_green")).AppendChild(doc.CreateTextNode(CameraColorCorrGreen.ToString()));
-                nodeVirtualCam.AppendChild(doc.CreateElement("camera_color_correction_blue")).AppendChild(doc.CreateTextNode(CameraColorCorrBlue.ToString()));
+                nodeVirtualCam.AppendChild(doc.CreateElement("camera_color_correction_fact_red")).AppendChild(doc.CreateTextNode(CameraColorCorrFactRed.ToString()));
+                nodeVirtualCam.AppendChild(doc.CreateElement("camera_color_correction_fact_green")).AppendChild(doc.CreateTextNode(CameraColorCorrFactGreen.ToString()));
+                nodeVirtualCam.AppendChild(doc.CreateElement("camera_color_correction_fact_blue")).AppendChild(doc.CreateTextNode(CameraColorCorrFactBlue.ToString()));
+                nodeVirtualCam.AppendChild(doc.CreateElement("camera_color_correction_offs_red")).AppendChild(doc.CreateTextNode(CameraColorCorrOffsRed.ToString()));
+                nodeVirtualCam.AppendChild(doc.CreateElement("camera_color_correction_offs_green")).AppendChild(doc.CreateTextNode(CameraColorCorrOffsGreen.ToString()));
+                nodeVirtualCam.AppendChild(doc.CreateElement("camera_color_correction_offs_blue")).AppendChild(doc.CreateTextNode(CameraColorCorrOffsBlue.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("camera_height")).AppendChild(doc.CreateTextNode(CameraHeight.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("camera_axis_angle")).AppendChild(doc.CreateTextNode(CameraAxisAngle.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("camera_output_width")).AppendChild(doc.CreateTextNode(CameraOutputWidth.ToString()));
@@ -860,6 +871,7 @@ namespace StreetMaker
                 nodeVirtualCam.AppendChild(doc.CreateElement("mark_lane_max_dist_side_angle")).AppendChild(doc.CreateTextNode(MarkLaneMaxDistSideAngle.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("mark_max_detail_distance")).AppendChild(doc.CreateTextNode(MarkMaxDetailDistance.ToString())); ;
 
+                nodeVirtualCam.AppendChild(doc.CreateElement("reuse_previous_classes")).AppendChild(doc.CreateTextNode(ReusePreviousClasses.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("draw_wrong_dir_items")).AppendChild(doc.CreateTextNode(DrawWrongDirItems.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("draw_wrong_dir_stop_yield")).AppendChild(doc.CreateTextNode(DrawWrongDirStopYield.ToString()));
                 nodeVirtualCam.AppendChild(doc.CreateElement("include_class_images")).AppendChild(doc.CreateTextNode(IncludeClassImages.ToString()));
@@ -869,7 +881,6 @@ namespace StreetMaker
                 nodeAugmentation.AppendChild(doc.CreateElement("train_val_ratio")).AppendChild(doc.CreateTextNode(TrainValRatio.ToString()));
                 nodeAugmentation.AppendChild(doc.CreateElement("test_out_ratio")).AppendChild(doc.CreateTextNode(TestOutRatio.ToString()));
                 nodeAugmentation.AppendChild(doc.CreateElement("image_step_size")).AppendChild(doc.CreateTextNode(ImageStepSize.ToString()));
-                nodeAugmentation.AppendChild(doc.CreateElement("center_brightness_results")).AppendChild(doc.CreateTextNode(CenterBrightnessResults.ToString()));
 
                 XmlNode nodeSideSteps = nodeAugmentation.AppendChild(doc.CreateElement("side_steps"));
                 foreach (float sideStep in SideSteps)

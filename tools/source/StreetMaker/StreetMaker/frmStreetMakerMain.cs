@@ -299,12 +299,27 @@ namespace StreetMaker
                 }
                 float dx = (25.4f * w / 100f) * ZoomFactor.Width;
                 float dy = (25.4f * h / 100f) * ZoomFactor.Height;
+                float offsX = 5, offsY = 5;
                 Pen pen = new Pen(Color.LightGray);
-                for (float x = dx; x < StreetMap.DrawingSize.Width * ZoomFactor.Width; x += dx)
+                Brush brush= new SolidBrush(Color.LightGray);
+                e.Graphics.DrawString("1", Font, brush, new PointF(offsX, offsY));
+                int col = 2;
+                float x, y;
+                for (x = dx; x < StreetMap.DrawingSize.Width * ZoomFactor.Width; x += dx,col++)
+                {
                     e.Graphics.DrawLine(pen, new Point((int)x, 0), new Point((int)x, (int)StreetMap.DrawingSize.Height));
-
-                for (float y = dy; y < StreetMap.DrawingSize.Height * ZoomFactor.Height; y += dy)
+                    e.Graphics.DrawString(col.ToString(), Font, brush, new PointF(x + offsX, offsY));
+                }
+                int row = 2;
+                for (y = dy; y < StreetMap.DrawingSize.Height * ZoomFactor.Height; y += dy,row++)
+                {
                     e.Graphics.DrawLine(pen, new Point(0, (int)y), new Point((int)StreetMap.DrawingSize.Width, (int)y));
+                    e.Graphics.DrawString(row.ToString() + " | " + ((col-1) * (row-1)+1).ToString(), Font, brush, new PointF(offsX, y+ offsY));
+                }
+                StringFormat format = new StringFormat();
+                format.Alignment = StringAlignment.Far;
+                format.LineAlignment = StringAlignment.Far;
+                e.Graphics.DrawString(((col-1)*(row-1)).ToString(), Font, brush, new PointF(StreetMap.DrawingSize.Width * ZoomFactor.Width- offsX, StreetMap.DrawingSize.Height * ZoomFactor.Height- offsY),format);
             }
         }
 
@@ -877,8 +892,14 @@ namespace StreetMaker
         /// <param name="e">Event arguments.</param>
         private void tsmiPrint_Click(object sender, EventArgs e)
         {
-            PrintStreetMap printMap = new PrintStreetMap(StreetMap, AppSettings, sender == tsmiTestPrint);
+            PrintStreetMap printMap = new PrintStreetMap(pdPrintStreepMap, StreetMap, AppSettings, sender == tsmiTestPrint);
             pdPrintStreepMap.Document = printMap.PrintDocument;
+            pdPrintStreepMap.PrinterSettings.FromPage = 1;
+            pdPrintStreepMap.PrinterSettings.ToPage = printMap.TotalPages;
+
+            bool showPageLimits = tsmiShowPageLimits.Checked;
+            tsmiShowPageLimits.Checked = true;
+            this.Refresh();
 
             if (pdPrintStreepMap.ShowDialog() == DialogResult.OK)
             {
@@ -886,6 +907,7 @@ namespace StreetMaker
                 printMap.Print();
                 SetEnabled(true);
             }
+            tsmiShowPageLimits.Checked = showPageLimits;
         }
 
         /// <summary>

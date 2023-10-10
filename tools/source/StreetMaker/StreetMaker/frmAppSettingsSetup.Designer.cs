@@ -183,12 +183,18 @@
             this.tbClassTextFileName = new System.Windows.Forms.TextBox();
             this.label92 = new System.Windows.Forms.Label();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.nudColorCorrOffsRed = new System.Windows.Forms.NumericUpDown();
+            this.label108 = new System.Windows.Forms.Label();
+            this.nudColorCorrOffsBlue = new System.Windows.Forms.NumericUpDown();
+            this.label107 = new System.Windows.Forms.Label();
+            this.nudColorCorrOffsGreen = new System.Windows.Forms.NumericUpDown();
+            this.label106 = new System.Windows.Forms.Label();
             this.label99 = new System.Windows.Forms.Label();
-            this.nudColorCorrBlue = new System.Windows.Forms.NumericUpDown();
-            this.nudColorCorrGreen = new System.Windows.Forms.NumericUpDown();
+            this.nudColorCorrFactBlue = new System.Windows.Forms.NumericUpDown();
+            this.nudColorCorrFactGreen = new System.Windows.Forms.NumericUpDown();
             this.label97 = new System.Windows.Forms.Label();
             this.label98 = new System.Windows.Forms.Label();
-            this.nudColorCorrRed = new System.Windows.Forms.NumericUpDown();
+            this.nudColorCorrFactRed = new System.Windows.Forms.NumericUpDown();
             this.label96 = new System.Windows.Forms.Label();
             this.nudMarkMaxDetailDistance = new System.Windows.Forms.NumericUpDown();
             this.nudMarkLaneMaxDistSide = new System.Windows.Forms.NumericUpDown();
@@ -218,7 +224,6 @@
             this.label105 = new System.Windows.Forms.Label();
             this.lbResultingImageCount = new System.Windows.Forms.Label();
             this.label104 = new System.Windows.Forms.Label();
-            this.ckbCenterBrightnessResults = new System.Windows.Forms.CheckBox();
             this.ckbDrawWrongDirStopYield = new System.Windows.Forms.CheckBox();
             this.ckbDrawWrongDirItems = new System.Windows.Forms.CheckBox();
             this.nudImageStepSize = new System.Windows.Forms.NumericUpDown();
@@ -281,6 +286,7 @@
             this.fbdSelectPath = new System.Windows.Forms.FolderBrowserDialog();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.ckbReusePreviousClasses = new System.Windows.Forms.CheckBox();
             this.gbDefaultDrawingSize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDefaultDrawingHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDefaultDrawingWidth)).BeginInit();
@@ -330,9 +336,12 @@
             this.tpDataGeneration.SuspendLayout();
             this.groupBox12.SuspendLayout();
             this.groupBox7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrBlue)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrGreen)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrRed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrOffsRed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrOffsBlue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrOffsGreen)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrFactBlue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrFactGreen)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrFactRed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMarkMaxDetailDistance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMarkLaneMaxDistSide)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMarkLaneMaxDistFront)).BeginInit();
@@ -1995,7 +2004,7 @@
             this.pnControl.Controls.Add(this.btnOK);
             this.pnControl.Controls.Add(this.btnCancel);
             this.pnControl.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnControl.Location = new System.Drawing.Point(0, 820);
+            this.pnControl.Location = new System.Drawing.Point(0, 846);
             this.pnControl.Name = "pnControl";
             this.pnControl.Size = new System.Drawing.Size(940, 48);
             this.pnControl.TabIndex = 18;
@@ -2008,7 +2017,7 @@
             this.tcMain.Location = new System.Drawing.Point(0, 0);
             this.tcMain.Name = "tcMain";
             this.tcMain.SelectedIndex = 0;
-            this.tcMain.Size = new System.Drawing.Size(940, 820);
+            this.tcMain.Size = new System.Drawing.Size(940, 846);
             this.tcMain.TabIndex = 19;
             // 
             // tpDrawingSettings
@@ -2030,13 +2039,13 @@
             this.tpDrawingSettings.Location = new System.Drawing.Point(4, 22);
             this.tpDrawingSettings.Name = "tpDrawingSettings";
             this.tpDrawingSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tpDrawingSettings.Size = new System.Drawing.Size(932, 794);
+            this.tpDrawingSettings.Size = new System.Drawing.Size(932, 820);
             this.tpDrawingSettings.TabIndex = 1;
             this.tpDrawingSettings.Text = "Drawing Settings";
             // 
             // tbSubDirStreetmaps
             // 
-            this.tbSubDirStreetmaps.Location = new System.Drawing.Point(194, 726);
+            this.tbSubDirStreetmaps.Location = new System.Drawing.Point(194, 736);
             this.tbSubDirStreetmaps.Name = "tbSubDirStreetmaps";
             this.tbSubDirStreetmaps.Size = new System.Drawing.Size(133, 20);
             this.tbSubDirStreetmaps.TabIndex = 18;
@@ -2045,7 +2054,7 @@
             // label100
             // 
             this.label100.AutoSize = true;
-            this.label100.Location = new System.Drawing.Point(26, 729);
+            this.label100.Location = new System.Drawing.Point(26, 739);
             this.label100.Name = "label100";
             this.label100.Size = new System.Drawing.Size(105, 13);
             this.label100.TabIndex = 19;
@@ -2053,16 +2062,17 @@
             // 
             // btnBrowseDataPath
             // 
-            this.btnBrowseDataPath.Location = new System.Drawing.Point(774, 750);
+            this.btnBrowseDataPath.Location = new System.Drawing.Point(774, 760);
             this.btnBrowseDataPath.Name = "btnBrowseDataPath";
             this.btnBrowseDataPath.Size = new System.Drawing.Size(81, 23);
             this.btnBrowseDataPath.TabIndex = 17;
             this.btnBrowseDataPath.Text = "Browse";
             this.btnBrowseDataPath.UseVisualStyleBackColor = true;
+            this.btnBrowseDataPath.Click += new System.EventHandler(this.btnBrowseDataPath_Click);
             // 
             // tbPathToDataStorage
             // 
-            this.tbPathToDataStorage.Location = new System.Drawing.Point(194, 752);
+            this.tbPathToDataStorage.Location = new System.Drawing.Point(194, 762);
             this.tbPathToDataStorage.Name = "tbPathToDataStorage";
             this.tbPathToDataStorage.Size = new System.Drawing.Size(568, 20);
             this.tbPathToDataStorage.TabIndex = 16;
@@ -2071,7 +2081,7 @@
             // label68
             // 
             this.label68.AutoSize = true;
-            this.label68.Location = new System.Drawing.Point(27, 755);
+            this.label68.Location = new System.Drawing.Point(27, 765);
             this.label68.Name = "label68";
             this.label68.Size = new System.Drawing.Size(119, 13);
             this.label68.TabIndex = 15;
@@ -2091,7 +2101,7 @@
             this.tpDataGeneration.Location = new System.Drawing.Point(4, 22);
             this.tpDataGeneration.Name = "tpDataGeneration";
             this.tpDataGeneration.Padding = new System.Windows.Forms.Padding(3);
-            this.tpDataGeneration.Size = new System.Drawing.Size(932, 794);
+            this.tpDataGeneration.Size = new System.Drawing.Size(932, 820);
             this.tpDataGeneration.TabIndex = 2;
             this.tpDataGeneration.Text = "Data Generation";
             // 
@@ -2144,12 +2154,18 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.nudColorCorrOffsRed);
+            this.groupBox7.Controls.Add(this.label108);
+            this.groupBox7.Controls.Add(this.nudColorCorrOffsBlue);
+            this.groupBox7.Controls.Add(this.label107);
+            this.groupBox7.Controls.Add(this.nudColorCorrOffsGreen);
+            this.groupBox7.Controls.Add(this.label106);
             this.groupBox7.Controls.Add(this.label99);
-            this.groupBox7.Controls.Add(this.nudColorCorrBlue);
-            this.groupBox7.Controls.Add(this.nudColorCorrGreen);
+            this.groupBox7.Controls.Add(this.nudColorCorrFactBlue);
+            this.groupBox7.Controls.Add(this.nudColorCorrFactGreen);
             this.groupBox7.Controls.Add(this.label97);
             this.groupBox7.Controls.Add(this.label98);
-            this.groupBox7.Controls.Add(this.nudColorCorrRed);
+            this.groupBox7.Controls.Add(this.nudColorCorrFactRed);
             this.groupBox7.Controls.Add(this.label96);
             this.groupBox7.Controls.Add(this.nudMarkMaxDetailDistance);
             this.groupBox7.Controls.Add(this.nudMarkLaneMaxDistSide);
@@ -2176,64 +2192,145 @@
             this.groupBox7.Controls.Add(this.nudCameraHFOV);
             this.groupBox7.Location = new System.Drawing.Point(4, 291);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(430, 237);
+            this.groupBox7.Size = new System.Drawing.Size(430, 262);
             this.groupBox7.TabIndex = 16;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Virtual Camera";
             // 
+            // nudColorCorrOffsRed
+            // 
+            this.nudColorCorrOffsRed.Location = new System.Drawing.Point(344, 72);
+            this.nudColorCorrOffsRed.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudColorCorrOffsRed.Name = "nudColorCorrOffsRed";
+            this.nudColorCorrOffsRed.Size = new System.Drawing.Size(62, 20);
+            this.nudColorCorrOffsRed.TabIndex = 55;
+            this.toolTip1.SetToolTip(this.nudColorCorrOffsRed, "Color correction offset of the camera for the red channel.");
+            this.nudColorCorrOffsRed.Value = new decimal(new int[] {
+            127,
+            0,
+            0,
+            0});
+            // 
+            // label108
+            // 
+            this.label108.AutoSize = true;
+            this.label108.Location = new System.Drawing.Point(227, 74);
+            this.label108.Name = "label108";
+            this.label108.Size = new System.Drawing.Size(101, 13);
+            this.label108.TabIndex = 54;
+            this.label108.Text = "Color Corr Offs Red:";
+            // 
+            // nudColorCorrOffsBlue
+            // 
+            this.nudColorCorrOffsBlue.Location = new System.Drawing.Point(344, 124);
+            this.nudColorCorrOffsBlue.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudColorCorrOffsBlue.Name = "nudColorCorrOffsBlue";
+            this.nudColorCorrOffsBlue.Size = new System.Drawing.Size(62, 20);
+            this.nudColorCorrOffsBlue.TabIndex = 53;
+            this.toolTip1.SetToolTip(this.nudColorCorrOffsBlue, "Color correction offset of the camera for the blue channel.");
+            this.nudColorCorrOffsBlue.Value = new decimal(new int[] {
+            127,
+            0,
+            0,
+            0});
+            // 
+            // label107
+            // 
+            this.label107.AutoSize = true;
+            this.label107.Location = new System.Drawing.Point(227, 126);
+            this.label107.Name = "label107";
+            this.label107.Size = new System.Drawing.Size(102, 13);
+            this.label107.TabIndex = 52;
+            this.label107.Text = "Color Corr Offs Blue:";
+            // 
+            // nudColorCorrOffsGreen
+            // 
+            this.nudColorCorrOffsGreen.Location = new System.Drawing.Point(344, 97);
+            this.nudColorCorrOffsGreen.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudColorCorrOffsGreen.Name = "nudColorCorrOffsGreen";
+            this.nudColorCorrOffsGreen.Size = new System.Drawing.Size(62, 20);
+            this.nudColorCorrOffsGreen.TabIndex = 51;
+            this.toolTip1.SetToolTip(this.nudColorCorrOffsGreen, "Color correction offset of the camera for the green channel.");
+            this.nudColorCorrOffsGreen.Value = new decimal(new int[] {
+            127,
+            0,
+            0,
+            0});
+            // 
+            // label106
+            // 
+            this.label106.AutoSize = true;
+            this.label106.Location = new System.Drawing.Point(227, 99);
+            this.label106.Name = "label106";
+            this.label106.Size = new System.Drawing.Size(110, 13);
+            this.label106.TabIndex = 50;
+            this.label106.Text = "Color Corr Offs Green:";
+            // 
             // label99
             // 
             this.label99.AutoSize = true;
-            this.label99.Location = new System.Drawing.Point(18, 100);
+            this.label99.Location = new System.Drawing.Point(18, 127);
             this.label99.Name = "label99";
-            this.label99.Size = new System.Drawing.Size(80, 13);
+            this.label99.Size = new System.Drawing.Size(104, 13);
             this.label99.TabIndex = 48;
-            this.label99.Text = "Color Corr Blue:";
+            this.label99.Text = "Color Corr Fact Blue:";
             // 
-            // nudColorCorrBlue
+            // nudColorCorrFactBlue
             // 
-            this.nudColorCorrBlue.DecimalPlaces = 3;
-            this.nudColorCorrBlue.Increment = new decimal(new int[] {
+            this.nudColorCorrFactBlue.DecimalPlaces = 3;
+            this.nudColorCorrFactBlue.Increment = new decimal(new int[] {
             1,
             0,
             0,
             131072});
-            this.nudColorCorrBlue.Location = new System.Drawing.Point(135, 97);
-            this.nudColorCorrBlue.Maximum = new decimal(new int[] {
+            this.nudColorCorrFactBlue.Location = new System.Drawing.Point(135, 124);
+            this.nudColorCorrFactBlue.Maximum = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.nudColorCorrBlue.Name = "nudColorCorrBlue";
-            this.nudColorCorrBlue.Size = new System.Drawing.Size(62, 20);
-            this.nudColorCorrBlue.TabIndex = 49;
-            this.nudColorCorrBlue.Tag = "";
-            this.toolTip1.SetToolTip(this.nudColorCorrBlue, "Color correction factor of the camera for the blue channel.");
-            this.nudColorCorrBlue.Value = new decimal(new int[] {
+            this.nudColorCorrFactBlue.Name = "nudColorCorrFactBlue";
+            this.nudColorCorrFactBlue.Size = new System.Drawing.Size(62, 20);
+            this.nudColorCorrFactBlue.TabIndex = 49;
+            this.nudColorCorrFactBlue.Tag = "";
+            this.toolTip1.SetToolTip(this.nudColorCorrFactBlue, "Color correction factor of the camera for the blue channel.");
+            this.nudColorCorrFactBlue.Value = new decimal(new int[] {
             8,
             0,
             0,
             65536});
             // 
-            // nudColorCorrGreen
+            // nudColorCorrFactGreen
             // 
-            this.nudColorCorrGreen.DecimalPlaces = 3;
-            this.nudColorCorrGreen.Increment = new decimal(new int[] {
+            this.nudColorCorrFactGreen.DecimalPlaces = 3;
+            this.nudColorCorrFactGreen.Increment = new decimal(new int[] {
             1,
             0,
             0,
             131072});
-            this.nudColorCorrGreen.Location = new System.Drawing.Point(344, 71);
-            this.nudColorCorrGreen.Maximum = new decimal(new int[] {
+            this.nudColorCorrFactGreen.Location = new System.Drawing.Point(135, 97);
+            this.nudColorCorrFactGreen.Maximum = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.nudColorCorrGreen.Name = "nudColorCorrGreen";
-            this.nudColorCorrGreen.Size = new System.Drawing.Size(62, 20);
-            this.nudColorCorrGreen.TabIndex = 47;
-            this.toolTip1.SetToolTip(this.nudColorCorrGreen, "Color correction factor of the camera for the green channel.");
-            this.nudColorCorrGreen.Value = new decimal(new int[] {
+            this.nudColorCorrFactGreen.Name = "nudColorCorrFactGreen";
+            this.nudColorCorrFactGreen.Size = new System.Drawing.Size(62, 20);
+            this.nudColorCorrFactGreen.TabIndex = 47;
+            this.toolTip1.SetToolTip(this.nudColorCorrFactGreen, "Color correction factor of the camera for the green channel.");
+            this.nudColorCorrFactGreen.Value = new decimal(new int[] {
             8,
             0,
             0,
@@ -2244,39 +2341,39 @@
             this.label97.AutoSize = true;
             this.label97.Location = new System.Drawing.Point(18, 74);
             this.label97.Name = "label97";
-            this.label97.Size = new System.Drawing.Size(79, 13);
+            this.label97.Size = new System.Drawing.Size(103, 13);
             this.label97.TabIndex = 44;
-            this.label97.Text = "Color Corr Red:";
+            this.label97.Text = "Color Corr Fact Red:";
             // 
             // label98
             // 
             this.label98.AutoSize = true;
-            this.label98.Location = new System.Drawing.Point(227, 73);
+            this.label98.Location = new System.Drawing.Point(18, 99);
             this.label98.Name = "label98";
-            this.label98.Size = new System.Drawing.Size(88, 13);
+            this.label98.Size = new System.Drawing.Size(112, 13);
             this.label98.TabIndex = 45;
-            this.label98.Text = "Color Corr Green:";
+            this.label98.Text = "Color Corr Fact Green:";
             // 
-            // nudColorCorrRed
+            // nudColorCorrFactRed
             // 
-            this.nudColorCorrRed.DecimalPlaces = 3;
-            this.nudColorCorrRed.Increment = new decimal(new int[] {
+            this.nudColorCorrFactRed.DecimalPlaces = 3;
+            this.nudColorCorrFactRed.Increment = new decimal(new int[] {
             1,
             0,
             0,
             131072});
-            this.nudColorCorrRed.Location = new System.Drawing.Point(135, 71);
-            this.nudColorCorrRed.Maximum = new decimal(new int[] {
+            this.nudColorCorrFactRed.Location = new System.Drawing.Point(135, 71);
+            this.nudColorCorrFactRed.Maximum = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.nudColorCorrRed.Name = "nudColorCorrRed";
-            this.nudColorCorrRed.Size = new System.Drawing.Size(62, 20);
-            this.nudColorCorrRed.TabIndex = 46;
-            this.nudColorCorrRed.Tag = "";
-            this.toolTip1.SetToolTip(this.nudColorCorrRed, "Color correction factor of the camera for the red channel.");
-            this.nudColorCorrRed.Value = new decimal(new int[] {
+            this.nudColorCorrFactRed.Name = "nudColorCorrFactRed";
+            this.nudColorCorrFactRed.Size = new System.Drawing.Size(62, 20);
+            this.nudColorCorrFactRed.TabIndex = 46;
+            this.nudColorCorrFactRed.Tag = "";
+            this.toolTip1.SetToolTip(this.nudColorCorrFactRed, "Color correction factor of the camera for the red channel.");
+            this.nudColorCorrFactRed.Value = new decimal(new int[] {
             8,
             0,
             0,
@@ -2285,7 +2382,7 @@
             // label96
             // 
             this.label96.AutoSize = true;
-            this.label96.Location = new System.Drawing.Point(18, 205);
+            this.label96.Location = new System.Drawing.Point(18, 231);
             this.label96.Name = "label96";
             this.label96.Size = new System.Drawing.Size(108, 13);
             this.label96.TabIndex = 41;
@@ -2293,7 +2390,7 @@
             // 
             // nudMarkMaxDetailDistance
             // 
-            this.nudMarkMaxDetailDistance.Location = new System.Drawing.Point(135, 202);
+            this.nudMarkMaxDetailDistance.Location = new System.Drawing.Point(135, 228);
             this.nudMarkMaxDetailDistance.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2313,7 +2410,7 @@
             // 
             // nudMarkLaneMaxDistSide
             // 
-            this.nudMarkLaneMaxDistSide.Location = new System.Drawing.Point(344, 176);
+            this.nudMarkLaneMaxDistSide.Location = new System.Drawing.Point(344, 202);
             this.nudMarkLaneMaxDistSide.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2335,7 +2432,7 @@
             // label90
             // 
             this.label90.AutoSize = true;
-            this.label90.Location = new System.Drawing.Point(18, 179);
+            this.label90.Location = new System.Drawing.Point(18, 205);
             this.label90.Name = "label90";
             this.label90.Size = new System.Drawing.Size(111, 13);
             this.label90.TabIndex = 37;
@@ -2344,7 +2441,7 @@
             // label91
             // 
             this.label91.AutoSize = true;
-            this.label91.Location = new System.Drawing.Point(227, 178);
+            this.label91.Location = new System.Drawing.Point(227, 204);
             this.label91.Name = "label91";
             this.label91.Size = new System.Drawing.Size(108, 13);
             this.label91.TabIndex = 38;
@@ -2352,7 +2449,7 @@
             // 
             // nudMarkLaneMaxDistFront
             // 
-            this.nudMarkLaneMaxDistFront.Location = new System.Drawing.Point(135, 176);
+            this.nudMarkLaneMaxDistFront.Location = new System.Drawing.Point(135, 202);
             this.nudMarkLaneMaxDistFront.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2374,7 +2471,7 @@
             // label67
             // 
             this.label67.AutoSize = true;
-            this.label67.Location = new System.Drawing.Point(227, 99);
+            this.label67.Location = new System.Drawing.Point(227, 231);
             this.label67.Name = "label67";
             this.label67.Size = new System.Drawing.Size(113, 13);
             this.label67.TabIndex = 33;
@@ -2382,7 +2479,7 @@
             // 
             // nudCameraOversampling
             // 
-            this.nudCameraOversampling.Location = new System.Drawing.Point(344, 97);
+            this.nudCameraOversampling.Location = new System.Drawing.Point(344, 228);
             this.nudCameraOversampling.Maximum = new decimal(new int[] {
             8,
             0,
@@ -2407,7 +2504,7 @@
             // 
             // nudCameraOutputHeight
             // 
-            this.nudCameraOutputHeight.Location = new System.Drawing.Point(344, 124);
+            this.nudCameraOutputHeight.Location = new System.Drawing.Point(344, 150);
             this.nudCameraOutputHeight.Maximum = new decimal(new int[] {
             1024,
             0,
@@ -2432,7 +2529,7 @@
             // label65
             // 
             this.label65.AutoSize = true;
-            this.label65.Location = new System.Drawing.Point(18, 127);
+            this.label65.Location = new System.Drawing.Point(18, 153);
             this.label65.Name = "label65";
             this.label65.Size = new System.Drawing.Size(112, 13);
             this.label65.TabIndex = 29;
@@ -2441,7 +2538,7 @@
             // label66
             // 
             this.label66.AutoSize = true;
-            this.label66.Location = new System.Drawing.Point(227, 126);
+            this.label66.Location = new System.Drawing.Point(227, 152);
             this.label66.Name = "label66";
             this.label66.Size = new System.Drawing.Size(115, 13);
             this.label66.TabIndex = 30;
@@ -2449,7 +2546,7 @@
             // 
             // nudCameraOutputWidth
             // 
-            this.nudCameraOutputWidth.Location = new System.Drawing.Point(135, 124);
+            this.nudCameraOutputWidth.Location = new System.Drawing.Point(135, 150);
             this.nudCameraOutputWidth.Maximum = new decimal(new int[] {
             1024,
             0,
@@ -2474,7 +2571,7 @@
             // nudCameraAxisAngle
             // 
             this.nudCameraAxisAngle.DecimalPlaces = 3;
-            this.nudCameraAxisAngle.Location = new System.Drawing.Point(344, 150);
+            this.nudCameraAxisAngle.Location = new System.Drawing.Point(344, 176);
             this.nudCameraAxisAngle.Maximum = new decimal(new int[] {
             90,
             0,
@@ -2494,7 +2591,7 @@
             // label63
             // 
             this.label63.AutoSize = true;
-            this.label63.Location = new System.Drawing.Point(18, 153);
+            this.label63.Location = new System.Drawing.Point(18, 179);
             this.label63.Name = "label63";
             this.label63.Size = new System.Drawing.Size(80, 13);
             this.label63.TabIndex = 25;
@@ -2503,7 +2600,7 @@
             // label64
             // 
             this.label64.AutoSize = true;
-            this.label64.Location = new System.Drawing.Point(227, 152);
+            this.label64.Location = new System.Drawing.Point(227, 178);
             this.label64.Name = "label64";
             this.label64.Size = new System.Drawing.Size(98, 13);
             this.label64.TabIndex = 26;
@@ -2511,7 +2608,7 @@
             // 
             // nudCameraHeight
             // 
-            this.nudCameraHeight.Location = new System.Drawing.Point(135, 150);
+            this.nudCameraHeight.Location = new System.Drawing.Point(135, 176);
             this.nudCameraHeight.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2682,11 +2779,11 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.ckbReusePreviousClasses);
             this.groupBox6.Controls.Add(this.lbTranValTest);
             this.groupBox6.Controls.Add(this.label105);
             this.groupBox6.Controls.Add(this.lbResultingImageCount);
             this.groupBox6.Controls.Add(this.label104);
-            this.groupBox6.Controls.Add(this.ckbCenterBrightnessResults);
             this.groupBox6.Controls.Add(this.ckbDrawWrongDirStopYield);
             this.groupBox6.Controls.Add(this.ckbDrawWrongDirItems);
             this.groupBox6.Controls.Add(this.nudImageStepSize);
@@ -2706,7 +2803,7 @@
             this.groupBox6.Controls.Add(this.label74);
             this.groupBox6.Controls.Add(this.label75);
             this.groupBox6.Controls.Add(this.label76);
-            this.groupBox6.Location = new System.Drawing.Point(4, 534);
+            this.groupBox6.Location = new System.Drawing.Point(4, 559);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(430, 254);
             this.groupBox6.TabIndex = 15;
@@ -2751,22 +2848,10 @@
             this.label104.TabIndex = 47;
             this.label104.Text = "Resulting Image Count:";
             // 
-            // ckbCenterBrightnessResults
-            // 
-            this.ckbCenterBrightnessResults.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckbCenterBrightnessResults.Location = new System.Drawing.Point(225, 16);
-            this.ckbCenterBrightnessResults.Name = "ckbCenterBrightnessResults";
-            this.ckbCenterBrightnessResults.Size = new System.Drawing.Size(153, 24);
-            this.ckbCenterBrightnessResults.TabIndex = 46;
-            this.ckbCenterBrightnessResults.Text = "Center Brightness Results:";
-            this.toolTip1.SetToolTip(this.ckbCenterBrightnessResults, "If true, brightness calculation results will be offset to center the min/max rang" +
-        "e.");
-            this.ckbCenterBrightnessResults.UseVisualStyleBackColor = true;
-            // 
             // ckbDrawWrongDirStopYield
             // 
             this.ckbDrawWrongDirStopYield.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckbDrawWrongDirStopYield.Location = new System.Drawing.Point(225, 68);
+            this.ckbDrawWrongDirStopYield.Location = new System.Drawing.Point(225, 67);
             this.ckbDrawWrongDirStopYield.Name = "ckbDrawWrongDirStopYield";
             this.ckbDrawWrongDirStopYield.Size = new System.Drawing.Size(153, 24);
             this.ckbDrawWrongDirStopYield.TabIndex = 44;
@@ -2987,7 +3072,7 @@
             this.groupBox5.Controls.Add(this.dgvSegmClassDefs);
             this.groupBox5.Location = new System.Drawing.Point(439, 207);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(483, 581);
+            this.groupBox5.Size = new System.Drawing.Size(483, 606);
             this.groupBox5.TabIndex = 14;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "SegmClass Definition";
@@ -3007,7 +3092,7 @@
             this.dgvSegmClassDefs.Location = new System.Drawing.Point(22, 19);
             this.dgvSegmClassDefs.Name = "dgvSegmClassDefs";
             this.dgvSegmClassDefs.RowHeadersVisible = false;
-            this.dgvSegmClassDefs.Size = new System.Drawing.Size(440, 550);
+            this.dgvSegmClassDefs.Size = new System.Drawing.Size(440, 579);
             this.dgvSegmClassDefs.TabIndex = 6;
             this.toolTip1.SetToolTip(this.dgvSegmClassDefs, "List of all object classes and their drawing color. ClassCode and UseCount will b" +
         "e updated after creating the dataset.");
@@ -3359,13 +3444,25 @@
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
             this.dataGridViewTextBoxColumn1.Width = 70;
             // 
+            // ckbReusePreviousClasses
+            // 
+            this.ckbReusePreviousClasses.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ckbReusePreviousClasses.Location = new System.Drawing.Point(225, 16);
+            this.ckbReusePreviousClasses.Name = "ckbReusePreviousClasses";
+            this.ckbReusePreviousClasses.Size = new System.Drawing.Size(153, 24);
+            this.ckbReusePreviousClasses.TabIndex = 51;
+            this.ckbReusePreviousClasses.Text = "Reuse Previous Classes:";
+            this.toolTip1.SetToolTip(this.ckbReusePreviousClasses, "If true, the previously generated Class-Text-File will be loaded to reuse its cla" +
+        "ss codes.");
+            this.ckbReusePreviousClasses.UseVisualStyleBackColor = true;
+            // 
             // frmAppSettingsSetup
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(940, 868);
+            this.ClientSize = new System.Drawing.Size(940, 894);
             this.ControlBox = false;
             this.Controls.Add(this.tcMain);
             this.Controls.Add(this.pnControl);
@@ -3432,9 +3529,12 @@
             this.groupBox12.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrBlue)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrGreen)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrRed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrOffsRed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrOffsBlue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrOffsGreen)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrFactBlue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrFactGreen)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudColorCorrFactRed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMarkMaxDetailDistance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMarkLaneMaxDistSide)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMarkLaneMaxDistFront)).EndInit();
@@ -3699,16 +3799,15 @@
         private System.Windows.Forms.Label label96;
         private System.Windows.Forms.NumericUpDown nudMarkMaxDetailDistance;
         private System.Windows.Forms.CheckBox ckbDrawWrongDirStopYield;
-        private System.Windows.Forms.CheckBox ckbCenterBrightnessResults;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.TextBox tbSubDirStreetmaps;
         private System.Windows.Forms.Label label100;
         private System.Windows.Forms.Label label99;
-        private System.Windows.Forms.NumericUpDown nudColorCorrBlue;
-        private System.Windows.Forms.NumericUpDown nudColorCorrGreen;
+        private System.Windows.Forms.NumericUpDown nudColorCorrFactBlue;
+        private System.Windows.Forms.NumericUpDown nudColorCorrFactGreen;
         private System.Windows.Forms.Label label97;
         private System.Windows.Forms.Label label98;
-        private System.Windows.Forms.NumericUpDown nudColorCorrRed;
+        private System.Windows.Forms.NumericUpDown nudColorCorrFactRed;
         private System.Windows.Forms.Button btnViewPointOutlineColor;
         private System.Windows.Forms.Label label101;
         private System.Windows.Forms.NumericUpDown nudViewPointWidth;
@@ -3719,5 +3818,12 @@
         private System.Windows.Forms.Label label104;
         private System.Windows.Forms.Label lbTranValTest;
         private System.Windows.Forms.Label label105;
+        private System.Windows.Forms.NumericUpDown nudColorCorrOffsRed;
+        private System.Windows.Forms.Label label108;
+        private System.Windows.Forms.NumericUpDown nudColorCorrOffsBlue;
+        private System.Windows.Forms.Label label107;
+        private System.Windows.Forms.NumericUpDown nudColorCorrOffsGreen;
+        private System.Windows.Forms.Label label106;
+        private System.Windows.Forms.CheckBox ckbReusePreviousClasses;
     }
 }

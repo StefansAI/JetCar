@@ -75,9 +75,9 @@
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.ssMainStatus = new System.Windows.Forms.StatusStrip();
+            this.tsslLocation = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslCursorValues = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslFileName = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslLocation = new System.Windows.Forms.ToolStripStatusLabel();
             this.tscTools = new System.Windows.Forms.ToolStripContainer();
             this.pnDrawingArea = new System.Windows.Forms.Panel();
             this.pbDrawingArea = new System.Windows.Forms.PictureBox();
@@ -565,6 +565,13 @@
             this.ssMainStatus.TabIndex = 1;
             this.ssMainStatus.Text = "statusStrip1";
             // 
+            // tsslLocation
+            // 
+            this.tsslLocation.AutoSize = false;
+            this.tsslLocation.Name = "tsslLocation";
+            this.tsslLocation.Size = new System.Drawing.Size(350, 17);
+            this.tsslLocation.Text = "-";
+            // 
             // tsslCursorValues
             // 
             this.tsslCursorValues.AutoSize = false;
@@ -576,13 +583,6 @@
             this.tsslFileName.Name = "tsslFileName";
             this.tsslFileName.Size = new System.Drawing.Size(12, 17);
             this.tsslFileName.Text = "-";
-            // 
-            // tsslLocation
-            // 
-            this.tsslLocation.AutoSize = false;
-            this.tsslLocation.Name = "tsslLocation";
-            this.tsslLocation.Size = new System.Drawing.Size(350, 17);
-            this.tsslLocation.Text = "-";
             // 
             // tscTools
             // 
@@ -1508,6 +1508,7 @@
             // 
             // pdPrintStreepMap
             // 
+            this.pdPrintStreepMap.AllowSomePages = true;
             this.pdPrintStreepMap.UseEXDialog = true;
             // 
             // frmStreetMakerMain
