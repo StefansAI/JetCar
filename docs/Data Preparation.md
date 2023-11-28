@@ -22,7 +22,7 @@ The Data folder for the ImageSegementer has to have a subfolder called "Recordin
 The very first time, this application is executed, it might prompt you to check and possibly correct the data path entries in the Settings dialog. A configuration file will be created to reload the last settings at startup.
 <br><br>
 <br><img src="assets/images/data_preparation/07-ImageSegementer.jpg"/><br>
-The basic idea of this application is based on going through the recorded images one by one, creating the mask for each. The full resolution image is shown on the left side and the downsampled version as background on the right.
+The basic idea of this application is going through the recorded images one by one and creating the mask for each. The full resolution image is shown on the left side and the downsampled version as background on the right.
 <br><br>
 <br><img src="assets/images/data_preparation/08-objects.jpg"/><br>
 Every area to represent any specific class will have to be outlined with a polygon. To start outlining, select an object class from the combo box and hit "New Polygon". <br>Outline the area with the mouse and left click everywhere, where a polygon point needs to be added. When close to an edge, the point will be automatically snapped to the edge, but this function can be disabled with a check box. <br>A left double click closes the polygon and ends the mouse entry. Hit the "Finish Segm Class" button to finalize it. The polygon changes to the class color and the enclosed area appears in the same color transparent on top of the scene background on the right side.
@@ -62,7 +62,6 @@ All mask files are stored into PNG files that appear black, since the class code
 The DataSet folder can be zipped up into JetCar_DataSet.zip for a model training run.
 <br><br><br>
 
-- [Model Training](Model%20Training.md)
-- [Street Maker](StreetMaker.md)
-- [Operation](Operation.md)
-
+- <a href="Model%20Training.md">Model Training</a><br>
+- <a href="StreetMaker.md">Street Maker</a><br>
+- <a href="Operation.md">Operation</a><br>

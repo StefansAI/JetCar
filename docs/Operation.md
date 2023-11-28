@@ -103,7 +103,8 @@ Above is a sequence of masks recorded in a right turn. As can be seen, in a turn
 In the implementation the LaneTracker class owns a steering_fixed_count, which is set to a positive value when the turn is initiated. The steering value is not changed and anything is ignored for a few frames. But with each new frame it will be decremented and about half way through to 0, the limit search is enabled again and steering values are calculated. If it is getting closer to alignment in about +/-45 degree in front, the counter is set to 0 and operation resumes normally. Otherwise the fixed turn continues until it reached 0 and the steering resumes from there.
 <br><br><br>
 
-- [Data Preparation with ImageSegmenter](Data%20Preparation.md)
-- [Model Training](Model%20Training.md)
-- [Street Maker](StreetMaker.md)
-- [Debugging](Debugging.md)
+- <a href="Data%20Preparation.md">Data Preparation with ImageSegmenter</a><br>
+- <a href="Model%20Training.md">Model Training</a><br>
+- <a href="StreetMaker.md">Street Maker</a><br>
+- <a href="Debugging.md">Debugging</a><br>
+

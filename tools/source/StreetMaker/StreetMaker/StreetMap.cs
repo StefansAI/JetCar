@@ -1288,6 +1288,17 @@ namespace StreetMaker
                                                         datasetCount++;
                                                         Bitmap bmNoised = Process.ImageNoise(bmBrightOut, AppSettings.NoiseLevels[noiseIdx]);
 
+                                                        if (rnd.NextDouble() < AppSettings.LightSpotRatio)
+                                                        {
+                                                            // Create a random reflection light spot on the image with randomized width and height variation and randomized intensity variation around the settings
+                                                            PointF location = new PointF((float)(rnd.NextDouble()* (bmNoised.Width-AppSettings.LightSpotWidth))+ AppSettings.LightSpotWidth/2, (float)(bmNoised.Height-(rnd.NextDouble()*bmNoised.Height * 0.6)));
+                                                            SizeF size = new SizeF((float)(AppSettings.LightSpotWidth* (0.5 + rnd.NextDouble())), (float)(AppSettings.LightSpotHeight * (0.5 + rnd.NextDouble())));
+                                                            float intensity = (float)( AppSettings.LightSpotIntensity * brightness * (0.5+rnd.NextDouble()/2));
+                                                            Bitmap bmLight = Process.ImageSpotReflection(bmNoised, location, size, intensity);
+                                                            bmNoised.Dispose();
+                                                            bmNoised = bmLight;
+                                                        }
+
                                                         // choose target directory randomly with the train/val-ration as target
                                                         string trainVal = AppSettings.SubDirTrain;
                                                         trainValCount++;

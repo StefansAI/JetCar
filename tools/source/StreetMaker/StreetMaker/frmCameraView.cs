@@ -31,6 +31,8 @@ namespace StreetMaker
         private frmStreetMakerMain MainForm;
         /// <summary>Full path to the predicted images in FileMode.</summary>
         private string PredPath;
+        /// <summary>Full path to the predicted images in FileMode for comparison.</summary>
+        private string PredPathCmp;
         /// <summary>Array of all file names in the folder.</summary>
         private List<string> ImgFileNames;
         /// <summary>Current index of the image to be displayed.</summary>
@@ -43,6 +45,8 @@ namespace StreetMaker
         private Bitmap codeMask;
         /// <summary>Reference to the current prediction mask object</summary>
         private Bitmap predMask;
+        /// <summary>Reference to the current prediction mask object for comparison</summary>
+        private Bitmap predMaskCmp;
         /// <summary>True for special mode displaying the virtual camera from a view point.</summary>
         private bool viewPointMode;
         #endregion Private Fields
@@ -62,7 +66,8 @@ namespace StreetMaker
             viewPointMode = false;
             codeMask = null;
             predMask = null;
-            SetPredictionVisible(false);
+            predMaskCmp = null;
+            SetPredictionVisible(0);
         }
 
         /// <summary>
@@ -75,8 +80,10 @@ namespace StreetMaker
             FileMode = true;
             codeMask = null;
             predMask = null;
+            predMaskCmp = null;
             string imgPath = MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.SubDirDataSet + MainForm.AppSettings.SubDirImg;
             PredPath = MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.SubDirDataSet + MainForm.AppSettings.SubDirPred;
+            PredPathCmp = PredPath.TrimEnd(new char[] { '\\' }) + "Cmp";
 
             LoadPalette(MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.ColorMapFileName);
             LoadClassNames(MainForm.AppSettings.PathToDataStorage + MainForm.AppSettings.ClassTextFileName);
@@ -170,15 +177,23 @@ namespace StreetMaker
         /// <summary>
         /// Set the prediction image visible or invisible and adjust form size accordingly.
         /// </summary>
-        /// <param name="Value">True to set the prediction image visible.</param>
-        private void SetPredictionVisible(bool Value)
+        /// <param name="PredCount">0 for none, 1 or 2 to set the prediction images visible.</param>
+        private void SetPredictionVisible(int PredCount)
         {
-            pbPredictionImage.Visible = Value;
-
-            if (Value == true)
-                ClientSize = new Size(pbPredictionImage.Left + pbPredictionImage.Width + 5, ClientSize.Height);
-            else
-                ClientSize = new Size(pbMaskImage.Left + pbMaskImage.Width + 5, ClientSize.Height);
+            switch (PredCount)
+            {
+                case 0:
+                    ClientSize = new Size(pbMaskImage.Left + pbMaskImage.Width + 5, ClientSize.Height);
+                    break;
+                case 1:
+                    ClientSize = new Size(pbPredictionImage.Left + pbPredictionImage.Width + 5, ClientSize.Height);
+                    break;
+                case 2:
+                    ClientSize = new Size(pbPredictionImageCmp.Left + pbPredictionImageCmp.Width + 5, ClientSize.Height);
+                    break;
+            }
+            pbPredictionImage.Visible = PredCount >= 1;
+            pbPredictionImageCmp.Visible = PredCount >= 2;
 
             pnNavigation.Left = (ClientSize.Width - pnButtons.Width) / 2;
         }
@@ -195,9 +210,16 @@ namespace StreetMaker
                 lbIdx.Text = ImgIdx.ToString();
 
                 string fullImgFileName = ImgFileNames[ImgIdx];
-                Bitmap bmFile = (Bitmap)Bitmap.FromFile(fullImgFileName);
-                BitmapCameraView = new Bitmap(bmFile);
-                bmFile.Dispose();
+                try
+                {
+                    Bitmap bmFile = (Bitmap)Bitmap.FromFile(fullImgFileName);
+                    BitmapCameraView = new Bitmap(bmFile);
+                    bmFile.Dispose();
+                }
+                catch
+                {
+                    BitmapCameraView = new Bitmap(MainForm.AppSettings.CameraOutputWidth, MainForm.AppSettings.CameraOutputHeight);
+                }
                 string imgFileName = Path.GetFileNameWithoutExtension(fullImgFileName).ToLower();
                 lbStatus.Text = imgFileName;
 
@@ -206,24 +228,52 @@ namespace StreetMaker
                 s[s.Length - 2] = MainForm.AppSettings.SubDirMask;
                 string maskPath = Path.Combine(s).Replace(":", ":" + Path.DirectorySeparatorChar);
                 maskFileName = maskPath + Path.DirectorySeparatorChar + maskFileName + ".png";
-                codeMask = (Bitmap)Bitmap.FromFile(maskFileName);
+                try
+                {
+                    codeMask = (Bitmap)Bitmap.FromFile(maskFileName);                  
+                }
+                catch
+                {
+                    codeMask = new Bitmap(MainForm.AppSettings.CameraOutputWidth, MainForm.AppSettings.CameraOutputHeight, PixelFormat.Format8bppIndexed);
+                }
                 BitmapMaskImage = Process.ImageColorMap(codeMask, ColorPalette, 255);
 
                 string predFileName = imgFileName.Replace(MainForm.AppSettings.PrefixImg.ToLower(), MainForm.AppSettings.PrefixPred.ToLower());
-                predFileName = PredPath + Path.DirectorySeparatorChar + predFileName + ".png";
+                string predFullFileName = PredPath + Path.DirectorySeparatorChar + predFileName + ".png";
+                string predFullFileNameCmp = PredPathCmp + Path.DirectorySeparatorChar + predFileName + ".png";
                 try
                 {
-                    predMask = (Bitmap)Bitmap.FromFile(predFileName);
+                    predMask = (Bitmap)Bitmap.FromFile(predFullFileName);
                     BitmapPrediction = Process.ImageColorMap(predMask, ColorPalette, 255);
-                    PredictionVisible = true;
+                    SetPredictionVisible(1);
                     lbPredCursor.Visible = true;
+
+                    try
+                    {
+                        predMaskCmp = (Bitmap)Bitmap.FromFile(predFullFileNameCmp);
+                        BitmapPredictionCmp = Process.ImageColorMap(predMaskCmp, ColorPalette, 255);
+                        SetPredictionVisible(2);
+                        lbPredCursorCmp.Visible = true;
+
+                    }
+                    catch
+                    {
+                        predMaskCmp = null;
+                        BitmapPredictionCmp = null;
+                        SetPredictionVisible(1);
+                        lbPredCursorCmp.Visible = false;
+                    }
                 }
                 catch
                 {
                     predMask = null;
                     BitmapPrediction = null;
-                    PredictionVisible = false;
+                    SetPredictionVisible(0);
                     lbPredCursor.Visible = false;
+                    predMaskCmp = null;
+                    BitmapPredictionCmp = null;
+                    lbPredCursorCmp.Visible = false;
+
                 }
             }
         }
@@ -316,6 +366,20 @@ namespace StreetMaker
                             lbMaskCursor.ForeColor = Color.Red;
                         else
                             lbMaskCursor.ForeColor = Color.Black;
+
+                        if (predMaskCmp != null)
+                        {
+                            int predCodeCmp = predMaskCmp.GetPixel(x, y).R; ;
+                            string predCodeCmpName = classNames[predCodeCmp];
+                            lbPredCursorCmp.Text = "Pred: x=" + x.ToString() + "  y=" + y.ToString() + "  code=" + predCodeCmp.ToString() + "  name=" + predCodeCmpName;
+
+                            if (maskCode != predCodeCmp)
+                                lbPredCursorCmp.ForeColor = Color.Red;
+                            else
+                                lbPredCursorCmp.ForeColor = Color.Black;
+
+                        }
+
                     }
                     else lbMaskCursor.ForeColor = Color.Black;
 
@@ -334,6 +398,7 @@ namespace StreetMaker
             lbImgCursor.Text = "";
             lbMaskCursor.Text = "";
             lbPredCursor.Text = "";
+            lbPredCursorCmp.Text = "";
         }
         #endregion Private Methods
 
@@ -406,6 +471,7 @@ namespace StreetMaker
                     bmOld.Dispose();
             }
         }
+
         /// <summary>
         /// Gets or sets the reference to the bitmap to be displayed on the very right side as predicted mask image. When a new reference is set, the previously assigned bitmap will be disposed.
         /// </summary>
@@ -416,6 +482,21 @@ namespace StreetMaker
             {
                 Bitmap bmOld = (Bitmap)pbPredictionImage.Image;
                 pbPredictionImage.Image = value;
+                if (bmOld != null)
+                    bmOld.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the reference to the bitmap to be displayed on the very right side as compare predicted mask image. When a new reference is set, the previously assigned bitmap will be disposed.
+        /// </summary>
+        public Bitmap BitmapPredictionCmp
+        {
+            get { return (Bitmap)pbPredictionImageCmp.Image; }
+            set
+            {
+                Bitmap bmOld = (Bitmap)pbPredictionImageCmp.Image;
+                pbPredictionImageCmp.Image = value;
                 if (bmOld != null)
                     bmOld.Dispose();
             }
@@ -462,15 +543,13 @@ namespace StreetMaker
         }
 
         /// <summary>
-        /// Gets or sets the visibility of the prediction picture. When set, the form size will be adjusted.
+        /// Gets or sets the visibility of the prediction pictures. When set to 0, 1 or 2, the form size will be adjusted.
         /// </summary>
-        public bool PredictionVisible
+        public int PredictionVisibleCount
         {
-            get { return pbPredictionImage.Visible; }
             set
             {
-                if (pbPredictionImage.Visible != value)
-                    SetPredictionVisible(value);
+                SetPredictionVisible(value);
             }
         }
 
@@ -534,5 +613,6 @@ namespace StreetMaker
         }
 
         #endregion Public Properties
+
     }
 }

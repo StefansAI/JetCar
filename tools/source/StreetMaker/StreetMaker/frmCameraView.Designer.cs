@@ -33,36 +33,43 @@
             this.pbMaskImage = new System.Windows.Forms.PictureBox();
             this.pbCameraImg = new System.Windows.Forms.PictureBox();
             this.pnControl = new System.Windows.Forms.Panel();
-            this.prbGenerationProgress = new System.Windows.Forms.ProgressBar();
-            this.lbCount = new System.Windows.Forms.Label();
+            this.pnNavigation = new System.Windows.Forms.Panel();
             this.pnButtons = new System.Windows.Forms.Panel();
             this.lbIdx = new System.Windows.Forms.Label();
             this.btnFirst = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnLast = new System.Windows.Forms.Button();
             this.btnPrevious = new System.Windows.Forms.Button();
+            this.ckbScan = new System.Windows.Forms.CheckBox();
+            this.prbGenerationProgress = new System.Windows.Forms.ProgressBar();
+            this.lbCount = new System.Windows.Forms.Label();
             this.pbPredictionImage = new System.Windows.Forms.PictureBox();
             this.lbStatus = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.pbPredictionImageCmp = new System.Windows.Forms.PictureBox();
             this.pnCursor = new System.Windows.Forms.Panel();
             this.lbMaskCursor = new System.Windows.Forms.Label();
             this.lbPredCursor = new System.Windows.Forms.Label();
             this.lbImgCursor = new System.Windows.Forms.Label();
-            this.ckbScan = new System.Windows.Forms.CheckBox();
             this.tmScan = new System.Windows.Forms.Timer(this.components);
-            this.pnNavigation = new System.Windows.Forms.Panel();
+            this.lbPredCursorCmp = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbMaskImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCameraImg)).BeginInit();
             this.pnControl.SuspendLayout();
+            this.pnNavigation.SuspendLayout();
             this.pnButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPredictionImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbPredictionImageCmp)).BeginInit();
             this.pnCursor.SuspendLayout();
-            this.pnNavigation.SuspendLayout();
             this.SuspendLayout();
             // 
             // pbMaskImage
             // 
-            this.pbMaskImage.Location = new System.Drawing.Point(459, 5);
+            this.pbMaskImage.Location = new System.Drawing.Point(459, 32);
             this.pbMaskImage.Name = "pbMaskImage";
             this.pbMaskImage.Size = new System.Drawing.Size(448, 448);
             this.pbMaskImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -74,7 +81,7 @@
             // 
             // pbCameraImg
             // 
-            this.pbCameraImg.Location = new System.Drawing.Point(5, 5);
+            this.pbCameraImg.Location = new System.Drawing.Point(5, 32);
             this.pbCameraImg.Name = "pbCameraImg";
             this.pbCameraImg.Size = new System.Drawing.Size(448, 448);
             this.pbCameraImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -90,27 +97,19 @@
             this.pnControl.Controls.Add(this.prbGenerationProgress);
             this.pnControl.Controls.Add(this.lbCount);
             this.pnControl.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnControl.Location = new System.Drawing.Point(0, 521);
+            this.pnControl.Location = new System.Drawing.Point(0, 551);
             this.pnControl.Name = "pnControl";
-            this.pnControl.Size = new System.Drawing.Size(1368, 40);
+            this.pnControl.Size = new System.Drawing.Size(1820, 40);
             this.pnControl.TabIndex = 4;
             // 
-            // prbGenerationProgress
+            // pnNavigation
             // 
-            this.prbGenerationProgress.Location = new System.Drawing.Point(5, -4);
-            this.prbGenerationProgress.Name = "prbGenerationProgress";
-            this.prbGenerationProgress.Size = new System.Drawing.Size(902, 10);
-            this.prbGenerationProgress.TabIndex = 3;
-            this.prbGenerationProgress.Visible = false;
-            // 
-            // lbCount
-            // 
-            this.lbCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbCount.Location = new System.Drawing.Point(0, 0);
-            this.lbCount.Name = "lbCount";
-            this.lbCount.Size = new System.Drawing.Size(1368, 40);
-            this.lbCount.TabIndex = 6;
-            this.lbCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pnNavigation.Controls.Add(this.pnButtons);
+            this.pnNavigation.Controls.Add(this.ckbScan);
+            this.pnNavigation.Location = new System.Drawing.Point(443, 8);
+            this.pnNavigation.Name = "pnNavigation";
+            this.pnNavigation.Size = new System.Drawing.Size(511, 29);
+            this.pnNavigation.TabIndex = 8;
             // 
             // pnButtons
             // 
@@ -178,66 +177,6 @@
             this.btnPrevious.UseVisualStyleBackColor = true;
             this.btnPrevious.Click += new System.EventHandler(this.btnPrevious_Click);
             // 
-            // pbPredictionImage
-            // 
-            this.pbPredictionImage.Location = new System.Drawing.Point(913, 5);
-            this.pbPredictionImage.Name = "pbPredictionImage";
-            this.pbPredictionImage.Size = new System.Drawing.Size(448, 448);
-            this.pbPredictionImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbPredictionImage.TabIndex = 7;
-            this.pbPredictionImage.TabStop = false;
-            this.toolTip1.SetToolTip(this.pbPredictionImage, "Prediction object code mask from the training run. ");
-            this.pbPredictionImage.MouseLeave += new System.EventHandler(this.pbCameraImg_MouseLeave);
-            this.pbPredictionImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCameraImg_MouseMove);
-            // 
-            // lbStatus
-            // 
-            this.lbStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lbStatus.Location = new System.Drawing.Point(0, 484);
-            this.lbStatus.Name = "lbStatus";
-            this.lbStatus.Size = new System.Drawing.Size(1368, 37);
-            this.lbStatus.TabIndex = 8;
-            this.lbStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toolTip1.SetToolTip(this.lbStatus, "File name of the current camera view image. Mask and prediction filenames are ide" +
-        "ntical except the prefix.");
-            // 
-            // pnCursor
-            // 
-            this.pnCursor.Controls.Add(this.lbMaskCursor);
-            this.pnCursor.Controls.Add(this.lbPredCursor);
-            this.pnCursor.Controls.Add(this.lbImgCursor);
-            this.pnCursor.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnCursor.Location = new System.Drawing.Point(0, 464);
-            this.pnCursor.Name = "pnCursor";
-            this.pnCursor.Size = new System.Drawing.Size(1368, 20);
-            this.pnCursor.TabIndex = 9;
-            // 
-            // lbMaskCursor
-            // 
-            this.lbMaskCursor.Location = new System.Drawing.Point(459, 0);
-            this.lbMaskCursor.Name = "lbMaskCursor";
-            this.lbMaskCursor.Size = new System.Drawing.Size(448, 20);
-            this.lbMaskCursor.TabIndex = 2;
-            this.lbMaskCursor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbPredCursor
-            // 
-            this.lbPredCursor.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lbPredCursor.Location = new System.Drawing.Point(915, 0);
-            this.lbPredCursor.Name = "lbPredCursor";
-            this.lbPredCursor.Size = new System.Drawing.Size(453, 20);
-            this.lbPredCursor.TabIndex = 1;
-            this.lbPredCursor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbImgCursor
-            // 
-            this.lbImgCursor.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lbImgCursor.Location = new System.Drawing.Point(0, 0);
-            this.lbImgCursor.Name = "lbImgCursor";
-            this.lbImgCursor.Size = new System.Drawing.Size(453, 20);
-            this.lbImgCursor.TabIndex = 0;
-            this.lbImgCursor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // ckbScan
             // 
             this.ckbScan.AutoSize = true;
@@ -250,25 +189,158 @@
             this.ckbScan.UseVisualStyleBackColor = true;
             this.ckbScan.CheckedChanged += new System.EventHandler(this.ckbScan_CheckedChanged);
             // 
+            // prbGenerationProgress
+            // 
+            this.prbGenerationProgress.Location = new System.Drawing.Point(5, -4);
+            this.prbGenerationProgress.Name = "prbGenerationProgress";
+            this.prbGenerationProgress.Size = new System.Drawing.Size(902, 10);
+            this.prbGenerationProgress.TabIndex = 3;
+            this.prbGenerationProgress.Visible = false;
+            // 
+            // lbCount
+            // 
+            this.lbCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbCount.Location = new System.Drawing.Point(0, 0);
+            this.lbCount.Name = "lbCount";
+            this.lbCount.Size = new System.Drawing.Size(1820, 40);
+            this.lbCount.TabIndex = 6;
+            this.lbCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pbPredictionImage
+            // 
+            this.pbPredictionImage.Location = new System.Drawing.Point(913, 32);
+            this.pbPredictionImage.Name = "pbPredictionImage";
+            this.pbPredictionImage.Size = new System.Drawing.Size(448, 448);
+            this.pbPredictionImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbPredictionImage.TabIndex = 7;
+            this.pbPredictionImage.TabStop = false;
+            this.toolTip1.SetToolTip(this.pbPredictionImage, "Prediction object code mask from the training run. ");
+            this.pbPredictionImage.MouseLeave += new System.EventHandler(this.pbCameraImg_MouseLeave);
+            this.pbPredictionImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCameraImg_MouseMove);
+            // 
+            // lbStatus
+            // 
+            this.lbStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lbStatus.Location = new System.Drawing.Point(0, 514);
+            this.lbStatus.Name = "lbStatus";
+            this.lbStatus.Size = new System.Drawing.Size(1820, 37);
+            this.lbStatus.TabIndex = 8;
+            this.lbStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip1.SetToolTip(this.lbStatus, "File name of the current camera view image. Mask and prediction filenames are ide" +
+        "ntical except the prefix.");
+            // 
+            // pbPredictionImageCmp
+            // 
+            this.pbPredictionImageCmp.Location = new System.Drawing.Point(1367, 32);
+            this.pbPredictionImageCmp.Name = "pbPredictionImageCmp";
+            this.pbPredictionImageCmp.Size = new System.Drawing.Size(448, 448);
+            this.pbPredictionImageCmp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbPredictionImageCmp.TabIndex = 10;
+            this.pbPredictionImageCmp.TabStop = false;
+            this.toolTip1.SetToolTip(this.pbPredictionImageCmp, "Second prediction object code mask from the training run. ");
+            this.pbPredictionImageCmp.MouseLeave += new System.EventHandler(this.pbCameraImg_MouseLeave);
+            this.pbPredictionImageCmp.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCameraImg_MouseMove);
+            // 
+            // pnCursor
+            // 
+            this.pnCursor.Controls.Add(this.lbPredCursorCmp);
+            this.pnCursor.Controls.Add(this.lbMaskCursor);
+            this.pnCursor.Controls.Add(this.lbPredCursor);
+            this.pnCursor.Controls.Add(this.lbImgCursor);
+            this.pnCursor.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnCursor.Location = new System.Drawing.Point(0, 492);
+            this.pnCursor.Name = "pnCursor";
+            this.pnCursor.Size = new System.Drawing.Size(1820, 22);
+            this.pnCursor.TabIndex = 9;
+            // 
+            // lbMaskCursor
+            // 
+            this.lbMaskCursor.Location = new System.Drawing.Point(459, 0);
+            this.lbMaskCursor.Name = "lbMaskCursor";
+            this.lbMaskCursor.Size = new System.Drawing.Size(448, 20);
+            this.lbMaskCursor.TabIndex = 2;
+            this.lbMaskCursor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbPredCursor
+            // 
+            this.lbPredCursor.Location = new System.Drawing.Point(910, 1);
+            this.lbPredCursor.Name = "lbPredCursor";
+            this.lbPredCursor.Size = new System.Drawing.Size(453, 20);
+            this.lbPredCursor.TabIndex = 1;
+            this.lbPredCursor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbImgCursor
+            // 
+            this.lbImgCursor.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lbImgCursor.Location = new System.Drawing.Point(0, 0);
+            this.lbImgCursor.Name = "lbImgCursor";
+            this.lbImgCursor.Size = new System.Drawing.Size(453, 22);
+            this.lbImgCursor.TabIndex = 0;
+            this.lbImgCursor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // tmScan
             // 
             this.tmScan.Interval = 250;
             this.tmScan.Tick += new System.EventHandler(this.btnNext_Click);
             // 
-            // pnNavigation
+            // lbPredCursorCmp
             // 
-            this.pnNavigation.Controls.Add(this.pnButtons);
-            this.pnNavigation.Controls.Add(this.ckbScan);
-            this.pnNavigation.Location = new System.Drawing.Point(443, 8);
-            this.pnNavigation.Name = "pnNavigation";
-            this.pnNavigation.Size = new System.Drawing.Size(511, 29);
-            this.pnNavigation.TabIndex = 8;
+            this.lbPredCursorCmp.Location = new System.Drawing.Point(1367, -1);
+            this.lbPredCursorCmp.Name = "lbPredCursorCmp";
+            this.lbPredCursorCmp.Size = new System.Drawing.Size(448, 23);
+            this.lbPredCursorCmp.TabIndex = 3;
+            this.lbPredCursorCmp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(5, 4);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(448, 23);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Image";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(459, 4);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(448, 23);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "Mask";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(913, 4);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(448, 23);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Prediction";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label4
+            // 
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(1367, 4);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(448, 23);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "Compare Prediction";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // frmCameraView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1368, 561);
+            this.ClientSize = new System.Drawing.Size(1820, 591);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.pbPredictionImageCmp);
             this.Controls.Add(this.pnCursor);
             this.Controls.Add(this.lbStatus);
             this.Controls.Add(this.pbPredictionImage);
@@ -285,11 +357,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbMaskImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCameraImg)).EndInit();
             this.pnControl.ResumeLayout(false);
-            this.pnButtons.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbPredictionImage)).EndInit();
-            this.pnCursor.ResumeLayout(false);
             this.pnNavigation.ResumeLayout(false);
             this.pnNavigation.PerformLayout();
+            this.pnButtons.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbPredictionImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbPredictionImageCmp)).EndInit();
+            this.pnCursor.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -317,5 +390,11 @@
         private System.Windows.Forms.CheckBox ckbScan;
         private System.Windows.Forms.Timer tmScan;
         private System.Windows.Forms.Panel pnNavigation;
+        private System.Windows.Forms.PictureBox pbPredictionImageCmp;
+        private System.Windows.Forms.Label lbPredCursorCmp;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }

@@ -223,3 +223,10 @@
 <td><a href="http://bit.ly/af1995">Adafruit</a></td>
 <td>Micro USB, 5V, 2.5A</td>
 </tr>
+<tr>
+<td>Matte Printer Paper</td>
+<td align="right">1</td>
+<td align="right">$29.99</td>
+<td><a href="https://www.amazon.com/gp/product/B0B3QWXVZC/ref=ppx_yo_dt_b_asin_image_o01_s00?ie=UTF8&th=1">Amazon</a></td>
+<td>Or similar thick matte paper</td>
+</tr>

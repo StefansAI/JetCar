@@ -198,6 +198,74 @@ namespace StreetMaker
             return bmResult;
         }
 
+        /// <summary>
+        /// Add a light spot reflection to the source bitmap at the requested location with the size and intensity.
+        /// </summary>
+        /// <param name="SourceBitmap">Source Bitmap to be processed.</param>
+        /// <param name="Location">Center location of the light spot reflection.</param>
+        /// <param name="Size">Size of the light spot reflection.</param>
+        /// <param name="Intensity">Amplitude factor.</param>
+        /// <returns>New Bitmap object with light spot added.</returns>
+        public static Bitmap ImageSpotReflection(Bitmap SourceBitmap, PointF Location, SizeF Size, float Intensity)
+        {
+            float wh = Size.Width / 2;
+            float hh = Size.Height / 2;
+
+            // if parameters are out of range, just return a copy of the original bitmap
+            if ((Location.X <= -wh) || (Location.X > SourceBitmap.Width + wh) || (Location.Y <= -hh) || (Location.Y >= SourceBitmap.Height + hh) || (Size.Width <= 0) || (Size.Height <= 0) || (Intensity <= 0))
+                return new Bitmap(SourceBitmap);
+
+            Bitmap bmResult = new Bitmap(SourceBitmap);
+            float rgbmax = 255 * Intensity;
+            double a2 = wh * wh;
+            double b2 = hh * hh;
+
+            unsafe
+            {
+                BitmapData bmdSource = SourceBitmap.LockBits(new Rectangle(0, 0, SourceBitmap.Width, SourceBitmap.Height), ImageLockMode.ReadWrite, SourceBitmap.PixelFormat);
+                BitmapData bmdResult = bmResult.LockBits(new Rectangle(0, 0, bmResult.Width, bmResult.Height), ImageLockMode.ReadWrite, bmResult.PixelFormat);
+
+                int bppSource = System.Drawing.Bitmap.GetPixelFormatSize(SourceBitmap.PixelFormat) / 8;
+                int bppResult = System.Drawing.Bitmap.GetPixelFormatSize(bmResult.PixelFormat) / 8;
+                byte* ptrBaseSource = (byte*)bmdSource.Scan0;
+                byte* ptrBaseResult = (byte*)bmdResult.Scan0;
+
+                for (int y = Math.Max(0,(int)(Location.Y-hh)); y < Math.Min(SourceBitmap.Height-1, (int)(Location.Y + hh)); y++)
+                {
+                    double dy = y - Location.Y;
+                    double dy2 = dy * dy;
+                    double xx = Math.Sqrt(Math.Abs(a2 - dy2 * a2 / b2));
+
+                    byte* currentLineSource = ptrBaseSource + (y * bmdSource.Stride);
+                    byte* currentLineResult = ptrBaseResult + (y * bmdResult.Stride);
+                    for (int x = Math.Max(0, (int)(Location.X - xx)); x < Math.Min(SourceBitmap.Width - 1, (int)(Location.X + xx)); x++)
+                    {
+                        double dx = x - Location.X;
+                        double dx2 = dx * dx;
+                        double c = Math.Sqrt(dx2 + dy2);
+                        double yy = Math.Sqrt(Math.Abs(b2 - dx2 * b2 / a2));
+                        double cmax = Math.Sqrt(xx*xx + yy*yy);
+                        double ampl = (1 + Math.Cos(Math.PI * c / cmax))/2;
+                        int adder = (int)(ampl * rgbmax);
+                        if (adder < 0)
+                            adder = adder;
+
+                        currentLineResult[x * bppResult] = (byte)Math.Min(Math.Max(currentLineSource[x * bppSource] + adder, 0), 255);              // B
+                        currentLineResult[x * bppResult + 1] = (byte)Math.Min(Math.Max(currentLineSource[x * bppSource + 1] + adder, 0), 255);      // G
+                        currentLineResult[x * bppResult + 2] = (byte)Math.Min(Math.Max(currentLineSource[x * bppSource + 2] + adder, 0), 255);      // R
+                                                                                                                                                    // 
+                        //currentLineResult[x * bppResult] = (byte)Math.Min(Math.Max(adder, 0), 255);              // B
+                        //currentLineResult[x * bppResult + 1] = (byte)Math.Min(Math.Max(adder, 0), 255);      // G
+                        //currentLineResult[x * bppResult + 2] = (byte)Math.Min(Math.Max(adder, 0), 255);      // R
+                    }
+                };
+                SourceBitmap.UnlockBits(bmdSource);
+                bmResult.UnlockBits(bmdResult);
+            }
+
+            return bmResult;
+        }
+
 
         /// <summary>
         /// Converts a bitmap read from a monochrome PNG mask to a color coded RGB bitmap using the segmentation class color definitions.

@@ -220,6 +220,15 @@
             this.label77 = new System.Windows.Forms.Label();
             this.nudCameraHFOV = new System.Windows.Forms.NumericUpDown();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.nudLightSpotHeight = new System.Windows.Forms.NumericUpDown();
+            this.label112 = new System.Windows.Forms.Label();
+            this.nudLightSpotWidth = new System.Windows.Forms.NumericUpDown();
+            this.label111 = new System.Windows.Forms.Label();
+            this.nudLightSpotIntensity = new System.Windows.Forms.NumericUpDown();
+            this.label110 = new System.Windows.Forms.Label();
+            this.nudLightSpotRatio = new System.Windows.Forms.NumericUpDown();
+            this.label109 = new System.Windows.Forms.Label();
+            this.ckbReusePreviousClasses = new System.Windows.Forms.CheckBox();
             this.lbTranValTest = new System.Windows.Forms.Label();
             this.label105 = new System.Windows.Forms.Label();
             this.lbResultingImageCount = new System.Windows.Forms.Label();
@@ -286,7 +295,6 @@
             this.fbdSelectPath = new System.Windows.Forms.FolderBrowserDialog();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.ckbReusePreviousClasses = new System.Windows.Forms.CheckBox();
             this.gbDefaultDrawingSize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDefaultDrawingHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDefaultDrawingWidth)).BeginInit();
@@ -355,6 +363,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudCameraImageRatio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCameraHFOV)).BeginInit();
             this.groupBox6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLightSpotHeight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLightSpotWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLightSpotIntensity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLightSpotRatio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudImageStepSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTestOutRatio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTrainValRatio)).BeginInit();
@@ -2004,7 +2016,7 @@
             this.pnControl.Controls.Add(this.btnOK);
             this.pnControl.Controls.Add(this.btnCancel);
             this.pnControl.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnControl.Location = new System.Drawing.Point(0, 846);
+            this.pnControl.Location = new System.Drawing.Point(0, 898);
             this.pnControl.Name = "pnControl";
             this.pnControl.Size = new System.Drawing.Size(940, 48);
             this.pnControl.TabIndex = 18;
@@ -2017,7 +2029,7 @@
             this.tcMain.Location = new System.Drawing.Point(0, 0);
             this.tcMain.Name = "tcMain";
             this.tcMain.SelectedIndex = 0;
-            this.tcMain.Size = new System.Drawing.Size(940, 846);
+            this.tcMain.Size = new System.Drawing.Size(940, 898);
             this.tcMain.TabIndex = 19;
             // 
             // tpDrawingSettings
@@ -2039,7 +2051,7 @@
             this.tpDrawingSettings.Location = new System.Drawing.Point(4, 22);
             this.tpDrawingSettings.Name = "tpDrawingSettings";
             this.tpDrawingSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tpDrawingSettings.Size = new System.Drawing.Size(932, 820);
+            this.tpDrawingSettings.Size = new System.Drawing.Size(932, 872);
             this.tpDrawingSettings.TabIndex = 1;
             this.tpDrawingSettings.Text = "Drawing Settings";
             // 
@@ -2101,7 +2113,7 @@
             this.tpDataGeneration.Location = new System.Drawing.Point(4, 22);
             this.tpDataGeneration.Name = "tpDataGeneration";
             this.tpDataGeneration.Padding = new System.Windows.Forms.Padding(3);
-            this.tpDataGeneration.Size = new System.Drawing.Size(932, 820);
+            this.tpDataGeneration.Size = new System.Drawing.Size(932, 872);
             this.tpDataGeneration.TabIndex = 2;
             this.tpDataGeneration.Text = "Data Generation";
             // 
@@ -2779,6 +2791,14 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.nudLightSpotHeight);
+            this.groupBox6.Controls.Add(this.label112);
+            this.groupBox6.Controls.Add(this.nudLightSpotWidth);
+            this.groupBox6.Controls.Add(this.label111);
+            this.groupBox6.Controls.Add(this.nudLightSpotIntensity);
+            this.groupBox6.Controls.Add(this.label110);
+            this.groupBox6.Controls.Add(this.nudLightSpotRatio);
+            this.groupBox6.Controls.Add(this.label109);
             this.groupBox6.Controls.Add(this.ckbReusePreviousClasses);
             this.groupBox6.Controls.Add(this.lbTranValTest);
             this.groupBox6.Controls.Add(this.label105);
@@ -2805,10 +2825,145 @@
             this.groupBox6.Controls.Add(this.label76);
             this.groupBox6.Location = new System.Drawing.Point(4, 559);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(430, 254);
+            this.groupBox6.Size = new System.Drawing.Size(430, 307);
             this.groupBox6.TabIndex = 15;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Augmentation";
+            // 
+            // nudLightSpotHeight
+            // 
+            this.nudLightSpotHeight.Location = new System.Drawing.Point(344, 279);
+            this.nudLightSpotHeight.Maximum = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
+            this.nudLightSpotHeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLightSpotHeight.Name = "nudLightSpotHeight";
+            this.nudLightSpotHeight.Size = new System.Drawing.Size(62, 20);
+            this.nudLightSpotHeight.TabIndex = 59;
+            this.toolTip1.SetToolTip(this.nudLightSpotHeight, "Default reflection spot light height. The applied height value will be a randomiz" +
+        "ed variation of +/- 50%");
+            this.nudLightSpotHeight.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label112
+            // 
+            this.label112.AutoSize = true;
+            this.label112.Location = new System.Drawing.Point(227, 282);
+            this.label112.Name = "label112";
+            this.label112.Size = new System.Drawing.Size(92, 13);
+            this.label112.TabIndex = 58;
+            this.label112.Text = "Light Spot Height:";
+            // 
+            // nudLightSpotWidth
+            // 
+            this.nudLightSpotWidth.Location = new System.Drawing.Point(135, 278);
+            this.nudLightSpotWidth.Maximum = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
+            this.nudLightSpotWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLightSpotWidth.Name = "nudLightSpotWidth";
+            this.nudLightSpotWidth.Size = new System.Drawing.Size(62, 20);
+            this.nudLightSpotWidth.TabIndex = 57;
+            this.toolTip1.SetToolTip(this.nudLightSpotWidth, "Default reflection spot light width. The applied width value will be a randomized" +
+        " variation of +/- 50%");
+            this.nudLightSpotWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label111
+            // 
+            this.label111.AutoSize = true;
+            this.label111.Location = new System.Drawing.Point(18, 281);
+            this.label111.Name = "label111";
+            this.label111.Size = new System.Drawing.Size(89, 13);
+            this.label111.TabIndex = 56;
+            this.label111.Text = "Light Spot Width:";
+            // 
+            // nudLightSpotIntensity
+            // 
+            this.nudLightSpotIntensity.DecimalPlaces = 2;
+            this.nudLightSpotIntensity.Location = new System.Drawing.Point(344, 253);
+            this.nudLightSpotIntensity.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLightSpotIntensity.Name = "nudLightSpotIntensity";
+            this.nudLightSpotIntensity.Size = new System.Drawing.Size(62, 20);
+            this.nudLightSpotIntensity.TabIndex = 55;
+            this.toolTip1.SetToolTip(this.nudLightSpotIntensity, "Default reflection spot light intensity. The applied intensity value will be a ra" +
+        "ndomized variation of 50%..100%");
+            this.nudLightSpotIntensity.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label110
+            // 
+            this.label110.AutoSize = true;
+            this.label110.Location = new System.Drawing.Point(227, 256);
+            this.label110.Name = "label110";
+            this.label110.Size = new System.Drawing.Size(100, 13);
+            this.label110.TabIndex = 54;
+            this.label110.Text = "Light Spot Intensity:";
+            // 
+            // nudLightSpotRatio
+            // 
+            this.nudLightSpotRatio.DecimalPlaces = 2;
+            this.nudLightSpotRatio.Location = new System.Drawing.Point(135, 252);
+            this.nudLightSpotRatio.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLightSpotRatio.Name = "nudLightSpotRatio";
+            this.nudLightSpotRatio.Size = new System.Drawing.Size(62, 20);
+            this.nudLightSpotRatio.TabIndex = 53;
+            this.toolTip1.SetToolTip(this.nudLightSpotRatio, "Ratio between images without reflection light and simulated light spot.");
+            this.nudLightSpotRatio.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label109
+            // 
+            this.label109.AutoSize = true;
+            this.label109.Location = new System.Drawing.Point(18, 255);
+            this.label109.Name = "label109";
+            this.label109.Size = new System.Drawing.Size(86, 13);
+            this.label109.TabIndex = 52;
+            this.label109.Text = "Light Spot Ratio:";
+            // 
+            // ckbReusePreviousClasses
+            // 
+            this.ckbReusePreviousClasses.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ckbReusePreviousClasses.Location = new System.Drawing.Point(225, 16);
+            this.ckbReusePreviousClasses.Name = "ckbReusePreviousClasses";
+            this.ckbReusePreviousClasses.Size = new System.Drawing.Size(153, 24);
+            this.ckbReusePreviousClasses.TabIndex = 51;
+            this.ckbReusePreviousClasses.Text = "Reuse Previous Classes:";
+            this.toolTip1.SetToolTip(this.ckbReusePreviousClasses, "If true, the previously generated Class-Text-File will be loaded to reuse its cla" +
+        "ss codes.");
+            this.ckbReusePreviousClasses.UseVisualStyleBackColor = true;
             // 
             // lbTranValTest
             // 
@@ -3072,7 +3227,7 @@
             this.groupBox5.Controls.Add(this.dgvSegmClassDefs);
             this.groupBox5.Location = new System.Drawing.Point(439, 207);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(483, 606);
+            this.groupBox5.Size = new System.Drawing.Size(483, 659);
             this.groupBox5.TabIndex = 14;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "SegmClass Definition";
@@ -3092,7 +3247,7 @@
             this.dgvSegmClassDefs.Location = new System.Drawing.Point(22, 19);
             this.dgvSegmClassDefs.Name = "dgvSegmClassDefs";
             this.dgvSegmClassDefs.RowHeadersVisible = false;
-            this.dgvSegmClassDefs.Size = new System.Drawing.Size(440, 579);
+            this.dgvSegmClassDefs.Size = new System.Drawing.Size(440, 632);
             this.dgvSegmClassDefs.TabIndex = 6;
             this.toolTip1.SetToolTip(this.dgvSegmClassDefs, "List of all object classes and their drawing color. ClassCode and UseCount will b" +
         "e updated after creating the dataset.");
@@ -3444,25 +3599,13 @@
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
             this.dataGridViewTextBoxColumn1.Width = 70;
             // 
-            // ckbReusePreviousClasses
-            // 
-            this.ckbReusePreviousClasses.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckbReusePreviousClasses.Location = new System.Drawing.Point(225, 16);
-            this.ckbReusePreviousClasses.Name = "ckbReusePreviousClasses";
-            this.ckbReusePreviousClasses.Size = new System.Drawing.Size(153, 24);
-            this.ckbReusePreviousClasses.TabIndex = 51;
-            this.ckbReusePreviousClasses.Text = "Reuse Previous Classes:";
-            this.toolTip1.SetToolTip(this.ckbReusePreviousClasses, "If true, the previously generated Class-Text-File will be loaded to reuse its cla" +
-        "ss codes.");
-            this.ckbReusePreviousClasses.UseVisualStyleBackColor = true;
-            // 
             // frmAppSettingsSetup
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(940, 894);
+            this.ClientSize = new System.Drawing.Size(940, 946);
             this.ControlBox = false;
             this.Controls.Add(this.tcMain);
             this.Controls.Add(this.pnControl);
@@ -3549,6 +3692,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudCameraHFOV)).EndInit();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLightSpotHeight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLightSpotWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLightSpotIntensity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLightSpotRatio)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudImageStepSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTestOutRatio)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTrainValRatio)).EndInit();
@@ -3825,5 +3972,13 @@
         private System.Windows.Forms.NumericUpDown nudColorCorrOffsGreen;
         private System.Windows.Forms.Label label106;
         private System.Windows.Forms.CheckBox ckbReusePreviousClasses;
+        private System.Windows.Forms.NumericUpDown nudLightSpotHeight;
+        private System.Windows.Forms.Label label112;
+        private System.Windows.Forms.NumericUpDown nudLightSpotWidth;
+        private System.Windows.Forms.Label label111;
+        private System.Windows.Forms.NumericUpDown nudLightSpotIntensity;
+        private System.Windows.Forms.Label label110;
+        private System.Windows.Forms.NumericUpDown nudLightSpotRatio;
+        private System.Windows.Forms.Label label109;
     }
 }

@@ -30,7 +30,7 @@ cd notebooks
 
 python3 <<HEREDOC
 import segmentation_models_pytorch as smp
-model = smp.Unet(encoder_name="mobilenet_v2", classes=10, activation='argmax2d')
+model = smp.UnetPlusPlus(encoder_name="timm-mobilenetv3_large_minimal_100", classes=10, activation='argmax2d')
 HEREDOC
 
 

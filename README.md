@@ -34,13 +34,13 @@ The project is organized into following folders:
 
 To download just one sub folder from this repository, <a href="https://www.gitkraken.com/learn/git/github-download#how-to-download-a-folder-from-github">read here</a> or enter the URL directly in <a href="https://download-directory.github.io/"> https://download-directory.github.io/.</a> 
 <br><br>
-More documentation:
-- [BOM](docs/BOM.md)
-- [Assembly](docs/Assembly.md)
-- [SD Card Setup](docs/SD%20Card%20Setup.md)
-- [Data Preparation with ImageSegmenter](docs/Data%20Preparation.md)
-- [Model Training](docs/Model%20Training.md)
-- [Street Maker](docs/StreetMaker.md)
-- [Operation](docs/Operation.md)
-- [Debugging](docs/Debugging.md)
+More documentation:<br>
+- <a href="docs/BOM.md">BOM</a><br>
+- <a href="docs/Assembly.md">Assembly</a><br>
+- <a href="docs/SD%20Card%20Setup.md">SD Card Setup</a><br>
+- <a href="docs/Data%20Preparation.md">Data Preparation with ImageSegmenter</a><br>
+- <a href="docs/Model%20Training.md">Model Training</a><br>
+- <a href="docs/StreetMaker.md">Street Maker</a><br>
+- <a href="docs/Operation.md">Operation</a><br>
+- <a href="docs/Debugging.md">Debugging</a><br>
 <br><br>

@@ -112,8 +112,17 @@ The last parameter "Mark Lane Max Front", "Mark Lane Max Side" and "Mask Max Det
 The augmentation area shows similar parameter fields as in the ImageSegmenter and similar multiplication rules apply when adding more values. But there is also an "Image Step Size". This is exactly the step size moving the camera forward or backwards as described in the previous images above. Increasing this number will reduce the number of images in the dataset and decreasing the step size will result in more.<br>
 <br><img src="assets/images/streetmaker/30b-augmentation.jpg"/><br>
 If a street map is loaded, the program calculates the number of image/mask pairs that will be generated with the current parameter. It will be updated after changing step size or any of the augmentation parameters.<br>
-There are some more checkboxes to be ignored for now, since they were introduced for testing different options. But the defaults are best.<br>
-The class definition table here on the right side is a bit different than the one in the ImageSegmenter not only because more class possibilities were introduced with StreetMaker, like crosswalks. Some items were also renamed slightly. But the column "UseCount" hints to another feature of this application. It will always optimize the class output to what is actually used in the particular street map. Every UseCount of 0 will be removed from the ClassCode enumeration. Note that the ClassCode is set to -1 for each class that is not used. This will result in an optimal set of classes for each individual map, which is more efficient for run-time execution but worse for exchangeability of model weights between different maps. The compromise is training on a map with more classes used, but printing maps with subsets of that training map. <br>
+There are some more checkboxes to be ignored for now, since they were introduced for testing different options. But the defaults are good to go.<br>
+Below the augmentation settings there are few more parameter to simulate light spots.
+<br>
+<br><img src="assets/images/streetmaker/30c-light_spot_parms.jpg"/><br>
+While testing the JetCar on the printed out map, it turned out that light reflexions disturbed the camera image quiet often and caused bad classification spots in the resulting mask.
+<br><img src="assets/images/streetmaker/30d-light-spot1.jpg"/><img src="assets/images/streetmaker/30d-light-spot2.jpg"/><br>
+One way to avoid this is creating a diffuse light, blocking sun light from windows and use less reflective paper for the printout. A matte thick paper (right picture) works much better than the standard printer paper, which is often glossy and thin (left picture). Thick is better to keep the paper flat.<br>
+But on top of it all, just add light-spots into the training and testing dataset. With these parameters a light spot is overlaid to 30% of all output images with randomized size and intensity around these settings (+/- 50%). This helps to harden the model against remaining light spots in the scene.<br>
+<img src="assets/images/streetmaker/30e-light-spot1.jpg"/><img src="assets/images/streetmaker/30e-light-spot2.jpg"/><br>
+<br><br>
+The class definition table on the right side of this dialog is a bit different than the one in the ImageSegmenter not only because more class possibilities were introduced with StreetMaker, like crosswalks. Some items were also renamed slightly. But the column "UseCount" hints to another feature of this application. It will always optimize the class output to what is actually used in the particular street map. Every UseCount of 0 will be removed from the ClassCode enumeration. Note that the ClassCode is set to -1 for each class that is not used. This will result in an optimal set of classes for each individual map, which is more efficient for run-time execution but worse for exchangeability of model weights between different maps. The compromise is training on a map with more classes used, but printing maps with subsets of that training map. <br>
 Let's have a look at the "File Names" group. When generating a new dataset, these 2 files are generated too and written to the data path.
 <br><br>
 <br><img src="assets/images/streetmaker/31-classes.jpg"/><br>
@@ -129,7 +138,7 @@ The problem at this point is, that the StreetMaker can generate scenes, which th
 It can be imagined that at some point later the map should be integrated into the code like a phone map and the car should find it's own way for instance from any given point to a specific parking space as a destination point. Something for the next extensions.
 <br><br><br>
 
-<mark>REMARK</mark>
+<mark>REMARK</mark><br><br>
 
 If you have a new map you want to train on, it might happen that some classes appear only once or very few times. After running the model training on datasets, these few classes might be not recognized in the inference. When that happens you can take real images of these classes, run them through ImageSegmenter and merge the dataset with the streetmaker dataset for the next training run.<br>
 Alternatively you can increase the occurance of these classes.
@@ -166,10 +175,25 @@ At the bottom right of this view there is the artefact of the last piece of inte
 Part of the problem is suppressing all marking on wrong-dir-lanes, which suppressed the stop-line class here. But the line is also recessed and the wrong-dir code will still show up around it.<br>
 This problem occured often enough with automatic view generation, that wrong-dir artefacts showed up between shoulder line class and driving direction class at inference. Placing the view points correctly will avoid this completely. <br><br>
 <br><img src="assets/images/streetmaker/45-intersection.jpg"/><br>
-The picture above shows the placement around one intersection. Several view point had been placed before arrows to enhance the training on the arrows and intersections. View points directly at the stop signs will improve their training. View points at the interscetion exit lanes are placed behind the curves to avoid the artefacts shown above.
- 
+The picture above shows the placement around one intersection. Several view points had been placed before arrows to enhance the training on the arrows and intersections. View points directly at the stop signs will improve their training. View points at the interscetion exit lanes are placed behind the curves to avoid the artefacts shown above.
+<br><br>
+<br><img src="assets/images/streetmaker/46-prediction_folder.jpg"/><br>
+The training will result in a prediction using the test data input. Unzip the prediction results into the dataset folder.<br><br>
+<br><img src="assets/images/streetmaker/47-prediction_files.jpg"/><br>
+These PNG files don't display well in the file explorer view, since the few encoded classes come up as very dark gray tones only.<br><br>
+<br><img src="assets/images/streetmaker/48-menu_pred.jpg"/><br>
+But they can be visualized via the StreetMaker application using the "Display Test and Pred" menu item.<br><br>
+<br><img src="assets/images/streetmaker/49-camera_view_pred.jpg"/><br>
+This opens the camera view form displaying the image, the mask and the prediction result together. The cursor can be moved over either one of them to display the codes at the cursor position. If the mask and prediction classes match, the texts appear in black. If they don't match, the text color is changed to red.<br><br>
+<br><img src="assets/images/streetmaker/50-predcmp_folder.jpg"/><br>
+If you want to check the prediction results from two different training runs, just place the previous version into a folder named "*Cmp" next to the prediction folder.<br><br>
+<br><img src="assets/images/streetmaker/51-precmp-view.jpg"/><br>
+In this case, the camera view form displays the additional compare contents on the right side. Now it can be checked, if the new run had better results then the previous one. Of course, this only works when the same dataset was used in both. Otherwise the names would not match up.<br><br>
+<br><img src="assets/images/streetmaker/52-precmp-view-imgsegm.jpg"/><br>
+Because the ImageSegmenter uses a slightly different naming scheme for the dataset than the StreetMaker, both can be easily mixed together to create one dataset for training and prediction. The StreetMaker application can display both results as shown above. The camera image on the left shows clearly where the printed papers were glued together. Unfortunately the color tones changed from one printed row to the next. But the results were still acceptable.
+<br><br>
+Mixing both together will definitely help bridging the virtual world of the StreetMaker with real scene photos used for the ImageSegmenter. As you can see above, despite all efforts to create good virtual images, real camera images look quiete different. There are the different print colors, the seems and also the background that can confuse the model.
 <br><br><br>
 
-- [Data Preparation with ImageSegmenter](docs/Data%20Preparation.md)
-- [Operation](Operation.md)
-
+- <a href="Data%20Preparation.md">Data Preparation with ImageSegmenter</a><br>
+- <a href="Operation.md">Operation</a><br>

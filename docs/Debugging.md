@@ -239,6 +239,6 @@ AVG_SLOPE_THRESHOLD_DIAG = 0.9
 ```
 <br><br><br>
 
-- [Operation](Operation.md)
-- [README](README.md)
+- <a href="Operation.md">Operation</a><br>
+- <a href="../README.md">Read Me</a><br>
 

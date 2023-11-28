@@ -133,12 +133,12 @@ Now place the flatbed with the Jetson Nano on top. It slides under in the front 
 Screw the camera mount to the cabin and screw in the camera board.
 <br><br>
 <br><img src="assets/images/assembly/43-camera_connected.jpg"/><br>
-Pluig in the flex cable of the camera into the Jetson Nano connector. Lift the plastic part, place the flex board in and press the tiny plastic part back in. Make sure, it is held in and doesn't come out.
+Plug in the flex cable of the camera into the Jetson Nano connector. Lift the plastic part, place the flex board in and press the tiny plastic part back in. Make sure, it is held in and doesn't come out.
 <br><br>
 <br><img src="assets/images/assembly/44-Done.jpg"/><br>
 Congratulation. It's done and ready to go.
 <br><br><br>
 
-- [BOM](BOM.md)
-- [SD Card Setup](SD%20Card%20Setup.md)
 
+- <a href="BOM.md">BOM</a><br>
+- <a href="SD%20Card%20Setup.md">SD Card Setup</a><br>

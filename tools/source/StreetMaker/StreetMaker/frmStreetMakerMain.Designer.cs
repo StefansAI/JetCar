@@ -530,26 +530,26 @@
             // tsmiOnlineHelp
             // 
             this.tsmiOnlineHelp.Name = "tsmiOnlineHelp";
-            this.tsmiOnlineHelp.Size = new System.Drawing.Size(146, 22);
+            this.tsmiOnlineHelp.Size = new System.Drawing.Size(180, 22);
             this.tsmiOnlineHelp.Text = "Online Doc";
             this.tsmiOnlineHelp.Click += new System.EventHandler(this.tsmiOnlineHelp_Click);
             // 
             // tsmiJetCarProject
             // 
             this.tsmiJetCarProject.Name = "tsmiJetCarProject";
-            this.tsmiJetCarProject.Size = new System.Drawing.Size(146, 22);
+            this.tsmiJetCarProject.Size = new System.Drawing.Size(180, 22);
             this.tsmiJetCarProject.Text = "JetCar Project";
             this.tsmiJetCarProject.Click += new System.EventHandler(this.tsmiJetCarProject_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(143, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 6);
             // 
             // tsmiAbout
             // 
             this.tsmiAbout.Name = "tsmiAbout";
-            this.tsmiAbout.Size = new System.Drawing.Size(146, 22);
+            this.tsmiAbout.Size = new System.Drawing.Size(180, 22);
             this.tsmiAbout.Text = "About";
             this.tsmiAbout.Click += new System.EventHandler(this.tsmiAbout_Click);
             // 

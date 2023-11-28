@@ -792,7 +792,6 @@ namespace ImageSegmenter
                 return;
 
             SetEnabled(false);
-            Random rnd = new Random(DateTime.Now.Millisecond);
             if (processConfirmation.CLearAllOutputDirs == true)
                 ClearOutputDirs();
 
@@ -1779,6 +1778,7 @@ namespace ImageSegmenter
             ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirImg + AppSettings.SubDirPredTest);
             ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirMask + AppSettings.SubDirTrain);
             ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirMask + AppSettings.SubDirVal);
+            ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirMask + AppSettings.SubDirPredTest);
             ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirInfo + AppSettings.SubDirTrain);
             ClearDirectory(AppSettings.PathToOutputDataset + AppSettings.SubDirInfo + AppSettings.SubDirVal);
             if (AppSettings.InfoOutput == false)
@@ -1870,16 +1870,16 @@ namespace ImageSegmenter
         }
 
         /// <summary>
-        /// 
+        /// Processes one augmentation output with the passed parameter and assigns the result to the left PictureBox.
         /// </summary>
-        /// <param name="ImgNo"></param>
-        /// <param name="ZoomFactor"></param>
-        /// <param name="TiltAngle"></param>
-        /// <param name="BrightnessFactor"></param>
-        /// <param name="ContrastEnhancement"></param>
-        /// <param name="NoiseAdder"></param>
-        /// <param name="NoiseIdx"></param>
-        /// <param name="Rnd"></param>
+        /// <param name="ImgNo">Image number to be used in the file name.</param>
+        /// <param name="ZoomFactor">Current zoom factor of the augmentation.</param>
+        /// <param name="TiltAngle">Current tilt angle of the augmentation.</param>
+        /// <param name="BrightnessFactor">Current b of the brithness factor of the augmentation.</param>
+        /// <param name="ContrastEnhancement">Current contrast enhancement value of the augmentation.</param>
+        /// <param name="NoiseAdder">Current noise adder value of the augmentation.</param>
+        /// <param name="NoiseIdx">Index of the current noise application to be used in the file name.</param>
+        /// <param name="Rnd">Reference to the random object used.</param>
         private void ProcessAugmentationAndSave(int ImgNo, float ZoomFactor, int TiltAngle, float BrightnessFactor, float ContrastEnhancement, int NoiseAdder, int NoiseIdx, Random Rnd)
         {
             string baseName = BuildBaseFileName(ImgNo, ZoomFactor, TiltAngle, BrightnessFactor, ContrastEnhancement, NoiseIdx);
@@ -1938,17 +1938,23 @@ namespace ImageSegmenter
 
                 SetWorkingImage(bmOriginalImg);
                 LoadSegmClasses();
+                // Store the downsampled image for the prediction in the test subfolder
                 Bitmap bmTest = Process.DownSample(bmOriginalImg, AppSettings.ImageOutputSize.Width, AppSettings.ImageOutputSize.Height);
                 bmTest.Save(AppSettings.PathToOutputDataset + AppSettings.SubDirImg + AppSettings.SubDirPredTest + Session.CurrentImageFileName+".jpg");
                 bmTest.Dispose();
-
+                // Store the related mask for StreetMaker only, when dataset is mixed with StreetMaker dataset so it can be viewed there
+                bm8bitMask.Save(AppSettings.PathToOutputDataset + AppSettings.SubDirMask + AppSettings.SubDirPredTest + Session.CurrentImageFileName + ".png");
+                
                 for (int idxZoom = 0; idxZoom < AppSettings.ZoomFactors.Length; idxZoom++)
                 {
                     float zoomFactor = AppSettings.ZoomFactors[idxZoom];
                     for (int idxTilt = 0; idxTilt < AppSettings.TiltAngles.Length; idxTilt++)
                     {
                         int tiltAngle = AppSettings.TiltAngles[idxTilt];
-                        if (((Math.Abs(tiltAngle) >= 15) && (zoomFactor > 1.3f)) || ((Math.Abs(tiltAngle) >= 10) && (zoomFactor > 1.2f)) || ((Math.Abs(tiltAngle) >= 5) && (zoomFactor > 1.1f)) || ((Math.Abs(tiltAngle) == 0) && (zoomFactor > 1.0f)))
+                        if (((Math.Abs(tiltAngle) >= 15) && (zoomFactor >= 1.3f)) || 
+                            ((Math.Abs(tiltAngle) >= 10) && (zoomFactor >= 1.2f)) || 
+                            ((Math.Abs(tiltAngle) >= 5) && (zoomFactor >= 1.1f)) || 
+                            ((Math.Abs(tiltAngle) == 0) && (zoomFactor >= 1.0f)))
                         {
                             for (int idxBright = 0; idxBright < AppSettings.BrightnessFactors.Length; idxBright++)
                             {

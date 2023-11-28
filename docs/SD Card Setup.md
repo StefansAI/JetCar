@@ -58,7 +58,6 @@ Since from now on, all communications with the JetCar can go through Jupyter, th
 In the end it might be also good to apply "sudo apt-get autoremove" and "sudo apt-get clean" from the Jupyter terminal for instance.
 <br><br><br>
 
-- [BOM](BOM.md)
-- [Assembly](Assembly.md)
-- [Data Preparation with ImageSegmenter](Data%20Preparation.md)
-
+- <a href="BOM.md">BOM</a><br>
+- <a href="Assembly.md">Assembly</a><br>
+- <a href="Data%20Preparation.md">Data Preparation with ImageSegmenter</a><br>

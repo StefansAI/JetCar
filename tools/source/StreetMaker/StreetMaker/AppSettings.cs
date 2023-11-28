@@ -317,6 +317,16 @@ namespace StreetMaker
         public float[] ColorFactors = { 0.9f, 1.0f, 1.1f };
         /// <summary>Adding noise in different levels at the end.</summary>
         public int[] NoiseLevels = { 10, 10 };
+
+        /// <summary>Ratio between images without reflection light and simulated light spot. </summary>
+        public float LightSpotRatio = 0.3f;
+        /// <summary>Default reflection spot light width. The applied width value will be a randomized variation of +/- 50%</summary>
+        public float LightSpotWidth = 112;
+        /// <summary>Default reflection spot light height. The applied height value will be a randomized variation of +/- 50%</summary>
+        public float LightSpotHeight = 112;
+        /// <summary>Default reflection spot light intensity. The applied intensity value will be a randomized variation of 50%..100%</summary>
+        public float LightSpotIntensity = 0.2f;
+
         #endregion Augmentation
 
         #region Folders and File Prefixes
@@ -684,6 +694,12 @@ namespace StreetMaker
                 for (int i = 0; i < noiseLevelsItems.Count; i++)
                     NoiseLevels[i] = Convert.ToInt32(noiseLevelsItems[i].InnerText);
 
+                XmlNode nodeLightSpot = nodeAugmentation.SelectSingleNode("light_spot");
+                LightSpotRatio = Convert.ToSingle(nodeLightSpot.SelectSingleNode("ratio").InnerText);
+                LightSpotWidth = Convert.ToSingle(nodeLightSpot.SelectSingleNode("width").InnerText);
+                LightSpotHeight = Convert.ToSingle(nodeLightSpot.SelectSingleNode("height").InnerText);
+                LightSpotIntensity = Convert.ToSingle(nodeLightSpot.SelectSingleNode("intensity").InnerText);
+
                 XmlNode nodeDataPath = nodeDataGen.SelectSingleNode("data_path");
 
                 SubDirDataSet = nodeDataPath.SelectSingleNode("output_dataset").InnerText.TrimEnd(new char[] { '\\' }) + '\\'; 
@@ -901,6 +917,12 @@ namespace StreetMaker
                 XmlNode nodeNoiseLevels = nodeAugmentation.AppendChild(doc.CreateElement("noise_levels"));
                 foreach (float noiseLevel in NoiseLevels)
                     nodeNoiseLevels.AppendChild(doc.CreateElement("item")).AppendChild(doc.CreateTextNode(noiseLevel.ToString()));
+
+                XmlNode nodeLightSpot = nodeAugmentation.AppendChild(doc.CreateElement("light_spot"));
+                nodeLightSpot.AppendChild(doc.CreateElement("ratio")).AppendChild(doc.CreateTextNode(LightSpotRatio.ToString()));
+                nodeLightSpot.AppendChild(doc.CreateElement("width")).AppendChild(doc.CreateTextNode(LightSpotWidth.ToString()));
+                nodeLightSpot.AppendChild(doc.CreateElement("height")).AppendChild(doc.CreateTextNode(LightSpotHeight.ToString()));
+                nodeLightSpot.AppendChild(doc.CreateElement("intensity")).AppendChild(doc.CreateTextNode(LightSpotIntensity.ToString()));
 
                 XmlNode nodeDataPath = nodeDataGen.AppendChild(doc.CreateElement("data_path"));
                 nodeDataPath.AppendChild(doc.CreateElement("output_dataset")).AppendChild(doc.CreateTextNode(SubDirDataSet));

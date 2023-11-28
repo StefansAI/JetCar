@@ -58,7 +58,6 @@ When starting the ImageSegmenter application now, it will toggle the prediction 
 True mask to compare with predicted mask above.
 <br><br><br>
 
-- [Data Preparation with ImageSegmenter](Data%20Preparation.md)
-- [Street Maker](StreetMaker.md)
-- [Operation](Operation.md)
-
+- <a href="Data%20Preparation.md">Data Preparation with ImageSegmenter</a><br>
+- <a href="StreetMaker.md">Street Maker</a><br>
+- <a href="Operation.md">Operation</a><br>

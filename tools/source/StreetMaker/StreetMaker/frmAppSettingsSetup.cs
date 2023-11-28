@@ -48,7 +48,6 @@ namespace StreetMaker
         }
         #endregion Constructor
 
-
         #region Special conversions
         /// <summary>
         /// Converts a float vector into string representation.
@@ -260,6 +259,11 @@ namespace StreetMaker
             tbColorFactors.Text = FloatVectorToString(editSettings.ColorFactors);
             tbNoiseLevels.Text = IntVectorToString(editSettings.NoiseLevels);
 
+            nudLightSpotRatio.Value = (decimal)editSettings.LightSpotRatio;
+            nudLightSpotWidth.Value = (decimal)editSettings.LightSpotWidth;
+            nudLightSpotHeight.Value = (decimal)editSettings.LightSpotHeight;
+            nudLightSpotIntensity.Value = (decimal)editSettings.LightSpotIntensity;
+
             dtSegmClassDefs.Rows.Clear();
             foreach (SegmClassDef scd in SegmClassDefs.Defs)
             {
@@ -375,6 +379,11 @@ namespace StreetMaker
             editSettings.BrightnessFactors = StringToFloatVector(tbBrightnessFactors.Text, AppSettings.BRIGHTNESS_FACTOR_MIN, AppSettings.BRIGHTNESS_FACTOR_MAX);
             editSettings.ColorFactors = StringToFloatVector(tbColorFactors.Text, AppSettings.COLOR_FACTOR_MIN, AppSettings.COLOR_FACTOR_MAX);
             editSettings.NoiseLevels = StringToIntVector(tbNoiseLevels.Text, AppSettings.NOISE_LEVEL_MIN, AppSettings.NOISE_LEVEL_MAX);
+
+            editSettings.LightSpotRatio = (float)nudLightSpotRatio.Value;
+            editSettings.LightSpotWidth = (float)nudLightSpotWidth.Value;
+            editSettings.LightSpotHeight = (float)nudLightSpotHeight.Value;
+            editSettings.LightSpotIntensity = (float)nudLightSpotIntensity.Value;
 
             for (int i = 0; i < dtSegmClassDefs.Rows.Count; i++)
             {
