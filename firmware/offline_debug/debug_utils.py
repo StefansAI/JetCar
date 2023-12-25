@@ -1,3 +1,5 @@
+# A few helper functions for the offline debugging.
+# The function names are sufficient as explananation.
 from jetcar_definitions import *
 
 import cv2

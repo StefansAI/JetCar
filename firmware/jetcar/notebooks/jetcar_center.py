@@ -43,7 +43,7 @@ DEBUG_PRINT_GET_CENTER_CLASSES = False
 # Set to true to enable debug print messages with the new object list from the codes
 DEBUG_PRINT_GET_NEW_LIST = False
 # Set to true to enable debug print messages with the final objects list contents
-DEBUG_PRINT_UPDATE_OBJECTS_OBJECT_LIST = False
+DEBUG_PRINT_UPDATE_OBJECT_LIST = False
 
 # Width of the window to determine the dominant class code for the center lane
 CENTER_WINDOW_WIDTH = 7
@@ -69,12 +69,25 @@ CLASS_CODE_OBJ_TTL = 3
 # Time-To-Live definition for keeping intersection object in the list, when not updated
 INTERSECTION_OBJ_TTL = 20
 # Minimum number of cycles for an object class code to be alive before it will be recognized as valid
-CLASS_CODE_OBJ_MIN_ALIVE = 4
+CLASS_CODE_OBJ_MIN_ALIVE = 3
 # Minimum size for an object class code to be recognized as valid
 CLASS_CODE_OBJ_MIN_SIZE = 5
+# Minimum size for any arrow object class code to be recognized as valid
+ARROW_CODE_OBJ_MIN_SIZE = 15
 # Object distance from ORIGIN to switch from update length to moving the object location
 CLASS_CODE_OBJ_ORIGIN_DIST = 10
-
+# A minimum distance for matching new objects to objects in the list
+OBJ_MATCH_MIN_DIST = -5
+# A maximum distance for matching new objects to objects in the list at close distance
+OBJ_MATCH_MAX_DIST_CLOSE = 75
+# A maximum distance for matching new objects to objects in the list at far distance
+OBJ_MATCH_MAX_DIST_FAR = 15
+# Precalculated amplitude for the calculation in update_objects() - don't change formula
+OBJ_MATCH_AMPL = (OBJ_MATCH_MAX_DIST_CLOSE - OBJ_MATCH_MAX_DIST_FAR)/2
+# Precalculated offset for the calculation in update_objects() - don't change formula
+OBJ_MATCH_OFFS = OBJ_MATCH_AMPL + OBJ_MATCH_MAX_DIST_FAR
+# Precalculated scaler for the claculation in update_objects() - don't change formula
+OBJ_MATCH_SCALER = math.pi/IMG_YC
 #============================================================================================
 
 class SegmClassPoint:
@@ -153,7 +166,7 @@ class SegmClassPoint:
 
     def __str__(self):
         """ Returns a string representation of the ClassCodePoint object """
-        return f'{self.code}:{SegmClass(self.code).name}-{self.score:.1f}'
+        return f'{SegmClass(self.code).name}({self.code}):{self.score:.1f}'
 
 #============================================================================================
 
@@ -171,6 +184,8 @@ class SegmClassObj:
         self.distance = origin.get_distance(self.location)
         self.ttl = CLASS_CODE_OBJ_TTL
         self.alive = 0
+        self.ref_idx = -1
+        self.move_dist = 0
         return
 
     def update_location(self, point:Point):
@@ -204,18 +219,31 @@ class SegmClassObj:
         that the car motion will make an object appear closer each time and the location 
         will have to be updated. Otherwise, it will have to be moved 
         new_obj         -- object reference to update from. """
-        if new_obj.distance < self.distance:
+        if new_obj.distance <= self.distance:
+            self.move_dist = self.distance - new_obj.distance
             self.location = new_obj.location.copy()
             self.distance = new_obj.distance 
-                      
-        self.update_endpoint(new_obj.endpoint, True)  
+            self.update_endpoint(new_obj.endpoint, False)  
+        else:              
+            self.update_endpoint(new_obj.endpoint, True)  
         self.ttl = CLASS_CODE_OBJ_TTL 
+        return
+
+    def move(self, delta):
+        """ General update method to update location or end point. It is assumed, 
+        that the car motion will make an object appear closer each time and the location 
+        will have to be updated. Otherwise, it will have to be moved 
+        new_obj         -- object reference to update from. """
+        self.move_dist = delta
+        self.location.y -= delta
+        self.distance -= delta 
         return
 
     def __str__(self):
         """ Returns a string representation of the ClassCodeObj object """
         #s = f'{SegmClass(self.code).name}'
-        return f'{self.distance}:{self.size}:{SegmClass(self.code).name}:{self.alive}:{self.ttl}'
+        return f'{self.distance}:{self.size}:{SegmClass(self.code).name}({self.code}):{self.alive}:{self.ttl},{self.move_dist}'
+        #return f'd={self.distance}:s={self.size}:c={self.code}={SegmClass(self.code).name}:a={self.alive}:t={self.ttl},m={self.move_dist}'
 
 #============================================================================================
 N_CENTER_CLASS_POINTS = 2*N_LANE_POINTS+1
@@ -243,12 +271,23 @@ class LaneCenter:
             sy = NEIGHBOR_STEP_SIZE_Y
         self.codes = [SegmClassPoint(w, h, sx, sy) for i in range(N_CENTER_CLASS_POINTS)]
         self.init_object_list()
+        self.next_turn_lane_obj:SegmClassObj = None
+        self.stop_yield_text_obj:SegmClassObj = None
+        self.stop_yield_line_obj:SegmClassObj = None
+        self.dominant_arrow_code:SegmClass = None
+        self.move_avg = 0
         return
 
     def init_object_list(self):
-        """Init object list with an empty list object"""
+        """Init object list with an empty list object and clear expired_turns"""
         self.objects = []
+        self.clear_expired_turns()
         return
+    
+    def clear_expired_turns(self):
+         """Init expired_turns list with an empty list object"""
+         self.expired_turns = []
+         return       
 
     def get_center_classes(self, mask):
         """Determine the class codes along the center points.
@@ -269,9 +308,9 @@ class LaneCenter:
                 self.codes[ii].update_location(mask, self.points[i])
  
         if DEBUG_PRINT_GET_CENTER_CLASSES == True:
-            sc = f'{self.side}  codes:  '
+            sc = f'{self.side.name}  codes:  '
             for i in range(len(self.codes)):
-                sc += f'{self.codes[i]}  '
+                sc += f'{i}.{self.codes[i]}  '
             print(sc)       
 
         return
@@ -280,19 +319,40 @@ class LaneCenter:
         """ Decrement the TTL counters of all current objects and remove expired ones.
         All objects in front of the car will be removed when their time-to-live is expired.
         Intersection objects in the current center lane not in front anymore will be kept 
-        until the intersection is entered or passed."""
+        until the intersection is entered or passed. 
+        Similarily turn codes left/right will be kept until completely behind camera and 
+        then moved to experied_turns for later processing"""
         for i in reversed(range(len(self.objects))):
             self.objects[i].ttl -= 1
             if self.objects[i].ttl <= 0:
-                if self.side == Side.Center:
-                    if self.objects[i].distance > CLASS_CODE_OBJ_ORIGIN_DIST:  
-                        self.objects.pop(i)
-                    elif self.objects[i].code not in INTERSECTION_OBJECT_CODES or \
-                         self.objects[i].size == 0 or self.objects[i].ttl < -INTERSECTION_OBJ_TTL:
-                        self.objects.pop(i)
-                else:
+                # time-to-live is expired, everything in front can be removed from list
+                if self.objects[i].distance > CLASS_CODE_OBJ_ORIGIN_DIST:  
                     self.objects.pop(i)
+                else:
+                    # Any object behind the camera view will be checked individually by side
+                    if self.side == Side.Center:
+                        # Keep intersection codes only, others can be removed
+                        if self.objects[i].code not in INTERSECTION_OBJECT_CODES or \
+                           self.objects[i].size == 0 or self.objects[i].ttl < -INTERSECTION_OBJ_TTL:
+                            self.objects.pop(i)
+
+                    elif self.side == Side.Left and self.objects[i].code == LANE_LEFT_TURN_CODE:
+                        # If left turn is completely out of sight, place it in epxired_turn and remove from object list
+                        if (self.objects[i].distance + self.objects[i].size) <= 0:
+                            self.expired_turns.append(self.objects[i])
+                            self.objects.pop(i)
+
+                    elif self.side == Side.Right and self.objects[i].code in [LANE_RIGHT_TURN_CODE, SegmClass.lane_wrong_dir.value]:
+                        # If right turn or wrong dir is completely out of sight, place it in epxired_turn and remove from object list
+                        if (self.objects[i].distance + self.objects[i].size) <= 0:
+                            self.expired_turns.append(self.objects[i])
+                            self.objects.pop(i)
+                    else:
+                        # Any other object left or right can be removed from object list
+                        self.objects.pop(i)
+
             else:
+                # TTL not expired, so increment alive count
                 self.objects[i].alive += 1
         return
 
@@ -326,44 +386,153 @@ class LaneCenter:
             current_obj.update_endpoint(self.codes[len(self.codes)-1].location, False)
 
         if DEBUG_PRINT_GET_NEW_LIST == True:
-            s = f'{self.side}   new: '
+            s = f'{self.side.name}   new: '
             for i in range(len(new_list)):
                 s += f'{new_list[i]}  '
             print(s)
         return new_list
 
 
-    def update_objects(self):
+    def update_objects(self, group_move_avg):
         """Top level method to call check_ttls() to remove expired objects from the list.
         It then calls get_new_list() to convert the array of code points to a new list of 
         objects. This new list is then used to update matching existing objects in 
-        self.objects list or insert newly discovered objects into the correct position."""
+        self.objects list or insert newly discovered objects into the correct position.
+        After updating the lists, update the references to some predefined class members."""
         
+        # decrement TTLs
         self.check_ttls()
+
+        if DEBUG_PRINT_UPDATE_OBJECT_LIST == True:
+            s = f'{self.side.name} obj old: '
+            for i in range(len(self.objects)):
+                s += f'{self.objects[i]}  '
+            print(s)
+
+        # Get the new list from the current point contents
         new_list = self.get_new_list()
 
-        idx=0
-        # 
-        for i in range(len(new_list)):
-            handled = False
-            while handled == False:
-                if idx < len(self.objects):
-                    if new_list[i].code == self.objects[idx].code:
-                        self.objects[idx].update(new_list[i])
-                        handled = True
-                    elif new_list[i].distance < self.objects[idx].distance:
-                        self.objects.insert(idx, new_list[i])
-                        handled = True
-                    idx += 1
-                else:
-                    self.objects.append(new_list[i])
-                    handled = True
+        # At startup, when the objects list is empty, just assigne the new list
+        if self.objects == []:
+            self.objects = new_list
+        else:
+            # Clear all previous references
+            for i in range(len(self.objects)):
+                self.objects[i].ref_idx = -1
+                self.objects[i].move_dist = 0
+
+            # Go through the new list and match the entries to previous list and update the entries
+            move_sum = 0
+            move_cnt = 0
+            idx = len(self.objects)-1
+            for i in reversed(range(len(new_list))):
+                for j in range(idx,-1,-1):
+                    if new_list[i].code == self.objects[j].code and new_list[i].ref_idx < 0:
+                        dist_delta = self.objects[j].distance - new_list[i].distance
+                        # calculate a distance dependent maximum match value since closer objects and movement are much bigger than far
+                        if new_list[i].distance > 0:
+                            obj_match_max_dist = int(math.cos(min(new_list[i].distance,IMG_YC)*OBJ_MATCH_SCALER)*OBJ_MATCH_AMPL + OBJ_MATCH_OFFS)
+                        else:
+                            obj_match_max_dist = OBJ_MATCH_MAX_DIST_CLOSE
+                        # If the delta between previous frame and this frame is in the min/max limits it's very likely the same object
+                        if dist_delta < obj_match_max_dist and dist_delta >= OBJ_MATCH_MIN_DIST:
+                            new_list[i].ref_idx = j
+                            self.objects[j].ref_idx = i
+                            idx = j-1
+                            self.objects[j].update(new_list[i])
+                            move_cnt += 1
+                            move_sum += self.objects[j].move_dist
+
+            # Calculate an average from the move distances above
+            if move_cnt > 0:
+                self.move_avg = move_sum//move_cnt
+            else:
+                self.move_avg = 0
+            
+            # Try to get a non-zero value for the current avg or the average between group and move_avg
+            if self.move_avg == 0 or group_move_avg == 0:
+                curr_move_avg = max(self.move_avg, group_move_avg)
+            else:
+                curr_move_avg = (self.move_avg + group_move_avg + 1)//2
  
-        if DEBUG_PRINT_UPDATE_OBJECTS_OBJECT_LIST == True:
+            if DEBUG_PRINT_UPDATE_OBJECT_LIST == True:
+                print(f'{self.side.name} move_avg={self.move_avg}  group_move_avg={group_move_avg} curr_move_avg={curr_move_avg}')
+                s = f'{self.side.name}  move:'
+
+            # Now, move all not updated objects closer by the current average to allow later matching again
+            if curr_move_avg > 0:
+                 for i in range(len(self.objects)):
+                    if self.objects[i].ref_idx < 0:
+                        self.objects[i].move(curr_move_avg)
+                        if DEBUG_PRINT_UPDATE_OBJECT_LIST == True:
+                            s += " %s" % (self.objects[i])
+
+            if DEBUG_PRINT_UPDATE_OBJECT_LIST == True:
+                print(s)
+            
+            # Next, insert all remaining new objects into the objects list
+            idx=0
+            for i in range(len(new_list)):
+                if new_list[i].ref_idx < 0:
+                    for j in range(idx,len(self.objects)):
+                        if new_list[i].distance <= self.objects[j].distance:
+                            self.objects.insert(j, new_list[i])
+                            idx = j
+                            break
+                        elif j == len(self.objects)-1:
+                            self.objects.append(new_list[i])
+                            idx=len(self.objects)-1
+                            break
+
+            # Last, check for neighboring duplicates and combine if possible
+            for i in reversed(range(len(self.objects))):
+                if i > 0 and self.objects[i-1].code == self.objects[i].code:
+                    ovrlap = (self.objects[i-1].distance + self.objects[i-1].size) - self.objects[i].distance
+                    if ovrlap >= OBJ_MATCH_MIN_DIST:
+                        self.objects[i-1].alive = max(self.objects[i-1].alive,self.objects[i].alive)
+                        self.objects[i-1].ttl = max(self.objects[i-1].ttl,self.objects[i].ttl)
+                        self.objects[i-1].update_endpoint(self.objects[i].endpoint, False)
+                        self.objects.pop(i)
+
+        # Update the predefined class references for faster access later
+        self.next_turn_lane_obj = None
+        self.stop_yield_text_obj = None
+        self.stop_yield_line_obj = None
+
+        # select the turn code to identify below
+        if self.side == Side.Left:
+            lane_turn_code = SegmClass.lane_left_turn.value
+        elif self.side == Side.Right:
+            lane_turn_code = SegmClass.lane_right_turn.value
+        else:
+            lane_turn_code = None
+            
+        # Go through the list and update the references for the first appearance only
+        for i in range(len(self.objects)):
+            if self.objects[i].alive >= CLASS_CODE_OBJ_MIN_ALIVE and self.objects[i].size >= CLASS_CODE_OBJ_MIN_SIZE:
+                if self.next_turn_lane_obj == None and self.objects[i].code == lane_turn_code:
+                    self.next_turn_lane_obj = self.objects[i]
+                
+                if self.stop_yield_line_obj == None and self.objects[i].code in STOP_YIELD_LINE_CODES:
+                    self.stop_yield_line_obj = self.objects[i]
+
+                if self.stop_yield_text_obj == None and self.objects[i].code in STOP_YIELD_TEXT_CODES:
+                    self.stop_yield_text_obj = self.objects[i]
+                
+        # Determine the dominant arrow code
+        self.dominant_arrow_code = self.get_dominant_arrow_code()
+
+        if DEBUG_PRINT_UPDATE_OBJECT_LIST == True:
             s = f'{self.side.name} objects: '
             for i in range(len(self.objects)):
                 s += f'{self.objects[i]}  '
             print(s)
+            if self.dominant_arrow_code == None:
+                s="None"
+            else:
+                s = "%d:%s" % (self.dominant_arrow_code,SegmClass(self.dominant_arrow_code).name )
+            print("%s next_turn=%s  text=%s  line=%s  arrow=%s" % (self.side.name, self.next_turn_lane_obj, self.stop_yield_text_obj, self.stop_yield_line_obj, s))
+ 
         return
 
 
@@ -382,9 +551,11 @@ class LaneCenter:
         sizes =  [0 for i in range(len(STREET_ARROW_CODES))]
         alives =  [0 for i in range(len(STREET_ARROW_CODES))]
         n = 0
+        idx=-1
         # Go through the object list to check for arrow codes
         for i in range(len(self.objects)): 
-            if self.objects[i].code in STREET_ARROW_CODES:
+            if self.objects[i].code in STREET_ARROW_CODES and self.objects[i].alive >= CLASS_CODE_OBJ_MIN_ALIVE and \
+               self.objects[i].size >= ARROW_CODE_OBJ_MIN_SIZE: 
                 # Accumulate size and alive values individually
                 idx = STREET_ARROW_CODES.index(self.objects[i].code)
                 sizes[idx] += self.objects[i].size
@@ -392,8 +563,8 @@ class LaneCenter:
                 n += 1
 
         if n == 0:
-            # Nothing found, return nothing
-            return NOTHING_CODE
+            # Nothing found
+            return None
         elif n == 1:
             #only one found, nothing further to do 
             return STREET_ARROW_CODES[idx]

@@ -561,15 +561,21 @@ namespace StreetMaker
 
                 if (frmCameraView != null)
                     frmCameraView.Close();
-                frmCameraView = new frmCameraView(this);
-                frmCameraView.Show();
-                
-                frmCameraView.ClassNames = StreetMap.GetCurrentClassNames();
-                frmCameraView.ColorPalette = StreetMap.GetCurrentColorMap();
-                StreetMap.GenerateCameraViewImages(StreetBitmap, ovl.MidPoint, ovl.DirectionAngle);
-                frmCameraView.ViewPointMode = true;
+                try
+                {
+                    frmCameraView = new frmCameraView(this);
+                    frmCameraView.ClassNames = StreetMap.GetCurrentClassNames();
+                    frmCameraView.ColorPalette = StreetMap.GetCurrentColorMap();
+                    StreetMap.GenerateCameraViewImages(StreetBitmap, ovl.MidPoint, ovl.DirectionAngle);
+                    frmCameraView.ViewPointMode = true;
 
-                frmCameraView.StatusText = "ViewPoint Location:" + (new PointF((float)Math.Round(ovl.MidPoint.X), (float)Math.Round(ovl.MidPoint.Y))).ToString() + "  Direction:" + Utils.ToDegree(ovl.DirectionAngle).ToString("F0") + "°";
+                    frmCameraView.StatusText = "ViewPoint Location:" + (new PointF((float)Math.Round(ovl.MidPoint.X), (float)Math.Round(ovl.MidPoint.Y))).ToString() + "  Direction:" + Utils.ToDegree(ovl.DirectionAngle).ToString("F0") + "°";
+                    frmCameraView.Show();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Exception:" + ex.Message);
+                }
                 tsmiShowViewPoints.Checked = showViewPoints;
             }
         }

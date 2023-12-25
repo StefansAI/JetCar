@@ -91,11 +91,27 @@ NOTHING_CODES = [NOTHING_CODE]
 MY_LANE_ONLY_CODES = [  
     LANE_MY_DRIVING_DIR_CODE]
  
+# Code list definition for my own lane and left turn lane
+MY_LANE_AND_LEFT_TURN_CODES = [  
+    LANE_MY_DRIVING_DIR_CODE,
+    LANE_LEFT_TURN_CODE]
+ 
+# Code list definition for my own lane and right turn lane
+MY_LANE_AND_RIGHT_TURN_CODES = [  
+    LANE_MY_DRIVING_DIR_CODE,
+    LANE_RIGHT_TURN_CODE]
+
 # Code list definition for all of my lanes 
 MY_LANE_CODES = [  
     LANE_MY_DRIVING_DIR_CODE, 
     LANE_LEFT_TURN_CODE, 
     LANE_RIGHT_TURN_CODE]
+
+# Code definitions identifying blocking the straight ahead direction
+STRAIGHT_BLOCK_CODES = [
+    NOTHING_CODE, 
+    SegmClass.lane_wrong_dir.value
+]
 
 # Code list definition for all possible lane limits on 
 # the left side of the lane straight ahead
@@ -104,8 +120,10 @@ STRAIGHT_LANE_LIMIT_CODES_LEFT = [
     SegmClass.white_shoulder_line.value, \
     SegmClass.white_solid_line.value, \
     SegmClass.white_dashed_line.value, \
+    SegmClass.white_double_line.value, \
     SegmClass.yellow_solid_line.value, \
     SegmClass.yellow_dashed_line.value, \
+    SegmClass.yellow_double_line.value, \
     SegmClass.lane_wrong_dir.value, \
     SegmClass.lane_left_turn.value, \
     SegmClass.lane_right_turn.value]
@@ -117,8 +135,10 @@ STRAIGHT_LANE_LIMIT_CODES_RIGHT = [
     SegmClass.white_shoulder_line.value, \
     SegmClass.white_solid_line.value, \
     SegmClass.white_dashed_line.value, \
+    SegmClass.white_double_line.value, \
     SegmClass.yellow_solid_line.value, \
     SegmClass.yellow_dashed_line.value, \
+    SegmClass.yellow_double_line.value, \
     SegmClass.lane_wrong_dir.value, \
     SegmClass.lane_right_turn.value]
 
@@ -128,8 +148,10 @@ LEFT_TURN_LIMIT_CODES_LEFT = [
     SegmClass.white_shoulder_line.value, \
     SegmClass.white_solid_line.value, \
     SegmClass.white_dashed_line.value, \
+    SegmClass.white_double_line.value, \
     SegmClass.yellow_solid_line.value, \
     SegmClass.yellow_dashed_line.value, \
+    SegmClass.yellow_double_line.value, \
     SegmClass.lane_wrong_dir.value]
 
 # Code list definition for all possible lane limits on 
@@ -148,6 +170,15 @@ RIGHT_TURN_LIMIT_CODES_RIGHT = LEFT_TURN_LIMIT_CODES_LEFT
 STREET_SIGN_CODES = [ 
     STOP_TEXT_CODE]
 
+# Code list for stop and yield texts
+STOP_YIELD_TEXT_CODES = [
+    STOP_TEXT_CODE]
+
+# Code list for stop and yield lines
+STOP_YIELD_LINE_CODES = [
+    SegmClass.yield_line.value, \
+    SegmClass.stop_line.value]
+
 # Code list definition of all arrows
 STREET_ARROW_CODES = [ 
     SegmClass.arrow_straight.value, \
@@ -160,7 +191,6 @@ STREET_ARROW_CODES = [
 
 # Code list definitions of intersection signs to keep track
 INTERSECTION_OBJECT_CODES = [ 
-    #SegmClass.wait_line.value, \
     SegmClass.yield_line.value, \
     SegmClass.stop_line.value, \
     SegmClass.stop_text.value, \
@@ -176,22 +206,22 @@ INTERSECTION_OBJECT_CODES = [
 # Combined sets of code lists and dx/dy combinations for the different 
 # directions for left lane limit searches
 DEFINITIONS_LEFT = [
-    (NOTHING_CODES,      NOTHING_CODES,                    0, 0), # Nowhere
-    (MY_LANE_CODES,      LEFT_TURN_LIMIT_CODES_LEFT,       0,+1), # Left
-    (MY_LANE_ONLY_CODES, LEFT_TURN_LIMIT_CODES_LEFT,      -1,+1), # LeftDiag
-    (MY_LANE_ONLY_CODES, STRAIGHT_LANE_LIMIT_CODES_LEFT,  -1, 0), # Straight
-    (MY_LANE_ONLY_CODES, LEFT_TURN_LIMIT_CODES_LEFT,      -1,-1), # RightDiag
-    (MY_LANE_CODES,      LEFT_TURN_LIMIT_CODES_LEFT,       0,-1)] # Right
+    (NOTHING_CODES,                 NOTHING_CODES,                    0, 0), # Nowhere
+    (MY_LANE_AND_LEFT_TURN_CODES,   LEFT_TURN_LIMIT_CODES_LEFT,       0,+1), # Left
+    (MY_LANE_AND_LEFT_TURN_CODES,   LEFT_TURN_LIMIT_CODES_LEFT,      -1,+1), # LeftDiag
+    (MY_LANE_ONLY_CODES,            STRAIGHT_LANE_LIMIT_CODES_LEFT,  -1, 0), # Straight
+    (MY_LANE_AND_RIGHT_TURN_CODES,  RIGHT_TURN_LIMIT_CODES_LEFT,     -1,-1), # RightDiag
+    (MY_LANE_AND_RIGHT_TURN_CODES,  RIGHT_TURN_LIMIT_CODES_LEFT,      0,-1)] # Right
 
 # Combined sets of code lists and dx/dy combinations for the different 
 # directions for right lane limit searches
 DEFINITIONS_RIGHT = [
-    (NOTHING_CODES,      NOTHING_CODES,                    0, 0), # Nowhere
-    (MY_LANE_CODES,      LEFT_TURN_LIMIT_CODES_RIGHT,      0,-1), # Left
-    (MY_LANE_ONLY_CODES, LEFT_TURN_LIMIT_CODES_RIGHT,     +1,-1), # LeftDiag
-    (MY_LANE_ONLY_CODES, STRAIGHT_LANE_LIMIT_CODES_RIGHT, +1, 0), # Straight
-    (MY_LANE_ONLY_CODES, LEFT_TURN_LIMIT_CODES_RIGHT,     +1,+1), # RightDiag
-    (MY_LANE_CODES,      LEFT_TURN_LIMIT_CODES_RIGHT,      0,+1)] # Right
+    (NOTHING_CODES,                 NOTHING_CODES,                    0, 0), # Nowhere
+    (MY_LANE_AND_LEFT_TURN_CODES,   LEFT_TURN_LIMIT_CODES_RIGHT,      0,-1), # Left
+    (MY_LANE_AND_LEFT_TURN_CODES,   LEFT_TURN_LIMIT_CODES_RIGHT,     +1,-1), # LeftDiag
+    (MY_LANE_ONLY_CODES,            STRAIGHT_LANE_LIMIT_CODES_RIGHT, +1, 0), # Straight
+    (MY_LANE_AND_RIGHT_TURN_CODES,  RIGHT_TURN_LIMIT_CODES_RIGHT,    +1,+1), # RightDiag
+    (MY_LANE_AND_RIGHT_TURN_CODES,  RIGHT_TURN_LIMIT_CODES_RIGHT,     0,+1)] # Right
 
 
 # Combined sets of direction marking codes and allowed turns for left, straight and right

@@ -2,7 +2,7 @@
 <annotation>
   <identifier>StreetMaker StreetMap</identifier>
   <size>
-    <drawing_width>2337</drawing_width>
+    <drawing_width>2286</drawing_width>
     <drawing_height>2042</drawing_height>
   </size>
   <object>
@@ -26,8 +26,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>0</angle>
-      <location_x>589.6517</location_x>
-      <location_y>341.108</location_y>
+      <location_x>622.0193</location_x>
+      <location_y>332.3366</location_y>
       <lane>
         <item>
           <overlay />
@@ -70,8 +70,8 @@
         </item>
       </street_descriptor>
       <angle>0</angle>
-      <location_x>889.6517</location_x>
-      <location_y>341.108</location_y>
+      <location_x>922.0193</location_x>
+      <location_y>332.3366</location_y>
       <lane>
         <item>
           <overlay />
@@ -107,8 +107,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>90</angle>
-      <location_x>409.6517</location_x>
-      <location_y>521.108</location_y>
+      <location_x>442.0195</location_x>
+      <location_y>512.3366</location_y>
       <lane>
         <item>
           <overlay />
@@ -138,8 +138,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>-90</angle>
-      <location_x>289.6517</location_x>
-      <location_y>521.108</location_y>
+      <location_x>322.0196</location_x>
+      <location_y>512.3366</location_y>
       <lane>
         <item>
           <overlay />
@@ -210,8 +210,8 @@
         </item>
       </street_descriptor>
       <angle>0</angle>
-      <location_x>889.6517</location_x>
-      <location_y>1101.108</location_y>
+      <location_x>922.0193</location_x>
+      <location_y>1092.337</location_y>
       <lane>
         <item>
           <overlay />
@@ -272,8 +272,8 @@
         </item>
       </street_descriptor>
       <angle>90</angle>
-      <location_x>409.6517</location_x>
-      <location_y>1261.108</location_y>
+      <location_x>442.0195</location_x>
+      <location_y>1252.337</location_y>
       <lane>
         <item>
           <overlay />
@@ -309,8 +309,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>0</angle>
-      <location_x>1329.652</location_x>
-      <location_y>341.108</location_y>
+      <location_x>1362.019</location_x>
+      <location_y>332.3366</location_y>
       <lane>
         <item>
           <overlay />
@@ -340,8 +340,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>0</angle>
-      <location_x>1629.652</location_x>
-      <location_y>341.108</location_y>
+      <location_x>1662.019</location_x>
+      <location_y>332.3366</location_y>
       <lane>
         <item>
           <overlay />
@@ -371,8 +371,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>-90</angle>
-      <location_x>289.652</location_x>
-      <location_y>1261.108</location_y>
+      <location_x>322.0199</location_x>
+      <location_y>1252.337</location_y>
       <lane>
         <item>
           <overlay />
@@ -402,8 +402,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>180</angle>
-      <location_x>589.6519</location_x>
-      <location_y>1741.108</location_y>
+      <location_x>622.0195</location_x>
+      <location_y>1732.337</location_y>
       <lane>
         <item>
           <overlay />
@@ -460,8 +460,8 @@
         </item>
       </street_descriptor>
       <angle>180</angle>
-      <location_x>1329.652</location_x>
-      <location_y>1741.107</location_y>
+      <location_x>1362.019</location_x>
+      <location_y>1732.336</location_y>
       <lane>
         <item>
           <overlay />
@@ -503,8 +503,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>0</angle>
-      <location_x>589.6519</location_x>
-      <location_y>1861.108</location_y>
+      <location_x>622.0195</location_x>
+      <location_y>1852.337</location_y>
       <lane>
         <item>
           <overlay>
@@ -541,8 +541,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>0</angle>
-      <location_x>1329.653</location_x>
-      <location_y>1861.108</location_y>
+      <location_x>1362.02</location_x>
+      <location_y>1852.337</location_y>
       <lane>
         <item>
           <overlay />
@@ -579,8 +579,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>-90</angle>
-      <location_x>1809.652</location_x>
-      <location_y>1561.108</location_y>
+      <location_x>1842.019</location_x>
+      <location_y>1552.337</location_y>
       <lane>
         <item>
           <overlay />
@@ -623,8 +623,8 @@
         </item>
       </street_descriptor>
       <angle>-90</angle>
-      <location_x>1809.652</location_x>
-      <location_y>821.1082</location_y>
+      <location_x>1842.019</location_x>
+      <location_y>812.3369</location_y>
       <lane>
         <item>
           <overlay />
@@ -660,8 +660,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>90</angle>
-      <location_x>1929.652</location_x>
-      <location_y>821.1082</location_y>
+      <location_x>1962.019</location_x>
+      <location_y>812.3369</location_y>
       <lane>
         <item>
           <overlay />
@@ -691,8 +691,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>90</angle>
-      <location_x>1929.652</location_x>
-      <location_y>1561.108</location_y>
+      <location_x>1962.019</location_x>
+      <location_y>1552.337</location_y>
       <lane>
         <item>
           <overlay />
@@ -722,8 +722,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>1.4210854715202E-13</angle>
-      <location_x>569.6512</location_x>
-      <location_y>1101.108</location_y>
+      <location_x>602.0188</location_x>
+      <location_y>1092.337</location_y>
       <lane>
         <item>
           <overlay>
@@ -767,8 +767,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>0</angle>
-      <location_x>1329.652</location_x>
-      <location_y>1101.108</location_y>
+      <location_x>1362.019</location_x>
+      <location_y>1092.337</location_y>
       <lane>
         <item>
           <overlay>
@@ -812,8 +812,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>-90</angle>
-      <location_x>1049.652</location_x>
-      <location_y>501.108</location_y>
+      <location_x>1082.019</location_x>
+      <location_y>492.3367</location_y>
       <lane>
         <item>
           <overlay>
@@ -857,8 +857,8 @@
       <ramp_radius>120</ramp_radius>
       <ramp_curve_angle>45</ramp_curve_angle>
       <angle>90.0000000000001</angle>
-      <location_x>1169.653</location_x>
-      <location_y>1581.107</location_y>
+      <location_x>1202.02</location_x>
+      <location_y>1572.336</location_y>
       <lane>
         <item>
           <overlay />

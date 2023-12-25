@@ -60,29 +60,57 @@ STEERING_X_SCALE = 2.5*IMG_XC
 # Number of cycles to stop at the wait line
 THROTTLE_STOP_CYCLES = 10
 # Throttle value when approaching an intersection
-THROTTLE_VALUE_APPROACHING_INTERSECTION = 0.75
+THROTTLE_VALUE_APPROACHING_INTERSECTION = 0.9
 # Throttle value when entering the inner intersection area
-THROTTLE_VALUE_ENTERING_INTERSECTION = 0.6
+THROTTLE_VALUE_ENTERING_INTERSECTION = 0.8
 # Throttle value to be used in a turn of an intersection
-THROTTLE_VALUE_IN_TURN = 0.8
+THROTTLE_VALUE_IN_TURN = 0.95
 # Throttle value to be used in a curve outside intersections
-THROTTLE_VALUE_IN_CURVE = 0.9
+THROTTLE_VALUE_IN_CURVE = 1.1
 # Steering value threshold for reducing the speed to THROTTLE_VALUE_IN_CURVE
-THROTTLE_CURVE_STEERING_THRESHOLD = 0.3
+THROTTLE_CURVE_STEERING_THRESHOLD = 0.5
+# Throttle value after a stop to overcome friction and get going
+THROTTLE_VALUE_AFTER_STOP = 1.0
 # Filter coefficient to low pass new throttle value with old one
 THROTTLE_VALUE_FILTER_COEFF = 0.25
-# Number of cycles to keep the current steering value when turning
-STEERING_FIXED_TURN_CYCLES = 16
-# Cycle count in fixed turn to switch to diagonal search
-STEERING_FIXED_TURN_DIAG_CYCLES = (STEERING_FIXED_TURN_CYCLES//2) + 2
+# Number of cycles to keep the current steering value when turning left
+STEERING_FIXED_TURN_CYCLES_LEFT = 20
+# Number of cycles to keep the current steering value when turning right
+STEERING_FIXED_TURN_CYCLES_RIGHT = 20
+# Number of cycles to keep the current steering value when turning right on offramp
+STEERING_FIXED_TURN_CYCLES_RIGHT_OFFRAMP = 15
+# Cycle count in fixed turn to switch to diagonal search when turning left
+STEERING_FIXED_TURN_DIAG_CYCLES_LEFT = STEERING_FIXED_TURN_CYCLES_LEFT - 8
+# Cycle count in fixed turn to switch to diagonal search when turning right
+STEERING_FIXED_TURN_DIAG_CYCLES_RIGHT = STEERING_FIXED_TURN_CYCLES_RIGHT - 6
+# Cycle count in fixed turn to switch to diagonal search when turning right
+STEERING_FIXED_TURN_DIAG_CYCLES_RIGHT_OFFRAMP = STEERING_FIXED_TURN_CYCLES_RIGHT_OFFRAMP - 6
+# Threshold to separate off ramp from sharp right turn
+RIGHT_OFFRAMP_SLOPE_THRESHOLD = 1.0
 # Fixed steering value used for left turn, left turn can be wider
-STEERING_LEFT_TURN_VALUE = -0.8
+STEERING_LEFT_TURN_VALUE = -1
 # Fixed steering value used for right turn, right turn must be tight
 STEERING_RIGHT_TURN_VALUE = 1.0
+# Fixed steering value used for right turn when going on off-ramp
+STEERING_RIGHT_TURN_VALUE_OFFRAMP = 0.7
+# Minimum size of left turn code object
+MIN_TURN_LEFT_OBJ_SIZE = 30
+# Minimum size of right turn code object
+MIN_TURN_RIGHT_OBJ_SIZE = 40
 # Minimum distance of left turn code to ORIGIN to start turning left
-MIN_TURN_LEFT_DISTANCE = 100
+MIN_TURN_LEFT_DISTANCE = 60
 # Minimum distance of right turn code to ORIGIN to start turning right
-MIN_TURN_RIGHT_DISTANCE = 60
+MIN_TURN_RIGHT_DISTANCE = 30
+# Minimum distance of right turn code to ORIGIN to start turning right into an offramp
+MIN_TURN_RIGHT_DISTANCE_OFFRAMP = 65
+# Minimum distance of left turn code to ORIGIN to recognize an intersection
+MIN_INTERSECTION_LEFT_TURN_DISTANCE = 120
+# Minimum distance of right turn code to ORIGIN to recognize an intersection
+MIN_INTERSECTION_RIGHT_TURN_DISTANCE = 80
+# Minimum distance of left turn code to ORIGIN to recognize an intersection
+MIN_INTERSECTION_LEFT_TURN_SIZE = 10
+# Minimum distance of right turn code to ORIGIN to recognize an intersection
+MIN_INTERSECTION_RIGHT_TURN_SIZE = 15
 # Minimum limit found point count to check for switching back to straight after turn
 MINIMUM_LIMIT_FOUND_POINTS = (2*N_SEARCH_POINTS)//3
 # A threshold to smooth out small steering changes with a low pass
@@ -90,9 +118,21 @@ STEERING_FILTER_THRESHOLD = 0.05
 # An average slope threshold for intersection detection to see if there is "Nothing" ahead
 AVG_SLOPE_THRESHOLD_INTERSECTION = 5
 # Switch back to straight direction when new average slope value goes above after turn
-AVG_SLOPE_THRESHOLD_STRAIGHT = 3
+AVG_SLOPE_THRESHOLD_STRAIGHT = 1.5
 # Switch to diagonal direction when new verage slope falls below
 AVG_SLOPE_THRESHOLD_DIAG = 0.9
+# Standard deviation threshold for allowing a left or right lane limit correction
+MAX_STDDEV_LR_CORRECTION_VALID = 10
+# Standard deviation threshold for allowing a center lane limit correction
+MAX_STDDEV_CENTER_CORRECTION_VALID = 3
+# Standard deviation threshold for allowing to switch from fixed steering to steering control
+MAX_STDDEV_STEERING_VALID = 3
+# Minimum distance to recognize stop text, yield text as valid for intersection approach
+TEXT_MIN_ORIGIN_DIST_APPROACH = 10*CLASS_CODE_OBJ_ORIGIN_DIST
+# Minimum distance to recognize stop text, yield text as valid for intersection enter
+TEXT_MIN_ORIGIN_DIST_ENTER = 5*CLASS_CODE_OBJ_ORIGIN_DIST
+# Minimum size to recognize stop text, yield text as valid
+TEXT_MIN_ORIGIN_SIZE = 2*CLASS_CODE_OBJ_MIN_SIZE
 
 # ============================================================================================
 
@@ -115,6 +155,7 @@ class LaneTracker:
         self.steering_value = 0
         self.new_steering_value = 0
         self.steering_fixed_count = 0
+        self.steering_fixed_count_diag_cycles = STEERING_FIXED_TURN_DIAG_CYCLES_RIGHT
         self.turn_left_allowed = True
         self.turn_right_allowed = True
         self.go_straight_allowed = True
@@ -128,6 +169,7 @@ class LaneTracker:
         self.intersection = False
         self.stop_detected = False
         self.slope_avg = 0
+        self.force_initxy = False
 
         if jetcar_lane.DEBUG_PRINT_FIND_LIMITS == True:
             print(self.lane_limits_left)
@@ -142,10 +184,10 @@ class LaneTracker:
 
         if jetcar_lane.DEBUG_PRINT_FIND_LIMITS == True:
             print("find limits left:")
-        self.lane_limits_left.find_limits(mask, self.direction)
+        self.lane_limits_left.find_limits(mask, self.direction, self.force_initxy)
         if jetcar_lane.DEBUG_PRINT_FIND_LIMITS == True:
             print("find limits right:")
-        self.lane_limits_right.find_limits(mask, self.direction)
+        self.lane_limits_right.find_limits(mask, self.direction, self.force_initxy)
 
         if jetcar_lane.DEBUG_PRINT_FIND_LIMITS == True or DEBUG_PRINT_GET_LANE_LIMITS == True:
             print("stddev left/right: %.3f / %.3f  limits_found: %d / %d" % \
@@ -168,7 +210,7 @@ class LaneTracker:
         correct_center = False
         correct_right = (self.lane_limits_right.limit_found_count <= self.lane_limits_left.limit_found_count) and \
                         (self.lane_limits_right.stddev > 2*self.lane_limits_left.stddev) and \
-                        (self.lane_limits_left.stddev < 10)
+                        (self.lane_limits_left.stddev < MAX_STDDEV_LR_CORRECTION_VALID)
 
         if correct_right == True:
             if DEBUG_PRINT_GET_LANE_LIMITS == True:
@@ -176,13 +218,13 @@ class LaneTracker:
         else:
             correct_left = (self.lane_limits_left.limit_found_count <= self.lane_limits_right.limit_found_count) and \
                            (self.lane_limits_left.stddev > 2*self.lane_limits_right.stddev) and \
-                           (self.lane_limits_right.stddev < 10)
+                           (self.lane_limits_right.stddev < MAX_STDDEV_LR_CORRECTION_VALID)
             if correct_left == True:
                 if DEBUG_PRINT_GET_LANE_LIMITS == True:
                     print("correct left:")
             else:
-                correct_center = (self.lane_limits_left.stddev > 3) and \
-                                 (self.lane_limits_left.stddev > 3)
+                correct_center = (self.lane_limits_left.stddev > MAX_STDDEV_CENTER_CORRECTION_VALID) and \
+                                 (self.lane_limits_left.stddev > MAX_STDDEV_CENTER_CORRECTION_VALID)
 
                 if DEBUG_PRINT_GET_LANE_LIMITS == True and correct_center == True:
                     print("correct center:")
@@ -316,6 +358,7 @@ class LaneTracker:
             print("get_lane_limits done: left=%.1f right==%.1f slope_avg=%.1f" % (self.lane_limits_left.slope, self.lane_limits_right.slope, self.slope_avg))
         return
 
+
     def update_lane_center_classes(self, mask):
         """ Update the segmentation class codes ond object lists in the center 
         of the lanes left and right and center lane. 
@@ -324,9 +367,11 @@ class LaneTracker:
         self.lane_center.get_center_classes(mask)
         self.lane_right.get_center_classes(mask)
 
-        self.lane_left.update_objects()
-        self.lane_center.update_objects()
-        self.lane_right.update_objects()
+        group_move_avg = (self.lane_left.move_avg + self.lane_center.move_avg + self.lane_right.move_avg)//3
+
+        self.lane_left.update_objects(group_move_avg)
+        self.lane_center.update_objects(group_move_avg)
+        self.lane_right.update_objects(group_move_avg)
 
         if jetcar_lane.DEBUG_MASK_IMG == True and jetcar_lane.DEBUG_MASK_IMG_CENTER == True:
             mask_img = jetcar_lane.DEBUG_MASK_IMG_REFERENCE.copy()
@@ -346,7 +391,7 @@ class LaneTracker:
                 self.go_straight_allowed = DEFINITIONS_DIRECTIONS[i][2]
                 self.turn_right_allowed = DEFINITIONS_DIRECTIONS[i][3]
                 if DEBUG_PRINT_PROCESS_CLASSES == True:
-                    print("i:%d code: %d=%s in DEFINITIONS_DIRECTIONS, allowed: left=%s straight=%s right=%s" % \
+                    print("i=%d code: %d:%s in DEFINITIONS_DIRECTIONS, allowed: left=%s straight=%s right=%s" % \
                           (i, code, SegmClass(code).name, self.turn_left_allowed, self.go_straight_allowed, self.turn_right_allowed))
                 return
         return
@@ -359,6 +404,9 @@ class LaneTracker:
         self.lane_left.remove_intersection_objects()
         self.lane_center.remove_intersection_objects()
         self.lane_right.remove_intersection_objects()
+        self.lane_left.clear_expired_turns()
+        self.lane_center.clear_expired_turns()
+        self.lane_right.clear_expired_turns()       
         self.intersection = False
         self.signal_left_enable = False
         self.signal_right_enable = False
@@ -388,8 +436,9 @@ class LaneTracker:
         next_turn_direction     -- direction code for the next upcoming turn.  """
 
         if DEBUG_PRINT_PROCESS_CLASSES == True:
-            print("process_classes direction:%s  next_turn_direction:%s  stop_count=%d " % (Direction(self.direction).name, Direction(next_turn_direction).name, self.stop_count))
+            print("process_classes direction=%s  next_turn_direction=%s  stop_count=%d " % (Direction(self.direction).name, Direction(next_turn_direction).name, self.stop_count))
 
+        # First, handle stop time by counting down the stop_count timer and returning without doing anything else
         if self.stop_count > 0:
             self.stop_count -= 1
             if self.stop_count > 0:
@@ -399,106 +448,117 @@ class LaneTracker:
                 self.lane_left.remove_intersection_objects()
                 self.lane_center.remove_intersection_objects()
                 self.lane_right.remove_intersection_objects()
-                self.throttle_value = THROTTLE_VALUE_ENTERING_INTERSECTION
+                self.throttle_value = THROTTLE_VALUE_AFTER_STOP
             return
  
-        self.intersection = False
+        # In the case of going straight through an intersection, check if any turns had been passed and are expired so we can init for next intersection
+        if self.intersection == True and self.direction == Direction.Straight and \
+           self.lane_left.next_turn_lane_obj == None and self.lane_right.next_turn_lane_obj == None and \
+           (len(self.lane_left.expired_turns) > 0 or len(self.lane_right.expired_turns) > 0):
+            self.init_for_next_intersection()
 
-        code = self.lane_center.get_dominant_arrow_code()
-        if code != NOTHING_CODE:
-            self.set_direction_enables(code)
+        # Reset intersection to re-assess in this cycle
+        self.intersection = False
+        
+        # Check for any arrow markings in our lane and enable possible directions accordingly, slow down
+        if self.lane_center.dominant_arrow_code != None:
+            self.set_direction_enables(self.lane_center.dominant_arrow_code)
             self.throttle_new_value = THROTTLE_VALUE_APPROACHING_INTERSECTION
             self.intersection = True
             if DEBUG_PRINT_PROCESS_CLASSES == True:
-                print("dominant arrow code: %d=%s" % (code, SegmClass(code).name))
+                print("dominant arrow code: %d:%s" % (self.lane_center.dominant_arrow_code, SegmClass(self.lane_center.dominant_arrow_code).name))
 
-        for i in range(len(self.lane_center.objects)):
-            if self.lane_center.objects[i].alive > CLASS_CODE_OBJ_TTL:
-                code = self.lane_center.objects[i].code
-                # Check codes in front
-                if self.stop_detected == False and code == STOP_TEXT_CODE and self.lane_center.objects[i].distance < 5*CLASS_CODE_OBJ_ORIGIN_DIST and \
-                    self.lane_center.objects[i].size >= CLASS_CODE_OBJ_MIN_SIZE and self.lane_center.objects[i].alive >= CLASS_CODE_OBJ_MIN_ALIVE:
-                    if DEBUG_PRINT_PROCESS_CLASSES == True:
-                        print("i:%d code: %d=%s == STOP_TEXT_CODE at dist=%d" % (i, code, SegmClass(code).name, self.lane_center.objects[i].distance))
-                    self.stop_detected = True
-                    self.throttle_new_value = THROTTLE_VALUE_ENTERING_INTERSECTION
-                    self.intersection = True
-                    self.brake_light_enable = True
+        # If there is any stop text coming up in range, slow down and prepare to stop
+        text_obj = self.lane_center.stop_yield_text_obj
+        if text_obj != None and text_obj.code == SegmClass.stop_text.value and text_obj.distance < TEXT_MIN_ORIGIN_DIST_APPROACH and \
+           text_obj.size >= TEXT_MIN_ORIGIN_SIZE:
+            self.stop_detected = True
+            self.intersection = True
 
-                elif code in INTERSECTION_OBJECT_CODES and self.lane_center.objects[i].distance > CLASS_CODE_OBJ_ORIGIN_DIST:
-                    self.throttle_new_value = THROTTLE_VALUE_APPROACHING_INTERSECTION
-                    self.intersection = True
-                    if DEBUG_PRINT_PROCESS_CLASSES == True:
-                        print("i:%d code: %d=%s in INTERSECTION_OBJECT_CODES" % (i, code, SegmClass(code).name))
+            if DEBUG_PRINT_PROCESS_CLASSES == True:
+                print("lane_center.stop_yield_text_obj: %d:%s size=%d alive=%d dist=%d" % (text_obj.code, SegmClass(text_obj.code).name, text_obj.size, text_obj.alive, text_obj.distance))
 
-                elif self.stop_detected == True:
-                    if (code == STOP_LINE_CODE and self.lane_center.objects[i].distance <= CLASS_CODE_OBJ_ORIGIN_DIST) or \
-                       (code == STOP_TEXT_CODE and self.lane_center.objects[i].distance <= 0):
-                        if DEBUG_PRINT_PROCESS_CLASSES == True:
-                            print("i:%d code: %d=%s == STOP_LINE_CODE and stop_detected==True" % (i, code, SegmClass(code).name))
-                        self.throttle_new_value = 0
-                        self.throttle_value = 0
-                        self.stop_count = THROTTLE_STOP_CYCLES
-                        self.brake_light_enable = True
-                        return
+            if text_obj.distance > TEXT_MIN_ORIGIN_DIST_ENTER:
+                self.throttle_new_value = THROTTLE_VALUE_APPROACHING_INTERSECTION
+            elif (text_obj.distance + text_obj.size) >= -10:
+                self.throttle_new_value = THROTTLE_VALUE_ENTERING_INTERSECTION
+            else:
+                self.throttle_new_value = 0
+                self.throttle_value = 0
+                self.stop_count = THROTTLE_STOP_CYCLES
+                self.brake_light_enable = True
+                if DEBUG_PRINT_PROCESS_CLASSES == True:
+                    print("STOP!")
+                return
 
+        # If the stop line is close enough, stop now, set the counter and return
+        line_obj = self.lane_center.stop_yield_line_obj
+        if line_obj != None and line_obj.code == SegmClass.stop_line.value and line_obj.distance <= CLASS_CODE_OBJ_ORIGIN_DIST and \
+            self.stop_detected == True and self.stop_detected == True:
+            self.throttle_new_value = 0
+            self.throttle_value = 0
+            self.stop_count = THROTTLE_STOP_CYCLES
+            self.brake_light_enable = True
+            if DEBUG_PRINT_PROCESS_CLASSES == True:
+                print("lane_center.stop_yield_line_obj: %d:%s size=%d alive=%d dist=%d" % (line_obj.code, SegmClass(line_obj.code).name, line_obj.size, line_obj.alive, line_obj.distance))
+                print("STOP!")
+            return
 
 
         # If there were no arrows or other signs indicating an intersection and the car is not in a tight curve, check for left and right turns
         if self.intersection == False and abs(self.slope_avg) > AVG_SLOPE_THRESHOLD_INTERSECTION:
             # Check left lane for a turn lane
-            for i in range(len(self.lane_left.objects)):
-                if self.lane_left.objects[i].code == LANE_LEFT_TURN_CODE and self.lane_left.objects[i].size >= CLASS_CODE_OBJ_MIN_SIZE and \
-                   self.lane_left.objects[i].alive >= CLASS_CODE_OBJ_MIN_ALIVE:
-                    self.intersection = True
-                    self.throttle_new_value = THROTTLE_VALUE_APPROACHING_INTERSECTION
-                    self.turn_left_allowed = True
-                    if DEBUG_PRINT_PROCESS_CLASSES == True:
-                        print("i:%d code: %d=%s == LANE_LEFT_TURN_CODE" % (i,self.lane_left.objects[i].code,\
-                                                                        SegmClass(self.lane_left.objects[i].code).name))
-                    break
+            lturn_obj = self.lane_left.next_turn_lane_obj
+            if lturn_obj != None and lturn_obj.distance < MIN_INTERSECTION_LEFT_TURN_DISTANCE and lturn_obj.size > MIN_INTERSECTION_LEFT_TURN_SIZE:
+                self.intersection = True
+                self.throttle_new_value = THROTTLE_VALUE_APPROACHING_INTERSECTION
+                if DEBUG_PRINT_PROCESS_CLASSES == True:
+                    print("lane_left.next_turn_lane_obj size=%d alive=%d dist=%d" % (lturn_obj.size,lturn_obj.alive,lturn_obj.distance))
 
             # Check right lane for a turn lane
-            for i in range(len(self.lane_right.objects)):
-                if self.lane_right.objects[i].code == LANE_RIGHT_TURN_CODE and self.lane_right.objects[i].size >= 30 and \
-                   self.lane_right.objects[i].alive >= CLASS_CODE_OBJ_MIN_ALIVE and self.lane_right.objects[i].distance < 90:
-                    self.intersection = True
-                    self.throttle_new_value = THROTTLE_VALUE_APPROACHING_INTERSECTION
-                    self.turn_right_allowed = True
-                    if DEBUG_PRINT_PROCESS_CLASSES == True:
-                        print("i:%d code: %d=%s == LANE_RIGHT_TURN_CODE" % (i,self.lane_right.objects[i].code,\
-                                                                            SegmClass(self.lane_right.objects[i].code).name))
-                    break
+            rturn_obj = self.lane_right.next_turn_lane_obj
+            if rturn_obj != None and rturn_obj.distance < MIN_INTERSECTION_RIGHT_TURN_DISTANCE and rturn_obj.size > MIN_INTERSECTION_RIGHT_TURN_SIZE:
+                self.intersection = True
+                self.throttle_new_value = THROTTLE_VALUE_APPROACHING_INTERSECTION
+                if DEBUG_PRINT_PROCESS_CLASSES == True:
+                    print("lane_right.next_turn_lane_obj size=%d alive=%d dist=%d" % (rturn_obj.size,rturn_obj.alive,rturn_obj.distance))
 
             # If there were no arrows, but there is an intersection, check if straight forward is allowed
-            if self.intersection == True and len(self.lane_center.objects) > 0:
-                for i in range(len(self.lane_center.objects)-1, 0):
-                    if self.lane_center.objects[i].code in [NOTHING_CODE, SegmClass.lane_wrong_dir.value] and \
-                       self.lane_center.objects[i].size >= CLASS_CODE_OBJ_MIN_SIZE and self.lane_center.objects[i].alive >= CLASS_CODE_OBJ_MIN_ALIVE:
-                        # Somethimes, the condition above becomes true when an intersection comes up after a curve, so check the neighbors too
-                        if self.lane_left.objects[len(self.lane_left.objects)-1].code in [NOTHING_CODE, SegmClass.lane_wrong_dir.value] and \
-                           self.lane_right.objects[len(self.lane_right.objects)-1].code in [NOTHING_CODE, SegmClass.lane_wrong_dir.value]:
-                            self.go_straight_allowed = False
-                            if DEBUG_PRINT_PROCESS_CLASSES == True:
-                                print("Straight not allowed! code: %d=%s in Nothing" % (self.lane_center.codes[N_CENTER_CLASS_POINTS-1].code,\
-                                                                                        SegmClass(self.lane_center.codes[N_CENTER_CLASS_POINTS-1].code).name))
+            # To avoid false positives, check the last 2 codes in each lane
+            if self.intersection == True and self.go_straight_allowed == True and \
+               self.lane_center.codes[N_CENTER_CLASS_POINTS-1] in STRAIGHT_BLOCK_CODES and \
+               self.lane_center.codes[N_CENTER_CLASS_POINTS-2] in STRAIGHT_BLOCK_CODES and \
+               self.lane_left.codes[N_CENTER_CLASS_POINTS-1] in STRAIGHT_BLOCK_CODES and \
+               self.lane_left.codes[N_CENTER_CLASS_POINTS-2] in STRAIGHT_BLOCK_CODES and \
+               self.lane_right.codes[N_CENTER_CLASS_POINTS-1] in STRAIGHT_BLOCK_CODES and \
+               self.lane_right.codes[N_CENTER_CLASS_POINTS-2] in STRAIGHT_BLOCK_CODES:
+                
+                self.go_straight_allowed = False
+
+                if DEBUG_PRINT_PROCESS_CLASSES == True and self.go_straight_allowed == False:
+                    print("Straight not allowed! codes: left=%d:%s center=%d:%s right=%d:%s" % (
+                          self.lane_left.objects[-1].code, SegmClass(self.lane_left.objects[-1].code).name,
+                          self.lane_center.objects[-1].code, SegmClass(self.lane_center.objects[-1].code).name,
+                          self.lane_right.objects[-1].code, SegmClass(self.lane_right.objects[-1].code).name))
 
         # Found intersection conditions
         if self.intersection == True:
             # In the special case that straight forward is requested but it is not allowed, just stop and wait
             if next_turn_direction == Direction.Straight and self.go_straight_allowed == False:
-                self.signal_left_enable = True
-                self.signal_right_enable = True
-                self.new_steering_value = 0
-                self.steering_value = 0
-                self.throttle_new_value = 0
-                self.throttle_value = 0
-                self.brake_light_enable = True
-                if DEBUG_PRINT_PROCESS_CLASSES == True:
-                    print("process_classes done, full stop: straight not allowed")
-                return
+                if (self.lane_left.next_turn_lane_obj != None and self.lane_left.next_turn_lane_obj.distance <= MIN_TURN_LEFT_DISTANCE and self.lane_left.next_turn_lane_obj.size >= MIN_TURN_LEFT_OBJ_SIZE) or \
+                   (self.lane_right.next_turn_lane_obj != None and self.lane_right.next_turn_lane_obj.distance <= MIN_TURN_RIGHT_DISTANCE and self.lane_right.next_turn_lane_obj.size >= MIN_TURN_RIGHT_OBJ_SIZE):
+                    self.signal_left_enable = True
+                    self.signal_right_enable = True
+                    self.new_steering_value = 0
+                    self.steering_value = 0
+                    self.throttle_new_value = 0
+                    self.throttle_value = 0
+                    self.brake_light_enable = True
+                    if DEBUG_PRINT_PROCESS_CLASSES == True:
+                        print("process_classes done, full stop: straight not allowed")
+                    return
 
-            # Set turn signal enables
+            # Set turn signal enables as in emergancy with all 4 turn signals to get the operators attention: "I cannot go where you want me to go"
             self.signal_left_enable = self.turn_left_allowed and next_turn_direction == Direction.Left
             self.signal_right_enable = self.turn_right_allowed and next_turn_direction == Direction.Right
 
@@ -518,8 +578,11 @@ class LaneTracker:
                   (self.intersection, self.turn_right_allowed, self.go_straight_allowed, self.turn_right_allowed, self.slope_avg))
         return
 
-    def get_new_steering_value(self):
+    def get_new_steering_value(self, left=True, right=True):
         """Calculate a new steering value by averaging the point offsets from the center"""
+        if left == False and right == False:
+            return
+        
         lsum = 0
         rsum = 0
         # sum up left and right deltas to center
@@ -527,10 +590,24 @@ class LaneTracker:
             lsum += self.lane_limits_left.get_x(STEERING_Y[i])-IMG_XC
             rsum += self.lane_limits_right.get_x(STEERING_Y[i])-IMG_XC
 
+        if left == False:
+            lsum = rsum - len(STEERING_Y)*ORIGIN_LANE_WIDTH
+        elif right == False:
+            rsum = lsum + len(STEERING_Y)*ORIGIN_LANE_WIDTH
+
         # Scale the average between left and right deltas to new steering value
         self.new_steering_value = min(max((lsum + rsum)/STEERING_X_SCALE,-1),1) 
         return
 
+    def update_steering(self):
+        """Filter and update steering_value from new_steering_value"""
+        # If the difference between current and new value is small, average both to make it smoother
+        if abs(self.new_steering_value-self.steering_value) < STEERING_FILTER_THRESHOLD:
+            self.steering_value = (self.steering_value + self.new_steering_value)/2
+        else:
+            self.steering_value = self.new_steering_value
+        return
+        
     def handle_directions(self, mask, next_turn_direction: Direction):
         """ Check for direction change request and look for left or right lane codes 
         and initiate the turn when recognized. In case of no turn, a steering value is 
@@ -542,14 +619,19 @@ class LaneTracker:
         if self.steering_fixed_count > 0:
             if self.throttle_value > 0:
                 self.steering_fixed_count -= 1
+                
+                # accelerate slowly in the turn to pull through
+                if self.throttle_new_value < THROTTLE_VALUE_IN_CURVE:
+                    self.throttle_new_value += 0.025
 
                 # While turning, switch to diagonal search at half way point
-                if self.steering_fixed_count == STEERING_FIXED_TURN_DIAG_CYCLES:
+                if self.steering_fixed_count == self.steering_fixed_count_diag_cycles:
                     if self.direction == Direction.Left:
                         self.direction = Direction.LeftDiag
                     elif self.direction == Direction.Right:
                         self.direction = Direction.RightDiag
                     self.throttle_new_value = THROTTLE_VALUE_IN_TURN
+                    self.force_initxy = True
 
                 # If 0 is reached, switch back to straight directly
                 elif self.steering_fixed_count == 0:
@@ -557,22 +639,40 @@ class LaneTracker:
                     self.direction = Direction.Straight
 
                 # To avoid overshooting, start checking for early switching to straight
-                elif self.steering_fixed_count < STEERING_FIXED_TURN_DIAG_CYCLES and \
-                        self.lane_limits_left.limit_found_count > MINIMUM_LIMIT_FOUND_POINTS and \
-                        self.lane_limits_left.limit_found_count > MINIMUM_LIMIT_FOUND_POINTS:
-                    # There are enough valid points to base on, so check current steering
-                    self.get_new_steering_value()
-                    if abs(self.slope_avg) > AVG_SLOPE_THRESHOLD_STRAIGHT:
-                        self.init_for_next_intersection()
-                        self.direction = Direction.Straight
-                        self.steering_fixed_count = 0
-                        self.steering_value = self.new_steering_value
+                elif self.steering_fixed_count < self.steering_fixed_count_diag_cycles:
+                    left_limit_ok = self.lane_limits_left.limit_found_count > MINIMUM_LIMIT_FOUND_POINTS and self.lane_limits_left.stddev < MAX_STDDEV_STEERING_VALID
+                    right_limit_ok = self.lane_limits_right.limit_found_count > MINIMUM_LIMIT_FOUND_POINTS and self.lane_limits_right.stddev < MAX_STDDEV_STEERING_VALID
+                    if left_limit_ok == True or right_limit_ok == True:
+                        # There are enough valid points to base a decision on, so check current steering
+                        self.get_new_steering_value(left_limit_ok, right_limit_ok)
+                        self.update_steering()
+
+                        if left_limit_ok == False:
+                            self.slope_avg = self.lane_limits_right.slope
+                        elif right_limit_ok == False:
+                            self.slope_avg = self.lane_limits_left.slope
+                        else:
+                            self.force_initxy = False
+
+                        if DEBUG_PRINT_HANDLE_DIRECTIONS == True:
+                            print("now steering: count=%d  left_limit_ok=%d  left_limit_found_count=%d left_stddev=%.3f  right_limit_ok=%d  right_limit_found_count=%s  right_stddev=%.3f  left_slope=%.3f right_slope=%.3f slope_avg=%.3f" % \
+                                (self.steering_fixed_count, left_limit_ok, self.lane_limits_left.limit_found_count, self.lane_limits_left.stddev, right_limit_ok, self.lane_limits_right.limit_found_count, self.lane_limits_right.stddev, self.lane_limits_left.slope, self.lane_limits_right.slope, self.slope_avg))
+
+                        if abs(self.slope_avg) > AVG_SLOPE_THRESHOLD_STRAIGHT:
+                            self.init_for_next_intersection()
+                            self.direction = Direction.Straight
+                            self.steering_fixed_count = 0
+                            self.force_initxy = False
+
+                    elif DEBUG_PRINT_HANDLE_DIRECTIONS == True:
+                        print("still fixed: count=%d  left_limit_found_count=%d left_stddev=%.3f  right_limit_found_count=%s  right_stddev=%.3f " % \
+                            (self.steering_fixed_count, self.lane_limits_left.limit_found_count, self.lane_limits_left.stddev, self.lane_limits_right.limit_found_count, self.lane_limits_right.stddev))
 
                 self.update_throttle()
 
             if DEBUG_PRINT_HANDLE_DIRECTIONS == True:
-                print("keep turning: count=%d  new_steer=%.3f steer=%.3f  dir:%s" % \
-                    (self.steering_fixed_count, self.new_steering_value, self.steering_value, self.direction.name))
+                print("keep turning: count=%d  new_steer=%.3f steer=%.3f  dir=%s  new_throttle=%.3f throttle_value=%.3f " % \
+                    (self.steering_fixed_count, self.new_steering_value, self.steering_value, self.direction.name, self.throttle_new_value, self.throttle_value))
 
             return
 
@@ -585,45 +685,95 @@ class LaneTracker:
             if next_turn_direction == Direction.Left and self.turn_left_allowed == True:
                 self.steering_control = False
                 self.signal_left_enable = True
-                for i in range(len(self.lane_left.objects)):
-                    if self.lane_left.objects[i].code == LANE_LEFT_TURN_CODE and \
-                       self.lane_left.objects[i].distance < MIN_TURN_LEFT_DISTANCE:
-                        # initiate turn, if enough points indicate a left turn lane
-                        self.direction = next_turn_direction
-                        self.steering_value = STEERING_LEFT_TURN_VALUE
-                        self.steering_fixed_count = STEERING_FIXED_TURN_CYCLES
-                        self.init_object_lists()
-                        if DEBUG_PRINT_HANDLE_DIRECTIONS == True:
-                            print("initiate turn left")
-                        break
+                if self.lane_left.next_turn_lane_obj != None and self.lane_left.next_turn_lane_obj.distance <= MIN_TURN_LEFT_DISTANCE and \
+                   self.lane_left.next_turn_lane_obj.size >= MIN_TURN_LEFT_OBJ_SIZE:
+                    # initiate turn, if enough points indicate a left turn lane
+                    self.direction = next_turn_direction
+                    self.steering_value = STEERING_LEFT_TURN_VALUE
+                    self.steering_fixed_count = STEERING_FIXED_TURN_CYCLES_LEFT
+                    self.steering_fixed_count_diag_cycles = STEERING_FIXED_TURN_DIAG_CYCLES_LEFT
+                    self.init_object_lists()
+                    if DEBUG_PRINT_HANDLE_DIRECTIONS == True:
+                        print("initiate turn left")
 
             # Check for right turn
             elif next_turn_direction == Direction.Right and self.turn_right_allowed == True:
                 self.steering_control = False
                 self.signal_right_enable = True
-                for i in range(len(self.lane_right.objects)):
-                    if self.lane_right.objects[i].code == LANE_RIGHT_TURN_CODE and \
-                       self.lane_right.objects[i].distance < MIN_TURN_RIGHT_DISTANCE:
-                        # initiate turn, if enough points indicate a right turn lane
-                        self.direction = next_turn_direction
-                        self.steering_value = STEERING_RIGHT_TURN_VALUE
-                        self.steering_fixed_count = STEERING_FIXED_TURN_CYCLES
+                if self.lane_right.next_turn_lane_obj != None and self.lane_right.next_turn_lane_obj.distance < MIN_TURN_RIGHT_DISTANCE_OFFRAMP  and \
+                   self.lane_right.next_turn_lane_obj.size >= MIN_TURN_RIGHT_OBJ_SIZE:
+                    # initiate turn, if enough points indicate a right turn lane
+                    self.direction = next_turn_direction
+                    if jetcar_lane.DEBUG_MASK_IMG == True:
+                        dbg_img = jetcar_lane.DEBUG_MASK_IMG_REFERENCE.copy()
+
+                    # there are 2 possibilities: a sharp right turn at intersection and a shallow turn at an off-ramp
+                    offramp = False
+                    p0 = Point(0,0)
+                    p1 = Point(0,0)
+                    n0 = 0
+                    n1 = 0
+                    scp = SegmClassPoint(NEIGHBOR_WINDOW_WIDTH, NEIGHBOR_WINDOW_HEIGHT, NEIGHBOR_STEP_SIZE_X, NEIGHBOR_STEP_SIZE_Y)
+                    # calculate the x and y sums for the lane right points and something in between lane limits and lane right points
+                    for i in range(len(self.lane_right.codes)):                       
+                        if self.lane_right.codes[i].location.y > self.lane_right.next_turn_lane_obj.endpoint.y:
+                            scp.location.x = (self.lane_center.codes[i].location.x + 2*self.lane_right.codes[i].location.x)//3
+                            scp.location.y = (self.lane_center.codes[i].location.y + 2*self.lane_right.codes[i].location.y)//3
+                            scp_code,scp_score = scp.get_dominant_class(mask)
+
+                            if scp_code == LANE_RIGHT_TURN_CODE:
+                                p0.x += scp.location.x
+                                p0.y += scp.location.y
+                                n0 += 1
+                                if jetcar_lane.DEBUG_MASK_IMG == True:
+                                    dbg_img = scp.location.draw(dbg_img, (255,64,64))
+
+                            if self.lane_right.codes[i].code == LANE_RIGHT_TURN_CODE:
+                                p1.x += self.lane_right.codes[i].location.x
+                                p1.y += self.lane_right.codes[i].location.y
+                                n1 += 1
+                                if jetcar_lane.DEBUG_MASK_IMG == True:
+                                    dbg_img = self.lane_right.codes[i].location.draw(dbg_img, (64,64,255))
+
+                    # now calculate the average coordinates from these sums and the slope of the averages
+                    if n0 > 0 and n1 > 0:
+                        p0.x /= n0
+                        p0.y /= n0
+                        p1.x /= n1
+                        p1.y /= n1
+                        slope = p0.get_slope(p1)
+                        offramp = slope >= RIGHT_OFFRAMP_SLOPE_THRESHOLD    # a higher slope indicates an off-ramp
+                        if jetcar_lane.DEBUG_MASK_IMG == True:
+                            dbg_img = cv2.line(dbg_img, (int(p0.x), int(p0.y)), (int(p1.x), int(p1.y)), (128,128,128), 2) 
+                            cv2.imwrite(f'{jetcar_lane.DEBUG_MASK_IMG_FILE_NAME}_4_r_turn.jpg',dbg_img)
+                    else:
+                        slope = 0
+                 
+                    # at the end set turn radius and foxed counts for off-ramp or sharp right turn
+                    if offramp == True:
+                        self.steering_value = STEERING_RIGHT_TURN_VALUE_OFFRAMP
+                        self.steering_fixed_count = STEERING_FIXED_TURN_CYCLES_RIGHT_OFFRAMP
+                        self.steering_fixed_count_diag_cycles = STEERING_FIXED_TURN_DIAG_CYCLES_RIGHT_OFFRAMP
                         self.init_object_lists()
                         if DEBUG_PRINT_HANDLE_DIRECTIONS == True:
-                            print("initiate turn right")
-                        break
+                            print("initiate turn right into off-ramp (slope=%.3f)" % (slope))
+
+                    elif self.lane_right.next_turn_lane_obj.distance < MIN_TURN_RIGHT_DISTANCE:
+                        self.steering_value = STEERING_RIGHT_TURN_VALUE
+                        self.steering_fixed_count = STEERING_FIXED_TURN_CYCLES_RIGHT
+                        self.steering_fixed_count_diag_cycles = STEERING_FIXED_TURN_DIAG_CYCLES_RIGHT
+                        self.init_object_lists()
+                        if DEBUG_PRINT_HANDLE_DIRECTIONS == True:
+                            print("initiate sharp turn right (dist:%d  slope=%.3f)" % (self.lane_right.next_turn_lane_obj.distance,slope))
+                    elif DEBUG_PRINT_HANDLE_DIRECTIONS == True:
+                        print("not ready to turn right (dist:%d  slope=%.3f)" % (self.lane_right.next_turn_lane_obj.distance,slope))
 
         # No turn is requested or currently possible, calculate steering value to keep car
         # in the center of the current lane
         if self.steering_fixed_count == 0 and self.throttle_value > 0:
             self.steering_control = True
             self.get_new_steering_value()
-
-            # If the difference between current and new value is small, average both to make it smoother
-            if abs(self.new_steering_value-self.steering_value) < STEERING_FILTER_THRESHOLD:
-                self.steering_value = (self.steering_value + self.new_steering_value)/2
-            else:
-                self.steering_value = self.new_steering_value
+            self.update_steering()
 
             if self.direction == Direction.Straight:
                 if abs(self.slope_avg) < AVG_SLOPE_THRESHOLD_DIAG:
@@ -635,7 +785,7 @@ class LaneTracker:
                 self.direction = Direction.Straight
         
         if DEBUG_PRINT_HANDLE_DIRECTIONS == True:
-            print("steering value:%.3f  dir:%s" % (self.steering_value, self.direction.name))
+            print("steering value=%.3f  dir=%s" % (self.steering_value, self.direction.name))
 
         return
 
@@ -650,7 +800,7 @@ class LaneTracker:
         next_turn_direction -- direction code for the next upcoming turn. """
 
         # In a turn it makes no sense to try finding limits and objects
-        if self.steering_fixed_count <= STEERING_FIXED_TURN_DIAG_CYCLES:
+        if self.steering_fixed_count <= self.steering_fixed_count_diag_cycles:
             self.get_lane_limits(mask)
             self.update_lane_center_classes(mask)
             self.process_classes(next_turn_direction)
@@ -660,7 +810,7 @@ class LaneTracker:
 
         if jetcar_lane.DEBUG_MASK_IMG == True:
             mask_img = self.draw(jetcar_lane.DEBUG_MASK_IMG_REFERENCE.copy())
-            cv2.imwrite(f'{jetcar_lane.DEBUG_MASK_IMG_FILE_NAME}_final.jpg',mask_img)
+            cv2.imwrite(f'{jetcar_lane.DEBUG_MASK_IMG_FILE_NAME}_5_final.jpg',mask_img)
 
         return
 
@@ -668,7 +818,7 @@ class LaneTracker:
         """ Draws its lane limit points, the approximation lines as well as
         center points and left lane and right lane points onto the 
         passed BGR image. Returns the resulting image """
-        if self.steering_fixed_count < STEERING_FIXED_TURN_DIAG_CYCLES:
+        if self.steering_fixed_count < self.steering_fixed_count_diag_cycles:
             img = self.lane_limits_left.draw(img)
             img = self.lane_limits_right.draw(img)
 

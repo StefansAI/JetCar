@@ -73,13 +73,15 @@ class JetCar(traitlets.HasTraits):
         self.throttle_left_reverse = self.kit.pwm[self.THROTTLE_LEFT_REVERSE_CHANNEL]
         self.throttle_right_forward = self.kit.pwm[self.THROTTLE_RIGHT_FORWARD_CHANNEL]
         self.throttle_right_reverse = self.kit.pwm[self.THROTTLE_RIGHT_REVERSE_CHANNEL]
-        self.steering_offset = -0.08
+        self.steering_raw_value = 0
+        self.steering_offset = 0.09
         self.steering_gain = -0.69
         self.steering_throttle_threshold = 0.25
-        self.steering_throttle_gain = 0.25
+        self.steering_throttle_gain = 2.0
         self.throttle_min_threshold = 0.05
-        self.throttle_raw_value = 0;
-        self.throttle_ratio = 1
+        self.throttle_raw_value = 0
+        self.throttle_gain_left = 1
+        self.throttle_gain_right = 1
         self.head_light_high_pwm_p = self.kit.pwm[self.HEAD_LIGHT_HIGH_CHANNEL_P]
         self.head_light_high_pwm_n = self.kit.pwm[self.HEAD_LIGHT_HIGH_CHANNEL_N]
         self.head_light_high_pwm_p.fraction = 0
@@ -100,28 +102,28 @@ class JetCar(traitlets.HasTraits):
     
     def _update_throttle(self):
         """Updates all motor channels depending forward or reverse using the p
-        recalculated throttle_ratio to balance between the 2 motors"""
+        recalculated throttle_gain_xxx to balance between the 2 motors"""
         if abs(self.throttle_raw_value) < self.throttle_min_threshold:
             self.throttle_left_forward.fraction = 0 
             self.throttle_left_reverse.fraction = 0
             self.throttle_right_forward.fraction = 0  
             self.throttle_right_reverse.fraction = 0
         else:
-            self.throttle_left = self.throttle_raw_value*self.throttle_ratio;
+            self.throttle_left = min(self.throttle_raw_value*self.throttle_gain_left,1);
             if self.throttle_left >= 0:
                 self.throttle_left_forward.fraction = min(self.throttle_left,1)   
                 self.throttle_left_reverse.fraction = 0
             else:
-                self.throttle_left_reverse.fraction = min(-self.throttle_left,1)  
                 self.throttle_left_forward.fraction = 0
+                self.throttle_left_reverse.fraction = min(-self.throttle_left,1)  
 
-            self.throttle_right = self.throttle_raw_value/self.throttle_ratio;
+            self.throttle_right = min(self.throttle_raw_value*self.throttle_gain_right,1);
             if self.throttle_right >= 0:
                 self.throttle_right_forward.fraction = min(self.throttle_right,1)  
                 self.throttle_right_reverse.fraction = 0
             else:
-                self.throttle_right_reverse.fraction = min(-self.throttle_right,1)   
                 self.throttle_right_forward.fraction = 0
+                self.throttle_right_reverse.fraction = min(-self.throttle_right,1)   
                 
     @traitlets.validate('steering')
     def _clip_steering(self, proposal):
@@ -135,16 +137,20 @@ class JetCar(traitlets.HasTraits):
         
     @traitlets.observe('steering')
     def _on_steering(self, change):
-        """Steering change event handler to apply offset and gain and calculate a new throttle_ratio 
+        """Steering change event handler to apply offset and gain and calculate a new throttle_gain_xxx
         depending on steering value. Calls _update_throttle to update motor control."""
-        self.steering_servo.throttle = min(max(change['new'] * self.steering_gain + self.steering_offset,-1),+1)
+        self.steering_raw_value = min(max(change['new'] * self.steering_gain,-1),+1)
+        self.steering_servo.throttle = min(max(self.steering_raw_value + self.steering_offset,-1),+1)
         
-        if self.steering_servo.throttle > self.steering_throttle_threshold:
-            self.throttle_ratio = 1  - (self.steering_servo.throttle - self.steering_throttle_threshold) * self.steering_throttle_gain
-        elif self.steering_servo.throttle < - self.steering_throttle_threshold:
-            self.throttle_ratio = 1  - (self.steering_servo.throttle + self.steering_throttle_threshold) * self.steering_throttle_gain
+        if self.steering_raw_value > self.steering_throttle_threshold:
+            self.throttle_gain_left = 1  + (self.steering_raw_value - self.steering_throttle_threshold) * self.steering_throttle_gain
+            self.throttle_gain_right = 1
+        elif self.steering_raw_value < - self.steering_throttle_threshold:
+            self.throttle_gain_left = 1
+            self.throttle_gain_right = 1  + (abs(self.steering_raw_value) - self.steering_throttle_threshold) * self.steering_throttle_gain         
         else:
-            self.throttle_ratio = 1
+            self.throttle_gain_left = 1
+            self.throttle_gain_right = 1       
             
         self._update_throttle()
             

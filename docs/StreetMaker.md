@@ -32,8 +32,8 @@ When hovering for instance over the lower left red connector, pressing "S" for s
 Pressing "A" instead of "S", left mouse click and drag will result in radius and angle getting changed.
 <br><br>
 <br><img src="assets/images/streetmaker/10-properties.jpg"/><br>
-Right clicking on any street element bring up its property page dialog as seen here for the curve piece. Change the "Inner Radius" to 200mm and the "Curve Angle" to 90 degrees for instance.<br>
-There are many other parameters to change for each street element, like number of lanes in both directions and the limiting lines. In fact, each street can even be changed into any other street, except into intersections. But any intersection type can also be changed into any other intersection type.<br>
+Right clicking on any street element brings up its property page dialog as seen here for the curve piece. Change the "Inner Radius" to 200mm and the "Curve Angle" to 90 degrees for instance.<br>
+There are many other parameters to change for each street element, like number of lanes in both directions and the limiting lines. In fact, each street can even be changed into any other street, except into intersections. Any intersection type can also be changed into any other intersection type, but not into a street element.<br>
 After the change the curve might be separated from the straight street. Each element has a starting point as reference and changes are made to that reference, which might cause it to shorten or lengthen on the other side.
 <br><br>
 <br><img src="assets/images/streetmaker/11-offramp.jpg"/><br>
@@ -94,11 +94,11 @@ Let's ignore "Show View Points" for now. It will be explained further down.<br>
 When opening the "Process" menu, it might be surprising to see menu items similar to the ImageSegmenter application described before. As it turned out, when writing the StreetMaker application, most of the information needed for creating segmentation masks was already there. Connectors kept track of the directions and lines can be selected by type. The drawing area is a bird's eye view on the street map. What was needed was a camera view, a camera view of a wide-angle camera with lens distortion from a certain height above the ground looking forward in a defined angle on the same map from a specific point of view.
 <br><br>
 <br><img src="assets/images/streetmaker/27-tbird.jpg"/><br>
-Let's start a new map and just put a T-Intersection on a new map and see what dataset would be created when hitting "Create Dataset". 
+Let's start a new map and just put a T-Intersection on a new map. Now let's see what dataset would be created when hitting "Create Dataset". 
 <br><br>
 <br><img src="assets/images/streetmaker/28-CameraView.jpg"/><br>
 Similar to the ImageSegmenter application you can see, how different tilts, brightness values and noise levels are applied, while the view seems to go forward and backwards. On the left side an artificial camera view is displayed, while a mask appears on the right side.<br>
-Of course, the camera view is totally artificial. It misses light reflections we had seen in the real images and other effects of a real scene. But it is close enough for training a model, that might need only few additional real photos and masks from the ImageSegementer. 
+Of course, the camera view is totally artificial. It still misses effects of a real scene. But it is close enough for training a model, that might need only few additional real photos and masks from the ImageSegementer. 
 <br><br>
 <br><img src="assets/images/streetmaker/29-classimg.jpg"/><br>
 Here is an illustration on how the algorithm works. The white triangle represents the camera point and direction. It starts with lane 0 of street 0 close to the entry connector and goes forward to the end. Then it goes backwards on the other side. After that it repeats this scheme for the second street.<br>
@@ -118,7 +118,7 @@ Below the augmentation settings there are few more parameter to simulate light s
 <br><img src="assets/images/streetmaker/30c-light_spot_parms.jpg"/><br>
 While testing the JetCar on the printed out map, it turned out that light reflexions disturbed the camera image quiet often and caused bad classification spots in the resulting mask.
 <br><img src="assets/images/streetmaker/30d-light-spot1.jpg"/><img src="assets/images/streetmaker/30d-light-spot2.jpg"/><br>
-One way to avoid this is creating a diffuse light, blocking sun light from windows and use less reflective paper for the printout. A matte thick paper (right picture) works much better than the standard printer paper, which is often glossy and thin (left picture). Thick is better to keep the paper flat.<br>
+One way to avoid this is creating a diffuse light, blocking sun light from windows and use less reflective paper for the printout. A matte thick paper (second picture) works much better than the standard printer paper, which is often glossy and thin (first picture). Thick is better to keep the paper flat.<br>
 But on top of it all, just add light-spots into the training and testing dataset. With these parameters a light spot is overlaid to 30% of all output images with randomized size and intensity around these settings (+/- 50%). This helps to harden the model against remaining light spots in the scene.<br>
 <img src="assets/images/streetmaker/30e-light-spot1.jpg"/><img src="assets/images/streetmaker/30e-light-spot2.jpg"/><br>
 <br><br>

@@ -11,7 +11,7 @@ The <a href="https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/">U-Ne
 There are a lot of examples online. This one from the <a href="https://towardsai.net/p/l/machine-learning-7">TowardsAI Website</a> looks like something for this project.
 <br><br>
 <br><img src="assets/images/data_preparation/04-capture.jpg"/><br>
-The <a href="https://github.com/NVIDIA-AI-IOT/jetbot">JetBot</a> project contained a Jupyter notebook to capture images the scene for its own training (data_collection.ipynb). A similar version is part of the firmware notebooks for the JetCar (<a href="https://github.com/StefansAI/JetCar/tree/main/firmware/jetcar/notebooks/JetCar_Collect_Images.ipynb">JetCar_Collect_Images.ipynb</a>).<br>It allows manually driving the car around remotely and to hit a button to capture scene images. When done, the recorded images can be zipped and downloaded to the PC.<br>
+The <a href="https://github.com/NVIDIA-AI-IOT/jetbot">JetBot</a> project contained a Jupyter notebook to capture images of the scene for its own training (data_collection.ipynb). A similar version is part of the firmware notebooks for the JetCar (<a href="https://github.com/StefansAI/JetCar/tree/main/firmware/jetcar/notebooks/JetCar_Collect_Images.ipynb">JetCar_Collect_Images.ipynb</a>).<br>It allows manually driving the car around remotely and to hit a button to capture scene images. When done, the recorded images can be zipped and downloaded to the PC.<br>
 JetBot and JetCar use image sizes of 224x224 for the inference. For better data augmentation however, the recorded images are here 4 times as big in both dimensions. 
 <br><br>
 <br><img src="assets/images/data_preparation/05-Data.jpg"/><br>

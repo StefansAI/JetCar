@@ -1419,7 +1419,7 @@ namespace ImageSegmenter
                         // bmPredMaskCode has the same coding as above
                         color = bmPredMaskCode.GetPixel(CoordRight.X, CoordRight.Y);
                         ID = color.R;
-                        lbCursorValuesRight.Text += "   PredMask ID: " + ID.ToString();
+                        lbCursorValuesRight.Text += "||   PredMask ID: " + ID.ToString();
                         if (ID < AppSettings.SegmClassDefs.Length)
                             lbCursorValuesRight.Text += "   SegmClass: " + AppSettings.SegmClassDefs[ID].Name;
                     }

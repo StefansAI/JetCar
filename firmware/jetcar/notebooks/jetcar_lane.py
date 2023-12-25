@@ -40,7 +40,7 @@ import time
 # Number of points in the lane limit vectors
 N_LANE_POINTS = 11
 # Number of points in the lane limit vectors to be used for find limit searches
-N_SEARCH_POINTS = 8
+N_SEARCH_POINTS = 9
 
 # Set to true to enable debug print messages when finding lane limit points
 DEBUG_PRINT_FIND_LIMITS_POINTS = False
@@ -65,6 +65,8 @@ DEBUG_MASK_IMG = False
 DEBUG_MASK_IMG_FILE_NAME = None
 # When DEBUG_MASK_IMG is true, assign the reference for each mask image
 DEBUG_MASK_IMG_REFERENCE = None
+# Set to true for all image sequences when initxy is true, when DEBUG_MASK_IMG is true
+DEBUG_MASK_IMG_INITXY = False
 # Set to true for all image sequences left and right, when DEBUG_MASK_IMG is true
 DEBUG_MASK_IMG_LEFT_RIGHT = False
 # Set to true for all images of the center points, when DEBUG_MASK_IMG is true
@@ -82,6 +84,12 @@ GRID_ORIGIN_OFFS = 10
 
 # Definition of the factor for diagonal steps
 DIAG_FACTOR = 1/math.sqrt(2)
+# Offset from center for diagonal search initialization for left turn (0 would start at origin)
+DIAG_INIT_OFFS_X_LEFT = 20
+# Offset from center for diagonal search initialization for right turn (0 would start at origin)
+DIAG_INIT_OFFS_X_RIGHT = 0
+# Factor for reducing the x coordinate search initialization in diagonal (1.0 = 45 degree)
+DIAG_INIT_FACT_X = 0.7
 
 # The initial width for searching for the lane limit is set to half the image width
 INITIAL_SEARCH_WIDTH = IMG_XC
@@ -169,9 +177,9 @@ class Point:
         y           -- y coordinate of the point to calculate slope with.
         return      -- slope between x/y coordinates and this object coordinates."""
         dx = x - self.x
-        dy = y - self.y
+        dy = self.y - y 
         if dx == 0:
-            return 1
+            return dy*1000
         if dy == 0:
             return 0
         return dy/dx
@@ -232,11 +240,11 @@ class LaneLimitPoint(Point):
             self.y = IMG_YMAX - self.default_origin_distance
         elif direction == Direction.LeftDiag:
             d = int(self.default_origin_distance*DIAG_FACTOR)
-            self.x = max(IMG_XC - d,0)
+            self.x = max(IMG_XC + DIAG_INIT_OFFS_X_LEFT - int(d*DIAG_INIT_FACT_X),0)
             self.y = max(IMG_YMAX - d,0)
         elif direction == Direction.RightDiag:
             d = int(self.default_origin_distance*DIAG_FACTOR)
-            self.x = min(IMG_XC + d, IMG_XMAX)
+            self.x = min(IMG_XC - DIAG_INIT_OFFS_X_RIGHT + int(d*DIAG_INIT_FACT_X), IMG_XMAX)
             self.y = max(IMG_YMAX - d,0)
         elif direction == Direction.Left:
             self.x = max(IMG_XC - self.default_origin_distance,0)
@@ -257,7 +265,7 @@ class LaneLimitPoint(Point):
         the center straight ahead. The calculation is an approximation from
         real images of a 145 degree HOV camera.
         direction   -- Direction enum code to ininitialize for."""
-        dist_corr = (abs(self.default_origin_distance - OPTICAL_CENTER_Y_OFFS) * 3) //19
+        dist_corr = (abs(self.default_origin_distance - OPTICAL_CENTER_Y_OFFS) * 3) //17
         dist_corr += (max(self.default_origin_distance - IMG_YC//2, 0)) //10
         if direction != Direction.Left and direction != Direction.Right:
             dist_corr += abs(self.x - IMG_XC) //3
@@ -298,7 +306,7 @@ class LaneLimitPoint(Point):
         self.usable = False
 
         if DEBUG_PRINT_FIND_LIMITS_POINTS == True:
-            print("find_limit: idx:%d  x:%d  y:%d  isw:%d  lsw:%d  dx:%d  dy:%d  back:%s" \
+            print("find_limit: idx=%d  x=%d  y=%d  isw=%d  lsw=%d  dx=%d  dy=%d  back=%s" \
                 % (self.idx, x, y, initial_search_width, limit_search_width, dx, dy, include_back))
 
         # The initial search is necessary to find the area with my_lane 
@@ -307,7 +315,7 @@ class LaneLimitPoint(Point):
         # when the first initial code is found
         if initial_search_width > 0 and mask[y, x] not in initial_codes:
             if DEBUG_PRINT_FIND_LIMITS_SEARCH == True:
-                print("initial search: code=%d=%s" % (mask[y, x],SegmClass(mask[y, x]).name))
+                print("initial search: code=%d:%s" % (mask[y, x],SegmClass(mask[y, x]).name))
             xx0 = xx1 = x
             yy0 = yy1 = y
             for i in range(initial_search_width):
@@ -318,7 +326,7 @@ class LaneLimitPoint(Point):
                     x = xx0
                     y = yy0
                     if DEBUG_PRINT_FIND_LIMITS_POINTS == True:
-                        print("find_limit: initial found+ i:%d  x:%d  y:%d  mask:%d=%s" % (i, x, y, mask[y, x],SegmClass(mask[y, x]).name))
+                        print("find_limit: initial found+ i=%d  x=%d  y=%d  mask=%d:%s" % (i, x, y, mask[y, x],SegmClass(mask[y, x]).name))
                     break
 
                 # checking to other side and stop, if we found our lane 
@@ -328,18 +336,18 @@ class LaneLimitPoint(Point):
                     x = xx1
                     y = yy1
                     if DEBUG_PRINT_FIND_LIMITS_POINTS == True:
-                        print("find_limit: initial found- i:%d  x:%d  y:%d  mask:%d=%s" % (i, x, y, mask[y, x],SegmClass(mask[y, x]).name))
+                        print("find_limit: initial found- i=%d  x=%d  y=%d  mask=%d:%s" % (i, x, y, mask[y, x],SegmClass(mask[y, x]).name))
                     include_back = False   # don't have to go back in this case
                     break
 
                 if DEBUG_PRINT_FIND_LIMITS_SEARCH == True:
-                    print("initial searching i:%d  xx0:%d  yy0:%d  mask0:%d=%s,  xx1:%d  yy1:%d  mask1:%d=%s " % \
+                    print("initial searching i=%d  xx0=%d  yy0=%d  mask0=%d:%s,  xx1=%d  yy1=%d  mask1=%d:%s " % \
                         (i, xx0, yy0, mask[yy0, xx0],SegmClass(mask[yy0, xx0]).name, xx1, yy1, mask[yy1, xx1],SegmClass(mask[yy1, xx1]).name))
 
             # if our lane is not found in the search range, give up here
             if i >= initial_search_width:
                 if DEBUG_PRINT_FIND_LIMITS_POINTS == True:
-                    print("find_limit: initial aborted i:%d  xx0:%d  yy0:%d xx1:%  yy1:%d" % (i, xx0, yy0, xx1, yy1))
+                    print("find_limit: initial aborted i=%d  xx0=%d  yy0=%d xx1=%  yy1=%d" % (i, xx0, yy0, xx1, yy1))
 
                 self.limit_found = False
                 return False
@@ -353,7 +361,7 @@ class LaneLimitPoint(Point):
             # go back until we left the limits in order to stay at the broder
             i = 0 
             if DEBUG_PRINT_FIND_LIMITS_SEARCH == True and (x > 0) and (x < IMG_XMAX) and (y > 0) and (y < IMG_YMAX):
-                print("back searching i:%d  x:%d  y:%d  mask:%d=%s in limit_codes:%s" % (i, x, y, mask[y, x],SegmClass(mask[y, x]).name,mask[y, x] in limit_codes))
+                print("back searching i=%d  x=%d  y=%d  mask=%d:%s in limit_codes=%s" % (i, x, y, mask[y, x],SegmClass(mask[y, x]).name,mask[y, x] in limit_codes))
 
             while (x > 0) and (x < IMG_XMAX) and (y > 0) and (y < IMG_YMAX) and (mask[y, x] in limit_codes):
                 x -= dx
@@ -361,18 +369,18 @@ class LaneLimitPoint(Point):
                 i += 1
                 if i >= limit_search_width:
                     if DEBUG_PRINT_FIND_LIMITS_POINTS == True:
-                        print("find_limit: back aborted i:%d  x:%d  y:%d  mask:%d" % (i, x, y, mask[y, x]))
+                        print("find_limit: back aborted i=%d  x=%d  y=%d  mask=%d" % (i, x, y, mask[y, x]))
                     return False
 
                 if DEBUG_PRINT_FIND_LIMITS_SEARCH == True and (x > 0) and (x < IMG_XMAX) and (y > 0) and (y < IMG_YMAX):
-                    print("back searching i:%d  x:%d  y:%d  mask:%d=%s in limit_codes:%s" % (i, x, y, mask[y, x],SegmClass(mask[y, x]).name,mask[y, x] in limit_codes))
+                    print("back searching i=%d  x=%d  y=%d  mask=%d:%s in limit_codes=%s" % (i, x, y, mask[y, x],SegmClass(mask[y, x]).name,mask[y, x] in limit_codes))
 
                     
         # assuming, the position is just back in the lane code: now go forward 
         # to find a limit code, just at the border next to the lane code
         i = 0 
         if DEBUG_PRINT_FIND_LIMITS_SEARCH == True and (x > 0) and (x < IMG_XMAX) and (y > 0) and (y < IMG_YMAX):
-            print("forward searching i:%d  x:%d  y:%d  mask:%d=%s in limit_codes:%s" % (i, x, y, mask[y, x],SegmClass(mask[y, x]).name,mask[y, x] in limit_codes))
+            print("forward searching i=%d  x=%d  y=%d  mask=%d:%s in limit_codes=%s" % (i, x, y, mask[y, x],SegmClass(mask[y, x]).name,mask[y, x] in limit_codes))
         
         while (x > 0) and (x < IMG_XMAX) and (y > 0) and (y < IMG_YMAX) and (mask[y, x] not in limit_codes):
             x += dx
@@ -380,17 +388,17 @@ class LaneLimitPoint(Point):
             i += 1
             if i >= limit_search_width:
                 if DEBUG_PRINT_FIND_LIMITS_POINTS == True:
-                    print("find_limit: forward aborted i:%d  x:%d  y:%d  mask:%d" % (i, x, y, mask[y, x]))
+                    print("find_limit: forward aborted i=%d  x=%d  y=%d  mask=%d" % (i, x, y, mask[y, x]))
                 return False
 
             if DEBUG_PRINT_FIND_LIMITS_SEARCH == True and (x > 0) and (x < IMG_XMAX) and (y > 0) and (y < IMG_YMAX):
-                print("forward searching i:%d  x:%d  y:%d  mask:%d=%s in limit_codes:%s" % (i, x, y, mask[y, x],SegmClass(mask[y, x]).name,mask[y, x] in limit_codes))
+                print("forward searching i=%d  x=%d  y=%d  mask=%d:%s in limit_codes=%s" % (i, x, y, mask[y, x],SegmClass(mask[y, x]).name,mask[y, x] in limit_codes))
 
         # poistion is found, so update point coordinates
         self.x = x
         self.y = y
         if DEBUG_PRINT_FIND_LIMITS_POINTS == True:
-            print("find_limit: found  x:%d  y:%d  mask:%d" % (x, y, mask[y, x]))
+            print("find_limit: found  x=%d  y=%d  mask=%d" % (x, y, mask[y, x]))
 
         self.usable = mask[y, x] in limit_codes
         return self.usable
@@ -419,7 +427,7 @@ class LaneLimits:
         if DEBUG_PRINT_FIND_LIMITS_POINTS == True:
             s = "%s: " % (self.side.name)
             for i in range(N_LANE_POINTS):
-                s += "  %d:%d" % (i,self.points[i].default_origin_distance)
+                s += "  %d=%d" % (i,self.points[i].default_origin_distance)
             print("dist_origin: %s" % (s))
         return
 
@@ -629,7 +637,7 @@ class LaneLimits:
         self.stddev = math.sqrt(dsum/N_SEARCH_POINTS)
 
         if DEBUG_PRINT_LINE_APPROX_CHECK == True:
-            print("%s again:%s  stddev:%.1f" % (s, again, self.stddev))   
+            print("%s again=%s  stddev=%.1f" % (s, again, self.stddev))   
 
         return again
 
@@ -707,7 +715,7 @@ class LaneLimits:
         return code[max_idx], max_count/N_LANE_POINTS
 
 
-    def find_limits(self, mask, direction:Direction):
+    def find_limits(self, mask, direction:Direction, force_initxy=False):
         """ Top level method to perform the search for the lane limits, 
         calculate the line approximation for the line approximation, 
         check and replace outliers and run again if necessary.
@@ -724,16 +732,21 @@ class LaneLimits:
         # Set flag if xy need to be re-initialized because of direction change
         initxy = self.direction == Direction.Nowhere or \
                  self.direction != direction or \
-                 self.stddev > INIT_XY_STDDEV_THRESHOLD or \
-                 self.limit_found_count <= INIT_XY_LIMIT_FOUND_THRESHOLD
+                 self.stddev >= INIT_XY_STDDEV_THRESHOLD or \
+                 self.limit_found_count <= INIT_XY_LIMIT_FOUND_THRESHOLD or \
+                 force_initxy
         include_back = not initxy
 
         #set search limit according to new initial search or continue tracking 
         if initxy == True:
+            #print("initxy %s " % (self.side.name))
             initial_search_width = IMG_XMAX
             limit_search_width = IMG_XMAX
             for i in range(N_LANE_POINTS):
                 self.points[i].init_xy(direction)
+            if DEBUG_MASK_IMG == True and DEBUG_MASK_IMG_INITXY == True:
+                mask_img = self.draw_points_only(DEBUG_MASK_IMG_REFERENCE.copy())
+                cv2.imwrite(f'{DEBUG_MASK_IMG_FILE_NAME}_0_{self.side.name}_init.jpg',mask_img)
         else:
             initial_search_width = 0 
             limit_search_width = ORIGIN_LANE_WIDTH
@@ -756,7 +769,7 @@ class LaneLimits:
 
         if DEBUG_MASK_IMG == True and DEBUG_MASK_IMG_LEFT_RIGHT == True:
             mask_img = self.draw_points_only(DEBUG_MASK_IMG_REFERENCE.copy())
-            cv2.imwrite(f'{DEBUG_MASK_IMG_FILE_NAME}_{self.side.name}_pts.jpg',mask_img)
+            cv2.imwrite(f'{DEBUG_MASK_IMG_FILE_NAME}_1_{self.side.name}_pts.jpg',mask_img)
 
         # now run line approximation and check and replace outliers for a limited 
         # number of repeatitions only, if necessary. The result should be a 
@@ -769,7 +782,7 @@ class LaneLimits:
             if DEBUG_MASK_IMG == True and DEBUG_MASK_IMG_LEFT_RIGHT == True:
                 self.extrapolate()
                 mask_img = self.draw(DEBUG_MASK_IMG_REFERENCE.copy())
-                cv2.imwrite(f'{DEBUG_MASK_IMG_FILE_NAME}_{self.side.name}_{i}_0.jpg',mask_img)
+                cv2.imwrite(f'{DEBUG_MASK_IMG_FILE_NAME}_2_{self.side.name}_{i}_0.jpg',mask_img)
 
             t3 = time.perf_counter()
             do_it_again = self.line_approx_check(True)
@@ -784,7 +797,7 @@ class LaneLimits:
             if DEBUG_MASK_IMG == True and DEBUG_MASK_IMG_LEFT_RIGHT == True:
                 self.extrapolate()
                 mask_img = self.draw(DEBUG_MASK_IMG_REFERENCE.copy())
-                cv2.imwrite(f'{DEBUG_MASK_IMG_FILE_NAME}_{self.side.name}_{i}_1.jpg',mask_img)
+                cv2.imwrite(f'{DEBUG_MASK_IMG_FILE_NAME}_3_{self.side.name}_{i}_1.jpg',mask_img)
  
             if do_it_again == False:
                 break
@@ -795,7 +808,7 @@ class LaneLimits:
         if DEBUG_PRINT_FIND_LIMITS_LANE == True:
             print("dt:  %.3fms  %.3fms  %.3fms" % ((t1-t0)*1000,(t2-t1)*1000,(t4-t3)*1000))
             print("%s  Approx: slope=%.3f offs=%.1f stdev=%.3f" %(self.side.name, self.slope, self.offs, self.stddev))
-            print("%s  Dominant: %d=%s, Score=%.1f" % (self.side.name,self.code,SegmClass(self.code).name,self.score))
+            print("%s  Dominant: %d:%s, Score=%.1f" % (self.side.name,self.code,SegmClass(self.code).name,self.score))
             
             if self.side == Side.Left:
                 dx, dy = DEFINITIONS_LEFT[self.direction.value][2:4]
