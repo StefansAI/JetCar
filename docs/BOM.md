@@ -113,7 +113,7 @@
 </tr>
 <tr>
 <td>Servo</td>
-<td align="right">2</td>
+<td align="right">1</td>
 <td align="right">$9.99</td>
 <td><a href="https://www.amazon.com/TISEKER-Pieces-Compatible-Helicopter-Arduino/dp/B0BGPHD7MX/ref=sr_1_3_sspa?crid=3NTZ4OXLX97I7&keywords=9g+metal+gear+servo&qid=1675103037&s=toys-and-games&sprefix=9g+metal+gear+serv%2Ctoys-and-games%2C658&sr=1-3-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEyQUdBR1RTNzUxQjBYJmVuY3J5cHRlZElkPUExMDMyMzE1M1VGMUtJRlZaWlZXVCZlbmNyeXB0ZWRBZElkPUEwNzAzNjUzQ1FVUVY3WjFTSTI5JndpZGdldE5hbWU9c3BfYXRmJmFjdGlvbj1jbGlja1JlZGlyZWN0JmRvTm90TG9nQ2xpY2s9dHJ1ZQ==">Amazon</a></td>
 <td>Any 9g - 14g metal gear, 90 degrees</td>
