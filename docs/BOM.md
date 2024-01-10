@@ -107,7 +107,7 @@
 <td>Camera</td>
 <td align="right">1</td>
 <td align="right">$29.00</td>
-<td><a href="https://leopardimaging.com/product/li-imx219-mipi-ff-nano/">Leopard Imaging</a>,
+<td><a href="https://www.mouser.com/ProductDetail/Leopard-Imaging/LI-IMX219-MIPI-FF-NANO-H145?qs=uwxL4vQweFMuaO3vw0DYUw%3D%3D">Mouser</a>,
 <a href="https://www.amazon.com/gp/product/B07T43K7LC/ref=ppx_yo_dt_b_asin_title_o03_s00?ie=UTF8&psc=1">Amazon</a></td>
 <td>LI-IMX219-MIPI-FF-NANO-<strong>H145</strong></td>
 </tr>
