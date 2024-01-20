@@ -44,3 +44,13 @@ More documentation:<br>
 - <a href="docs/Operation.md">Operation</a><br>
 - <a href="docs/Debugging.md">Debugging</a><br>
 <br><br>
+Videos:<br>
+- <a href="https://youtu.be/Dyagu1U4WaQ">JetCar Part 1 - Introduction</a><br>
+- <a href="https://youtu.be/SRJtpAVrnXM">JetCar Part 2 – Assembly</a><br> 
+- <a href="https://youtu.be/EU15R7dB3os">JetCar Part 3 - Firmware Setup</a><br>
+- <a href="https://youtu.be/G4PKwO-Vvck">JetCar Part 4 - Data Preparation</a><br>
+- <a href="https://youtu.be/1_ItpaHLQUw">JetCar Part 5 - Model Training</a><br>
+- <a href="https://youtu.be/k-taHFnwKoY">JetCar Part 6 - StreetMaker</a><br>
+- <a href="https://youtu.be/uBuOR0Mm2eY">JetCar Part 7 - Firmware</a><br>
+- <a href="https://youtu.be/s89fhRwG_2A">JetCar Part 8 - Demonstration</a><br>
+<br><br>
